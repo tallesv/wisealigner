@@ -10,8 +10,8 @@ export default extendTheme({
     },
   },
   fonts: {
-    heading: 'Roboto',
-    body: 'Roboto',
+    heading: 'Nunito',
+    body: 'Nunito',
   },
   styles: {
     global: {
