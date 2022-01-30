@@ -1,7 +1,14 @@
 import { extendTheme } from '@chakra-ui/react';
 
 export default extendTheme({
-  colors: {},
+  colors: {
+    gray: {
+      '550': '#31343d',
+    },
+    blue: {
+      '850': '#1a1d29',
+    },
+  },
   fonts: {
     heading: 'Roboto',
     body: 'Roboto',
@@ -9,8 +16,8 @@ export default extendTheme({
   styles: {
     global: {
       body: {
-        bg: 'gray.900',
-        color: 'gray.300',
+        bg: 'blue.850',
+        color: 'gray.200',
       },
     },
   },
