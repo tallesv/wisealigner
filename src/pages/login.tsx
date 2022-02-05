@@ -13,7 +13,13 @@ export default function Login() {
           </Text>
         </Box>
 
-        <Box bgColor="white" w={[358, 540]} h={[436]} borderRadius={5}>
+        <Box
+          bgColor="white"
+          w={[358, 540]}
+          h={[436]}
+          borderRadius={5}
+          boxShadow="xl"
+        >
           <Flex px={[1, 2]} py={[2, 3]} direction="column">
             <VStack spacing={7} px={[7, 16]} align="stretch" mt={10}>
               <Text fontSize={24} fontWeight={800}>
