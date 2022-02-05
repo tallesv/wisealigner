@@ -1,10 +1,4 @@
-import {
-  Box,
-  Flex,
-  VStack,
-  Text,
-  Input as ChakraInput,
-} from '@chakra-ui/react';
+import { Box, Flex, VStack, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { Input } from '../components/Form/input';
 import { Button } from '../components/Button';
