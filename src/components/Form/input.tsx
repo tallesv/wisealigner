@@ -1,37 +1,50 @@
+/* eslint-disable react/function-component-definition */
+/* eslint-disable react/no-children-prop */
 import {
   Input as ChakraInput,
   InputProps as ChakraInputProps,
+  InputGroup,
+  InputLeftElement,
+  FormLabel,
+  FormControl,
 } from '@chakra-ui/react';
-import { forwardRef, ForwardRefRenderFunction } from 'react';
+import { forwardRef, ForwardRefRenderFunction, ReactNode } from 'react';
 
 interface InputProps extends ChakraInputProps {
   name: string;
+  label?: string;
+  inputIcon?: ReactNode | string;
 }
 
-// eslint-disable-next-line react/function-component-definition
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { name, ...rest },
+  { name, label, inputIcon, ...rest },
   ref,
 ) => {
   return (
-    <ChakraInput
-      id={name}
-      name={name}
-      fontSize={15}
-      borderWidth={1}
-      bgColor="gray.550"
-      variant="filled"
-      _hover={{
-        bgColor: 'gray.550',
-      }}
-      _focus={{
-        bgColor: 'gray.550',
-        borderColor: 'gray.400',
-      }}
-      size="lg"
-      ref={ref}
-      {...rest}
-    />
+    <FormControl>
+      {!!label && (
+        <FormLabel fontWeight={700} htmlFor={name}>
+          {label}
+        </FormLabel>
+      )}
+      <InputGroup>
+        {!!inputIcon && (
+          <InputLeftElement
+            h="100%"
+            pointerEvents="none"
+            children={inputIcon}
+          />
+        )}
+        <ChakraInput
+          id={name}
+          name={name}
+          fontSize={15}
+          size="lg"
+          ref={ref}
+          {...rest}
+        />
+      </InputGroup>
+    </FormControl>
   );
 };
 
