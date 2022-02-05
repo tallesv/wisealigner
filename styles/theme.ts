@@ -6,7 +6,10 @@ export default extendTheme({
       '550': '#31343d',
     },
     blue: {
-      '850': '#1a1d29',
+      '450': '#3c4257',
+    },
+    purple: {
+      '550': '#635cff',
     },
   },
   fonts: {
@@ -16,8 +19,9 @@ export default extendTheme({
   styles: {
     global: {
       body: {
-        bg: 'blue.850',
-        color: 'gray.200',
+        bg: 'gray.200',
+        color: 'blue.450',
+        fontWeight: '600',
       },
     },
   },
