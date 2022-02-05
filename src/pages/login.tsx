@@ -31,7 +31,6 @@ export default function Login() {
                   <Text fontWeight={700}>Senha</Text>
                   <Text
                     fontWeight={700}
-                    as="a"
                     color="purple.550"
                     _hover={{
                       color: 'blue.450',
@@ -50,7 +49,6 @@ export default function Login() {
         <Flex w={[358, 540]} pl={[2, 4]} fontSize={14} align="left">
           <Text>Não possui conta?</Text>
           <Text
-            as="a"
             ml={2}
             color="purple.550"
             _hover={{
