@@ -7,7 +7,7 @@ export default function Login() {
   return (
     <Box>
       <VStack pt={[7, 14]} mx="auto" maxW={1000} spacing={10}>
-        <Box h={6} w={[358, 540]} pl={[4, 8]} align="left">
+        <Box h={6} w={[358, 540]} pl={[4, 8]}>
           <Text fontSize={[24]} fontWeight={800}>
             Untitleproject
           </Text>
