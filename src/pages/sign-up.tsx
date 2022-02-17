@@ -24,7 +24,7 @@ export default function SignUp(): JSX.Element {
         {isDefaultSize && (
           <Box pt={19} mr={16}>
             <Text mb={8} fontSize={[24]} fontWeight={800}>
-              Untitleproject
+              wisealigners
             </Text>
 
             <VStack spacing={5} align="stretch">
@@ -60,7 +60,7 @@ export default function SignUp(): JSX.Element {
             boxShadow="xl"
           >
             <Text fontSize={[20, 22]} fontWeight={800}>
-              Crie sua conta na Untitleproject
+              Crie sua conta na wisealigners
             </Text>
             <Input name="email" label="Email" type="email" size="md" />
             <Input name="name" label="Nome" size="md" />
