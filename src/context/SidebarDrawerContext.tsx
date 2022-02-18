@@ -18,7 +18,9 @@ export function SidebarDrawerProvider({
   const router = useRouter();
 
   useEffect(() => {
-    disclosure.onClose();
+    if (!disclosure.isOpen) {
+      disclosure.onClose();
+    }
   }, [disclosure, router.asPath]);
 
   return (

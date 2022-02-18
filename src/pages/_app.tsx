@@ -3,6 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import theme from '../../styles/theme';
 import { Layout } from '../components/Layout';
+import { SidebarDrawerProvider } from '../context/SidebarDrawerContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
@@ -13,9 +14,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       {pagesWithoutLayout.includes(pathname) ? (
         <Component {...pageProps} />
       ) : (
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <SidebarDrawerProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </SidebarDrawerProvider>
       )}
     </ChakraProvider>
   );
