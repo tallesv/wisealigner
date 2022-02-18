@@ -12,7 +12,7 @@ export function SidebarNav() {
   return (
     <Stack spacing="8" align="flex-start">
       <NavSection title="MEUS DADOS">
-        <NavLink icon={RiContactsLine} href="/">
+        <NavLink icon={RiContactsLine} href="/edit-user">
           Editar dados
         </NavLink>
       </NavSection>
