@@ -7,7 +7,7 @@ import { SidebarDrawerProvider } from '../context/SidebarDrawerContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
-  const pagesWithoutLayout = ['/login'];
+  const pagesWithoutLayout = ['/login', '/sign-up'];
 
   return (
     <ChakraProvider theme={theme}>

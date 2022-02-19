@@ -1,6 +1,7 @@
 import { Box, useBreakpointValue, Flex, VStack, Text } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { Input } from '../components/Form/input';
 import { Button } from '../components/Button';
 
@@ -11,6 +12,14 @@ export default function SignUp(): JSX.Element {
     lg: true,
     sm: false,
   });
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return <Text>Loading</Text>;
 
   return (
     <Box>
