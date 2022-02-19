@@ -6,11 +6,14 @@ import {
   useBreakpointValue,
   IconButton,
   Icon,
+  Button as CharkaButton,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { RiMenuLine } from 'react-icons/ri';
 import { useSidebarDrawer } from '../context/SidebarDrawerContext';
 
 export function Header() {
+  const { push } = useRouter();
   const { onOpen } = useSidebarDrawer();
 
   const isWideVersion = useBreakpointValue({
@@ -31,27 +34,34 @@ export function Header() {
       <Flex>
         {!isWideVersion && (
           <IconButton
+            suppressHydrationWarning
             aria-label="Open navigation"
             icon={<Icon as={RiMenuLine} />}
             fontSize="24"
             variant="unstyled"
             onClick={onOpen}
             mr={[1, 5]}
-            mt={[1, 2]}
+            mt={[3]}
           />
         )}
 
-        <Text
-          fontSize={['2xl', '3xl']}
-          fontWeight="bold"
-          letterSpacing="tight"
-          w="64"
+        <IconButton
+          onClick={() => push('/')}
+          bgColor="gray.200"
+          aria-label="Navigate to home page"
+          suppressHydrationWarning
         >
-          wisealigner
-          <Text as="span" ml={1} color="purple.550">
-            .
+          <Text
+            fontSize={['2xl', '3xl']}
+            fontWeight="bold"
+            letterSpacing="tight"
+          >
+            wisealigner
+            <Text as="span" ml={1} color="purple.550">
+              .
+            </Text>
           </Text>
-        </Text>
+        </IconButton>
       </Flex>
 
       <Flex>

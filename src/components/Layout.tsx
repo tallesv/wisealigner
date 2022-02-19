@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Header } from './Header';
 import { Menu } from './Menu/Index';
 
@@ -8,6 +8,14 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <>
       <Header />
