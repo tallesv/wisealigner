@@ -65,8 +65,8 @@ export function Header() {
 
       <Flex>
         <Box mr={3} textAlign="right">
-          <Text>name</Text>
-          <Text color="gray.450">email</Text>
+          <Text>Talles</Text>
+          <Text color="gray.450">talles@mail.com</Text>
         </Box>
 
         <Avatar size="md" name="Talles" src="https://github.com/tallesv.png" />
