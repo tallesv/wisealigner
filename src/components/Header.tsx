@@ -6,7 +6,6 @@ import {
   useBreakpointValue,
   IconButton,
   Icon,
-  Button as CharkaButton,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { RiMenuLine } from 'react-icons/ri';
