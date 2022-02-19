@@ -62,14 +62,27 @@ export default function SignUp(): JSX.Element {
             <Text fontSize={[20, 22]} fontWeight={800}>
               Crie sua conta na wisealigners
             </Text>
-            <Input name="email" label="Email" type="email" size="md" />
-            <Input name="name" label="Nome" size="md" />
-            <Input name="password" label="Senha" type="password" size="md" />
+            <Input
+              name="email"
+              label="Email"
+              type="email"
+              size="md"
+              bgColor="white"
+            />
+            <Input name="name" label="Nome" size="md" bgColor="white" />
+            <Input
+              name="password"
+              label="Senha"
+              type="password"
+              size="md"
+              bgColor="white"
+            />
             <Input
               name="password_confirmation"
               label="Confirmação de Senha"
               type="password"
               size="md"
+              bgColor="white"
             />
 
             <Button>Criar conta</Button>

@@ -25,7 +25,7 @@ export default function Login() {
               <Text fontSize={24} fontWeight={800}>
                 Entrar
               </Text>
-              <Input name="email" type="email" label="Email" />
+              <Input name="email" type="email" label="Email" bgColor="white" />
               <Box>
                 <Flex justifyContent="space-between">
                   <Text fontWeight={700}>Senha</Text>
@@ -39,7 +39,7 @@ export default function Login() {
                     <Link href="/sign-up">Esqueceu a senha?</Link>
                   </Text>
                 </Flex>
-                <Input name="password" type="password" mt={2} />
+                <Input name="password" type="password" mt={2} bgColor="white" />
               </Box>
               <Button>Entrar</Button>
             </VStack>

@@ -40,6 +40,8 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
           name={name}
           fontSize={15}
           size="lg"
+          focusBorderColor="purple.400"
+          bgColor="gray.200"
           ref={ref}
           {...rest}
         />
