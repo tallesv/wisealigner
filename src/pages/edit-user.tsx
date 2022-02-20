@@ -11,11 +11,10 @@ import {
   FormControl,
   FormLabel,
   AvatarBadge,
-  Text,
   IconButton,
   Tooltip,
 } from '@chakra-ui/react';
-import { FiXCircle } from 'react-icons/fi';
+import { RiCloseLine } from 'react-icons/ri';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -147,7 +146,7 @@ function EditUser() {
                     <IconButton
                       colorScheme="red.500"
                       aria-label="Remove avatar"
-                      icon={<FiXCircle />}
+                      icon={<RiCloseLine />}
                     />
                   </Tooltip>
                 </AvatarBadge>
