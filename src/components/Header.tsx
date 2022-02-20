@@ -6,9 +6,13 @@ import {
   useBreakpointValue,
   IconButton,
   Icon,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { RiMenuLine } from 'react-icons/ri';
+import { RiMenuLine, RiLogoutBoxRLine } from 'react-icons/ri';
 import { useSidebarDrawer } from '../context/SidebarDrawerContext';
 
 export function Header() {
@@ -68,8 +72,18 @@ export function Header() {
           <Text>Talles</Text>
           <Text color="gray.450">talles@mail.com</Text>
         </Box>
-
-        <Avatar size="md" name="Talles" src="https://github.com/tallesv.png" />
+        <Menu>
+          <MenuButton>
+            <Avatar
+              size="md"
+              name="Talles"
+              src="https://github.com/tallesv.png"
+            />
+          </MenuButton>
+          <MenuList>
+            <MenuItem icon={<RiLogoutBoxRLine />}>Sair</MenuItem>
+          </MenuList>
+        </Menu>
       </Flex>
     </Flex>
   );
