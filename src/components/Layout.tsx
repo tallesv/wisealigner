@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { ReactNode, useEffect, useState } from 'react';
 import { Header } from './Header';
 import { Menu } from './Menu/Index';
@@ -21,7 +21,9 @@ export function Layout({ children }: LayoutProps) {
       <Header />
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px={[4, 10]}>
         <Menu />
-        {children}
+        <Box bgColor="white" w="100%" borderRadius={8}>
+          {children}
+        </Box>
       </Flex>
     </>
   );
