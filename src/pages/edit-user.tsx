@@ -141,7 +141,7 @@ function EditUser() {
                 name="Talles"
                 src="https://github.com/tallesv.png"
               >
-                <AvatarBadge boxSize={10} bg="red.500">
+                <AvatarBadge boxSize={isWideVersion ? 10 : 8} bg="red.500">
                   <Tooltip label="Remover avatar" aria-label="Remove avatar">
                     <IconButton
                       colorScheme="red.500"
