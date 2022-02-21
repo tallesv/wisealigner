@@ -11,8 +11,9 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { RiMenuLine, RiLogoutBoxRLine } from 'react-icons/ri';
+import { RiMenuLine, RiLogoutBoxRLine, RiContactsLine } from 'react-icons/ri';
 import { useSidebarDrawer } from '../context/SidebarDrawerContext';
 
 export function Header() {
@@ -81,6 +82,9 @@ export function Header() {
             />
           </MenuButton>
           <MenuList>
+            <Link href="/edit-user">
+              <MenuItem icon={<RiContactsLine />}>Meus dados</MenuItem>
+            </Link>
             <MenuItem icon={<RiLogoutBoxRLine />}>Sair</MenuItem>
           </MenuList>
         </Menu>
