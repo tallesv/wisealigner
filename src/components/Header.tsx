@@ -15,10 +15,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { RiMenuLine, RiLogoutBoxRLine, RiContactsLine } from 'react-icons/ri';
 import { useSidebarDrawer } from '../context/SidebarDrawerContext';
+import { useAuth } from '../hooks/useAuth';
 
 export function Header() {
   const { push } = useRouter();
   const { onOpen } = useSidebarDrawer();
+  const { signOut } = useAuth();
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -85,7 +87,9 @@ export function Header() {
             <Link href="/edit-user">
               <MenuItem icon={<RiContactsLine />}>Meus dados</MenuItem>
             </Link>
-            <MenuItem icon={<RiLogoutBoxRLine />}>Sair</MenuItem>
+            <MenuItem icon={<RiLogoutBoxRLine />} onClick={signOut}>
+              Sair
+            </MenuItem>
           </MenuList>
         </Menu>
       </Flex>
