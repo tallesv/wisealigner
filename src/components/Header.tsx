@@ -60,7 +60,7 @@ export function Header() {
             fontWeight="bold"
             letterSpacing="tight"
           >
-            wisealigner
+            wisealigners
             <Text as="span" ml={1} color="purple.550">
               .
             </Text>
