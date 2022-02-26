@@ -1,9 +1,53 @@
-import { Box, Flex, VStack, Text } from '@chakra-ui/react';
+import { Box, Flex, VStack, Text, Alert, AlertIcon } from '@chakra-ui/react';
+import { useState } from 'react';
 import Link from 'next/link';
+import * as yup from 'yup';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { useAuth } from '../hooks/useAuth';
 import { Input } from '../components/Form/input';
 import { Button } from '../components/Button';
+import { withSSRGuest } from '../utils/withSSRGuest';
+
+type LoginFormData = {
+  email: string;
+  password: string;
+};
+
+const loginFormSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required('Por favor insira um E-mail')
+    .email('E-mail inválido'),
+  password: yup.string().required('Por favor insira uma senha.'),
+});
 
 export default function Login() {
+  const { signIn } = useAuth();
+  const [loginError, setLoginError] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
+
+  const { register, handleSubmit, formState } = useForm<LoginFormData>({
+    resolver: yupResolver(loginFormSchema),
+  });
+
+  const { errors } = formState;
+
+  const handleLogin: SubmitHandler<LoginFormData> = async values => {
+    try {
+      setLoginError(false);
+      setButtonLoading(true);
+      signIn(values);
+    } catch (err) {
+      setLoginError(true);
+      console.log(err);
+      console.log(loginError);
+    } finally {
+      setButtonLoading(false);
+    }
+  };
+
   return (
     <Box>
       <VStack pt={[7, 14]} mx="auto" maxW={1000} spacing={10}>
@@ -14,18 +58,33 @@ export default function Login() {
         </Box>
 
         <Box
+          as="form"
+          onSubmit={handleSubmit(handleLogin)}
           bgColor="white"
           w={[358, 540]}
-          h={[436]}
           borderRadius={5}
           boxShadow="xl"
         >
           <Flex px={[1, 2]} py={[2, 3]} direction="column">
-            <VStack spacing={7} px={[7, 16]} align="stretch" mt={10}>
+            <VStack spacing={5} px={[7, 16]} align="stretch" py={10}>
               <Text fontSize={24} fontWeight={800}>
                 Entrar
               </Text>
-              <Input name="email" type="email" label="Email" bgColor="white" />
+
+              {loginError && (
+                <Alert status="error">
+                  <AlertIcon />
+                  There was an error processing your request
+                </Alert>
+              )}
+
+              <Input
+                type="email"
+                label="Email"
+                bgColor="white"
+                error={errors.email}
+                {...register('email')}
+              />
               <Box>
                 <Flex justifyContent="space-between">
                   <Text fontWeight={700}>Senha</Text>
@@ -39,9 +98,18 @@ export default function Login() {
                     <Link href="/sign-up">Esqueceu a senha?</Link>
                   </Text>
                 </Flex>
-                <Input name="password" type="password" mt={2} bgColor="white" />
+                <Input
+                  type="password"
+                  mt={2}
+                  bgColor="white"
+                  error={errors.password}
+                  {...register('password')}
+                />
               </Box>
-              <Button>Entrar</Button>
+
+              <Button type="submit" isLoading={buttonLoading}>
+                Entrar
+              </Button>
             </VStack>
           </Flex>
         </Box>
@@ -62,3 +130,9 @@ export default function Login() {
     </Box>
   );
 }
+
+export const getServerSideProps = withSSRGuest(async ctx => {
+  return {
+    props: {},
+  };
+});

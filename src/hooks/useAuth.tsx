@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useCallback,
 } from 'react';
 import Router from 'next/router';
 import { setCookie, parseCookies, destroyCookie } from 'nookies';
@@ -12,6 +13,9 @@ import api from '../client/api';
 
 type User = {
   email: string;
+  id: string;
+  name: string;
+  type: string;
 };
 
 type SignInCredentials = {
@@ -40,41 +44,45 @@ function AuthProvider({ children }: AuthProviderProps) {
     const { 'wisealigners.token': token } = parseCookies();
 
     if (token) {
-      const { 'wisealigners.user': userFromCookie } = parseCookies();
+      const { 'wisealigners.user': userFromCookie } = parseCookies(null);
       setUser(JSON.parse(userFromCookie));
     }
   }, []);
 
-  async function signIn({ email, password }: SignInCredentials) {
+  // eslint-disable-next-line consistent-return
+  const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
     try {
       const response = await api.post('sessions', {
         email,
         password,
       });
 
-      const { token } = response.data;
+      const { token, user: userFromResponse } = response.data;
 
-      setCookie(undefined, 'wisealigners.token', 'testetee', {
-        maxAge: 60 * 60 * 24 * 30,
+      setCookie(undefined, 'wisealigners.token', token, {
+        maxAge: 60 * 60 * 24 * 7,
         path: '/',
       });
 
-      setCookie(undefined, 'wisealigners.user', email, {
-        maxAge: 60 * 60 * 24 * 30,
-        path: '/',
-      });
+      setCookie(
+        undefined,
+        'wisealigners.user',
+        JSON.stringify(userFromResponse),
+        {
+          maxAge: 60 * 60 * 24 * 7,
+          path: '/',
+        },
+      );
 
-      setUser({
-        email,
-      });
+      setUser(userFromResponse);
 
-      api.defaults.headers.common.Authorization = `Bearer ${'testee'}`;
+      api.defaults.headers.common.Authorization = `Bearer ${token}`;
 
       Router.push('/');
     } catch (err) {
       console.log(err);
     }
-  }
+  }, []);
 
   function signOut() {
     destroyCookie(undefined, 'wisealigners.token');
@@ -87,7 +95,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     <AuthContext.Provider
       value={useMemo(
         () => ({ signIn, signOut, isAuthenticated, user }),
-        [isAuthenticated, user],
+        [isAuthenticated, signIn, user],
       )}
     >
       {children}
