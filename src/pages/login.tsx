@@ -38,11 +38,9 @@ export default function Login() {
     try {
       setLoginError(false);
       setButtonLoading(true);
-      signIn(values);
+      await signIn(values);
     } catch (err) {
       setLoginError(true);
-      console.log(err);
-      console.log(loginError);
     } finally {
       setButtonLoading(false);
     }
@@ -74,7 +72,7 @@ export default function Login() {
               {loginError && (
                 <Alert status="error">
                   <AlertIcon />
-                  There was an error processing your request
+                  Combinação de email e senha incorreta.
                 </Alert>
               )}
 
@@ -131,7 +129,7 @@ export default function Login() {
   );
 }
 
-export const getServerSideProps = withSSRGuest(async ctx => {
+export const getServerSideProps = withSSRGuest(async () => {
   return {
     props: {},
   };

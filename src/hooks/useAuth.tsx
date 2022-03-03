@@ -49,7 +49,6 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
-  // eslint-disable-next-line consistent-return
   const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
     try {
       const response = await api.post('sessions', {
@@ -80,7 +79,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
       Router.push('/');
     } catch (err) {
-      console.log(err);
+      throw Error();
     }
   }, []);
 
