@@ -1,17 +1,92 @@
-import { Box, useBreakpointValue, Flex, VStack, Text } from '@chakra-ui/react';
+import {
+  Box,
+  useBreakpointValue,
+  Flex,
+  VStack,
+  Text,
+  useToast,
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import * as yup from 'yup';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
 import { Input } from '../components/Form/input';
 import { Button } from '../components/Button';
+import api from '../client/api';
+
+type RegisterFormData = {
+  email: string;
+  name: string;
+  password: string;
+  password_confirmation: string;
+};
+
+const registerFormSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required('Por favor insira um E-mail')
+    .email('E-mail inválido'),
+  name: yup.string().required('Por favor insira seu Nome'),
+  password: yup
+    .string()
+    .required('Por favor insira uma senha.')
+    .min(6, 'A senha deve ter no mínimo 6 caracteres'),
+  password_confirmation: yup
+    .string()
+    .required('Por favor insira a confirmação da senha.')
+    .min(6, 'A senha deve ter no mínimo 6 caracteres')
+    .equals([yup.ref('password')], 'As senhas precisam ser iguais.'),
+});
 
 export default function SignUp(): JSX.Element {
+  const { push } = useRouter();
+  const toast = useToast();
+
+  const [buttonLoading, setButtonLoading] = useState(false);
+
   let isDefaultSize = true;
 
   isDefaultSize = !!useBreakpointValue({
     lg: true,
     sm: false,
   });
+
+  const { register, handleSubmit, formState } = useForm<RegisterFormData>({
+    resolver: yupResolver(registerFormSchema),
+  });
+
+  const { errors } = formState;
+
+  const handleRegister: SubmitHandler<RegisterFormData> = async values => {
+    try {
+      setButtonLoading(true);
+      await api.post('/users', {
+        ...values,
+        type: 'client',
+      });
+      toast({
+        title: 'Conta criada com sucesso.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      push('/');
+    } catch (err) {
+      toast({
+        title: 'Houve um erro ao criar a conta.',
+        description: 'Por favo tente novamente',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setButtonLoading(false);
+    }
+  };
 
   const [mounted, setMounted] = useState(false);
 
@@ -56,11 +131,10 @@ export default function SignUp(): JSX.Element {
           </Box>
         )}
 
-        <Box>
+        <Box as="form" onSubmit={handleSubmit(handleRegister)}>
           <VStack
             spacing={5}
             align="stretch"
-            h={628}
             w={[358, 540]}
             px={[7, 12]}
             py={[7, 14]}
@@ -72,29 +146,40 @@ export default function SignUp(): JSX.Element {
               Crie sua conta na wisealigners
             </Text>
             <Input
-              name="email"
               label="Email"
               type="email"
               size="md"
               bgColor="white"
+              error={errors.email}
+              {...register('email')}
             />
-            <Input name="name" label="Nome" size="md" bgColor="white" />
             <Input
-              name="password"
+              label="Nome"
+              size="md"
+              bgColor="white"
+              error={errors.name}
+              {...register('name')}
+            />
+            <Input
               label="Senha"
               type="password"
               size="md"
               bgColor="white"
+              error={errors.password}
+              {...register('password')}
             />
             <Input
-              name="password_confirmation"
               label="Confirmação de Senha"
               type="password"
               size="md"
               bgColor="white"
+              error={errors.password_confirmation}
+              {...register('password_confirmation')}
             />
 
-            <Button>Criar conta</Button>
+            <Button type="submit" isLoading={buttonLoading}>
+              Criar conta
+            </Button>
 
             <Flex pt={3} fontSize={14} justify="center">
               <Text>Já possui conta?</Text>
