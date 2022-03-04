@@ -83,18 +83,18 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
-  function signOut() {
+  const signOut = useCallback(() => {
     destroyCookie(undefined, 'wisealigners.token');
     destroyCookie(undefined, 'wisealigners.user');
 
     Router.push('/');
-  }
+  }, []);
 
   return (
     <AuthContext.Provider
       value={useMemo(
         () => ({ signIn, signOut, isAuthenticated, user }),
-        [isAuthenticated, signIn, user],
+        [isAuthenticated, signIn, signOut, user],
       )}
     >
       {children}
