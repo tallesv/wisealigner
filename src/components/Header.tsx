@@ -20,7 +20,7 @@ import { useAuth } from '../hooks/useAuth';
 export function Header() {
   const { push } = useRouter();
   const { onOpen } = useSidebarDrawer();
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -72,14 +72,14 @@ export function Header() {
 
       <Flex>
         <Box mr={3} textAlign="right">
-          <Text>Talles</Text>
-          <Text color="gray.450">talles@mail.com</Text>
+          <Text>{user.name}</Text>
+          <Text color="gray.450">{user.email}</Text>
         </Box>
         <Menu>
           <MenuButton>
             <Avatar
               size="md"
-              name="Talles"
+              name={user.name}
               src="https://github.com/tallesv.png"
             />
           </MenuButton>
