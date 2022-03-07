@@ -1,4 +1,3 @@
-/* eslint-disable react/function-component-definition */
 /* eslint-disable react/no-children-prop */
 import {
   Input as ChakraInput,
