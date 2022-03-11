@@ -25,9 +25,8 @@ interface PacientDataProps {
   isWideVersion: boolean | undefined;
   stepsSize: number;
   activeStep: number;
-  handleNextStep: () => void;
   handlePrevStep: () => void;
-  handleSubmitData: (values: PacientFormData) => void;
+  handleSubmitData: (values: DadosDoPacienteType) => void;
 }
 
 const PacientDataFormSchema = yup.object().shape({
@@ -48,7 +47,6 @@ export function PacientData({
   isWideVersion,
   stepsSize,
   activeStep,
-  handleNextStep,
   handlePrevStep,
   handleSubmitData,
 }: PacientDataProps) {
@@ -57,19 +55,18 @@ export function PacientData({
   const [pacientImage, setPacientImage] = useState('');
 
   const { register, handleSubmit, formState, setValue, getValues } =
-    useForm<PacientFormData>({
+    useForm<DadosDoPacienteType>({
       resolver: yupResolver(PacientDataFormSchema),
     });
 
   const { errors } = formState;
 
   const handleSubmitPacientData: SubmitHandler<
-    PacientFormData
+    DadosDoPacienteType
   > = async values => {
     setButtonLoading(true);
-    handleNextStep();
-    setButtonLoading(false);
     handleSubmitData({ ...values });
+    setButtonLoading(false);
   };
 
   const handleUploadPacientImage = useCallback(
@@ -139,23 +136,10 @@ export function PacientData({
 
       <Flex>
         <Button
-          isDisabled={activeStep === 0}
-          mr={4}
-          onClick={() => handlePrevStep()}
-          size="sm"
-          variant="outline"
-          bgColor="white"
-          _hover={{ bgColor: 'white' }}
-          color="blue.450"
-        >
-          Anterior
-        </Button>
-        <Button
           size="sm"
           type="submit"
           isLoading={buttonLoading}
           disabled={isUploading}
-          onClick={() => handleNextStep()}
         >
           {activeStep === stepsSize ? 'Finalizar' : 'Próximo'}
         </Button>
