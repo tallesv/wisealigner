@@ -17,7 +17,7 @@ import { RelacaoAnteroPosterior } from '../components/NewCase/RelacaoAnteroPoste
 import { Overjet } from '../components/NewCase/Overjet';
 import { Sobremordida } from '../components/NewCase/Sobremordida';
 import { LinhaMedia } from '../components/NewCase/LinhaMedia';
-import { ManejoDeEspaços } from '../components/NewCase/ManejoDeEspaços';
+import { ManejoDeEspaços } from '../components/NewCase/ManejoDeEspacos';
 import { InformacoesComplementares } from '../components/NewCase/InformacoesComplementares';
 import { Documentacao } from '../components/NewCase/Documentacao';
 
