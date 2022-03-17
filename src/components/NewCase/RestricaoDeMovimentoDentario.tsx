@@ -17,7 +17,9 @@ import { CheckBoxGroup } from '../Form/CheckBoxGroup';
 
 interface RestricaoDeMovimentoDentarioProps {
   handleNextStep: () => void;
-  handleSubmitData: (values: RestricaoDeMovimentoDentarioType) => void;
+  handleSubmitData: (values: {
+    restricao_de_movimento_dentario: RestricaoDeMovimentoDentarioType;
+  }) => void;
 }
 
 const RestricaoDeMovimentoDentarioFormSchema = yup.object().shape({
@@ -80,7 +82,7 @@ export function RestricaoDeMovimentoDentario({
     RestricaoDeMovimentoDentarioType
   > = async values => {
     setButtonLoading(true);
-    handleSubmitData(values);
+    handleSubmitData({ restricao_de_movimento_dentario: { ...values } });
     setButtonLoading(false);
   };
 

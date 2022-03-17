@@ -18,7 +18,9 @@ import { Button } from '../Button';
 
 interface RelacaoAnteroPosteriorProps {
   handleNextStep: () => void;
-  handleSubmitData: (values: RelacaoAnteroPosteriorType) => void;
+  handleSubmitData: (values: {
+    relacao_antero_posterior: RelacaoAnteroPosteriorType;
+  }) => void;
 }
 
 const RelacaoAnteroPosteriorFormSchema = yup.object().shape({
@@ -81,7 +83,7 @@ export function RelacaoAnteroPosterior({
     RelacaoAnteroPosteriorType
   > = async values => {
     setButtonLoading(true);
-    handleSubmitData(values);
+    handleSubmitData({ relacao_antero_posterior: { ...values } });
     setButtonLoading(false);
   };
   return (

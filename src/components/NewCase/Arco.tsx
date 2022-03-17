@@ -28,7 +28,7 @@ export function Arco({ handleNextStep, handleSubmitData }: ArcoProps) {
 
   const { errors } = formState;
 
-  const handleSubmitPacientData: SubmitHandler<{
+  const handleSubmitArco: SubmitHandler<{
     tratarArco: string;
   }> = async value => {
     setButtonLoading(true);
@@ -41,7 +41,7 @@ export function Arco({ handleNextStep, handleSubmitData }: ArcoProps) {
       w="100%"
       spacing={8}
       as="form"
-      onSubmit={handleSubmit(handleSubmitPacientData)}
+      onSubmit={handleSubmit(handleSubmitArco)}
     >
       <RadioGroup
         name="tratarArco"

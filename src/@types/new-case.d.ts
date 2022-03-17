@@ -1,15 +1,15 @@
-type NewCase = {
-  dadosDoPaciente: DadosDoPacienteType;
+type NewCaseType = {
+  dados_do_paciente: DadosDoPacienteType;
   tratarArco: string;
-  restricao_de_movimento_dentario: RestricaoDeMovimentoDentario;
+  restricao_de_movimento_dentario: RestricaoDeMovimentoDentarioType;
   attachments: AttachmentsType;
-  relacao_antero_posterior: RelacaoAnteroPosterior;
+  relacao_antero_posterior: RelacaoAnteroPosteriorType;
   overjet: string;
-  sobremordida: Sobremordida;
-  linhaMedia: LinhaMedia;
-  manejo_de_espaços: ManejoDeEspaços;
-  informacoes_complementares: InformacoesComplementares;
-  documentacao: Documentacao;
+  sobremordida: SobremordidaType;
+  linha_media: LinhaMedia;
+  manejo_de_espaços: ManejoDeEspaçosType;
+  informacoes_complementares: InformacoesComplementaresType;
+  documentacao: DocumentacaoType;
 };
 
 type DadosDoPacienteType = {
@@ -45,8 +45,14 @@ type SobremordidaType = {
 
 type LinhaMediaType = {
   option: string;
-  sub_options?: string[];
-  observation?: string;
+  superior?: {
+    direita: string;
+    esquerda: string;
+  };
+  inferior?: {
+    direita: string;
+    esquerda: string;
+  };
 };
 
 type ManejoDeEspaçosType = {
@@ -83,7 +89,22 @@ type InformacoesComplementaresType = {
 };
 
 type DocumentacaoType = {
-  fotos: {};
-  radiografia: {};
-  stls: {};
+  fotos: {
+    perfil: string;
+    frente: string;
+    sorriso: string;
+    arca_superior: string;
+    arca_inferior: string;
+    arca_esquerda: string;
+    arca_direita: string;
+    arca_frontal: string;
+  };
+  radiografia: {
+    frente: string;
+    perfil: string;
+  };
+  stls: {
+    superior: string;
+    inferior: string;
+  };
 };

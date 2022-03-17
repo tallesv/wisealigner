@@ -17,7 +17,7 @@ import { CheckBoxGroup } from '../Form/CheckBoxGroup';
 
 interface AttachmentsProps {
   handleNextStep: () => void;
-  handleSubmitData: (values: AttachmentsType) => void;
+  handleSubmitData: (values: { attachments: AttachmentsType }) => void;
 }
 
 const AttachmentsFormSchema = yup.object().shape({
@@ -78,7 +78,7 @@ export function Attachments({
     AttachmentsType
   > = async values => {
     setButtonLoading(true);
-    handleSubmitData(values);
+    handleSubmitData({ attachments: { ...values } });
     setButtonLoading(false);
   };
 

@@ -26,7 +26,9 @@ interface PacientDataProps {
   stepsSize: number;
   activeStep: number;
   handlePrevStep: () => void;
-  handleSubmitData: (values: DadosDoPacienteType) => void;
+  handleSubmitData: (values: {
+    dados_do_paciente: DadosDoPacienteType;
+  }) => void;
 }
 
 const PacientDataFormSchema = yup.object().shape({
@@ -47,7 +49,6 @@ export function PacientData({
   isWideVersion,
   stepsSize,
   activeStep,
-  handlePrevStep,
   handleSubmitData,
 }: PacientDataProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -65,7 +66,7 @@ export function PacientData({
     DadosDoPacienteType
   > = async values => {
     setButtonLoading(true);
-    handleSubmitData({ ...values });
+    handleSubmitData({ dados_do_paciente: { ...values } });
     setButtonLoading(false);
   };
 
