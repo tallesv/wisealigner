@@ -2,11 +2,12 @@ import {
   Input as ChakraInput,
   InputGroup,
   Button as ChakraButton,
+  ButtonProps as ChakraButtonProps,
 } from '@chakra-ui/react';
 import { ReactNode, useRef, useState } from 'react';
 import uploadFile from '../../utils/uploadFile';
 
-interface FileUploadProps {
+interface FileUploadProps extends ChakraButtonProps {
   children?: ReactNode;
   label: string;
   onUploadImage: (url: string) => void;
@@ -45,10 +46,17 @@ export const FileUpload = ({
           inputRef.current = e;
         }}
         onChange={e => e.target.files && handleUpload(e.target.files[0])}
-        {...rest}
       />
       {children}
-      <ChakraButton isLoading={buttonLoading} fontSize={[11, 16]}>
+      <ChakraButton
+        isLoading={buttonLoading}
+        fontSize={[11, 16]}
+        variant="outline"
+        bgColor="white"
+        _hover={{ bgColor: 'white' }}
+        color="blue.450"
+        {...rest}
+      >
         {label}
       </ChakraButton>
     </InputGroup>
