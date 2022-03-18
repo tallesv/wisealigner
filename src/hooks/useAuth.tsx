@@ -46,6 +46,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     if (token) {
       const { 'wisealigners.user': userFromCookie } = parseCookies(null);
       setUser(JSON.parse(userFromCookie));
+      api.defaults.headers.common.Authorization = `Bearer ${token}`;
     }
   }, []);
 
