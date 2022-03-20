@@ -11,7 +11,7 @@ export function SidebarNav() {
         <NavLink icon={RiInputMethodLine} href="/new-case">
           Novo caso
         </NavLink>
-        <NavLink icon={RiDashboardLine} href="/case-table">
+        <NavLink icon={RiDashboardLine} href="/cases-table">
           Listar casos
         </NavLink>
       </NavSection>
