@@ -1,0 +1,21 @@
+type UserType = {
+  id: string;
+  type: string;
+  avatar: string;
+  name: string;
+  last_name: string;
+  email: string;
+  cpf: string;
+  fixed_phone: string;
+  phone: string;
+  clinic: string;
+  cro: string;
+  cro_state: string;
+  cep: string;
+  state: string;
+  city: string;
+  neighborhood: string;
+  street: string;
+  complement: string;
+  home_number: string;
+};
