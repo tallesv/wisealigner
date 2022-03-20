@@ -39,9 +39,7 @@ const PacientDataFormSchema = yup.object().shape({
   data_de_nascimento: yup
     .string()
     .required('Por favor insira a data de nascimento do paciente.'),
-  avatar: yup
-    .string()
-    .required('Por favor selecione uma foto para o paciente.'),
+  avatar: yup.string(),
 });
 
 export function PacientData({
