@@ -85,7 +85,9 @@ export function Header() {
           </MenuButton>
           <MenuList>
             <Link href="/sign-up">
-              <MenuItem icon={<RiUserAddLine />}>Registrar usuário</MenuItem>
+              <MenuItem hidden={user.type !== 'Admin'} icon={<RiUserAddLine />}>
+                Registrar usuário
+              </MenuItem>
             </Link>
             <Link href={`/edit-user/${user.id}`}>
               <MenuItem icon={<RiContactsLine />}>Meus dados</MenuItem>
