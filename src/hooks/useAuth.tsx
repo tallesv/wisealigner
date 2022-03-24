@@ -16,6 +16,7 @@ type User = {
   id: string;
   name: string;
   type: string;
+  avatar: string;
 };
 
 type SignInCredentials = {

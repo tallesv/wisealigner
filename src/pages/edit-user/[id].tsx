@@ -19,9 +19,15 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import cepPromise from 'cep-promise';
-import { Button } from '../components/Button';
-import { Input } from '../components/Form/input';
-import states from '../utils/states';
+import { useCallback, useEffect, useState } from 'react';
+import { Button } from '../../components/Button';
+import { Input } from '../../components/Form/input';
+import states from '../../utils/states';
+import { withSSRAuth } from '../../utils/withSSRAuth';
+import api from '../../client/api';
+import { FileUpload } from '../../components/Form/FileUpload';
+import deleteFile from '../../utils/deleteFile';
+import { getApiClient } from '../../client/apiClient';
 
 type EditUserFormData = {
   avatar: string;
@@ -66,7 +72,14 @@ const editUserFormSchema = yup.object().shape({
   home_number: yup.string(),
 });
 
-function EditUser() {
+interface EditUserProps {
+  user: UserType;
+}
+
+function EditUser({ user }: EditUserProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [userToEdit, setUserToEdit] = useState<UserType>(user);
+
   const inputSize = 'md';
 
   const isWideVersion = useBreakpointValue({
@@ -82,7 +95,14 @@ function EditUser() {
   const { errors } = formState;
 
   const handleEditUser: SubmitHandler<EditUserFormData> = async values => {
-    console.log(values);
+    setIsLoading(true);
+    await api.put(`/users/${userToEdit.id}`, {
+      ...userToEdit,
+      ...values,
+    });
+    const getUpdatedUser = await api.get(`/users/${userToEdit.id}`);
+    setUserToEdit(getUpdatedUser.data);
+    setIsLoading(false);
   };
 
   async function handleFillAddress(cep: string) {
@@ -101,6 +121,56 @@ function EditUser() {
     }
   }
 
+  const setUserValues = useCallback(
+    (userToSet: UserType) => {
+      setValue('avatar', userToSet.avatar);
+      setValue('name', userToSet.name);
+      setValue('last_name', userToSet.last_name);
+      setValue('email', userToSet.email);
+      setValue('cpf', userToSet.cpf);
+      setValue('fixed_phone', userToSet.fixed_phone);
+      setValue('phone', userToSet.phone);
+      setValue('clinic', userToSet.clinic);
+      setValue('cro', userToSet.cro);
+      setValue('cro_state', userToSet.cro_state);
+      setValue('cep', userToSet.cep);
+      setValue('state', userToSet.state);
+      setValue('city', userToSet.city);
+      setValue('neighborhood', userToSet.neighborhood);
+      setValue('street', userToSet.street);
+      setValue('complement', userToSet.complement);
+      setValue('home_number', userToSet.home_number);
+    },
+    [setValue],
+  );
+
+  async function removeAvatar(url: string) {
+    await deleteFile(url);
+  }
+
+  async function handleUploadUserAvatar(url: string) {
+    if (userToEdit.avatar !== '') {
+      await removeAvatar(userToEdit.avatar);
+    }
+
+    handleEditUser({
+      ...userToEdit,
+      avatar: url,
+    });
+  }
+
+  async function handleRemoveAvatar() {
+    await removeAvatar(userToEdit.avatar);
+    handleEditUser({
+      ...userToEdit,
+      avatar: '',
+    });
+  }
+
+  useEffect(() => {
+    setUserValues(user);
+  }, [setUserValues, user]);
+
   return (
     <Box
       maxWidth={1000}
@@ -118,6 +188,7 @@ function EditUser() {
           color="blue.450"
           variant="outline"
           size="md"
+          disabled={isLoading}
         >
           Alterar senha
         </Button>
@@ -138,30 +209,33 @@ function EditUser() {
             <Flex align="center" justify="space-evenly">
               <Avatar
                 size={isWideVersion ? 'xl' : 'lg'}
-                name="Talles"
-                src="https://github.com/tallesv.png"
+                name={userToEdit.name}
+                src={userToEdit.avatar}
               >
-                <AvatarBadge boxSize={isWideVersion ? 10 : 8} bg="red.500">
+                <AvatarBadge
+                  hidden={userToEdit.avatar === ''}
+                  boxSize={isWideVersion ? 10 : 8}
+                  bg="red.500"
+                >
                   <Tooltip label="Remover avatar" aria-label="Remove avatar">
                     <IconButton
                       colorScheme="red.500"
                       aria-label="Remove avatar"
+                      onClick={() => handleRemoveAvatar()}
                       icon={<RiCloseLine />}
                     />
                   </Tooltip>
                 </AvatarBadge>
               </Avatar>
 
-              <Button
-                bgColor="white"
-                _hover={{ bgColor: 'white' }}
-                color="blue.450"
-                variant="outline"
+              <FileUpload
+                label="Alterar avatar"
+                onUploadImage={url => handleUploadUserAvatar(url)}
+                isUploading={uploading => setIsLoading(uploading)}
                 size={isWideVersion ? 'md' : 'sm'}
                 ml={5}
-              >
-                Alterar avatar
-              </Button>
+                disabled={isLoading}
+              />
             </Flex>
           </Stack>
 
@@ -310,14 +384,41 @@ function EditUser() {
           _hover={{ bgColor: 'white' }}
           color="blue.450"
           variant="outline"
+          onClick={() => setUserValues(userToEdit)}
           mr={5}
+          disabled={isLoading}
         >
           Cancelar
         </Button>
-        <Button type="submit">Salvar</Button>
+        <Button type="submit" isLoading={isLoading}>
+          Salvar
+        </Button>
       </Flex>
     </Box>
   );
 }
 
 export default EditUser;
+
+export const getServerSideProps = withSSRAuth(
+  async ({ query: { id }, req }) => {
+    const { 'wisealigners.token': token } = req.cookies;
+
+    const apiClient = getApiClient(token);
+    const response = await apiClient.get(`users/${id}`);
+
+    const user = response.data;
+
+    if (!user) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: {
+        user,
+      },
+    };
+  },
+);

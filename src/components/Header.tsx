@@ -26,7 +26,6 @@ export function Header() {
     base: false,
     lg: true,
   });
-
   return (
     <Flex
       mx="auto"
@@ -77,14 +76,10 @@ export function Header() {
         </Box>
         <Menu>
           <MenuButton>
-            <Avatar
-              size="md"
-              name={user.name}
-              src="https://github.com/tallesv.png"
-            />
+            <Avatar size="md" name={user.name} src={user.avatar} />
           </MenuButton>
           <MenuList>
-            <Link href="/edit-user">
+            <Link href={`/edit-user/${user.id}`}>
               <MenuItem icon={<RiContactsLine />}>Meus dados</MenuItem>
             </Link>
             <MenuItem icon={<RiLogoutBoxRLine />} onClick={signOut}>
