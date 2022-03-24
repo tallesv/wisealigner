@@ -13,7 +13,12 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { RiMenuLine, RiLogoutBoxRLine, RiContactsLine } from 'react-icons/ri';
+import {
+  RiMenuLine,
+  RiLogoutBoxRLine,
+  RiContactsLine,
+  RiUserAddLine,
+} from 'react-icons/ri';
 import { useSidebarDrawer } from '../context/SidebarDrawerContext';
 import { useAuth } from '../hooks/useAuth';
 
@@ -79,6 +84,9 @@ export function Header() {
             <Avatar size="md" name={user.name} src={user.avatar} />
           </MenuButton>
           <MenuList>
+            <Link href="/sign-up">
+              <MenuItem icon={<RiUserAddLine />}>Registrar usuário</MenuItem>
+            </Link>
             <Link href={`/edit-user/${user.id}`}>
               <MenuItem icon={<RiContactsLine />}>Meus dados</MenuItem>
             </Link>

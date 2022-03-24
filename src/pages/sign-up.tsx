@@ -21,6 +21,7 @@ import api from '../client/api';
 type RegisterFormData = {
   email: string;
   name: string;
+  last_name: string;
   password: string;
   password_confirmation: string;
 };
@@ -31,6 +32,7 @@ const registerFormSchema = yup.object().shape({
     .required('Por favor insira um E-mail')
     .email('E-mail inválido'),
   name: yup.string().required('Por favor insira seu Nome'),
+  last_name: yup.string(),
   password: yup
     .string()
     .required('Por favor insira uma senha.')
@@ -66,10 +68,10 @@ export default function SignUp(): JSX.Element {
       setButtonLoading(true);
       await api.post('/users', {
         ...values,
-        type: 'client',
+        type: 'Client',
       });
       toast({
-        title: 'Conta criada com sucesso.',
+        title: 'Usuário criado com sucesso.',
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -77,7 +79,7 @@ export default function SignUp(): JSX.Element {
       push('/');
     } catch (err) {
       toast({
-        title: 'Houve um erro ao criar a conta.',
+        title: 'Houve um erro ao criar o usuário.',
         description: 'Por favo tente novamente',
         status: 'error',
         duration: 5000,
@@ -143,7 +145,7 @@ export default function SignUp(): JSX.Element {
             boxShadow="xl"
           >
             <Text fontSize={[20, 22]} fontWeight={800}>
-              Crie sua conta na wisealigners
+              Novo usuário
             </Text>
             <Input
               label="Email"
@@ -159,6 +161,14 @@ export default function SignUp(): JSX.Element {
               bgColor="white"
               error={errors.name}
               {...register('name')}
+            />
+
+            <Input
+              label="Sobrenome"
+              size="md"
+              bgColor="white"
+              error={errors.last_name}
+              {...register('last_name')}
             />
             <Input
               label="Senha"
@@ -178,10 +188,10 @@ export default function SignUp(): JSX.Element {
             />
 
             <Button type="submit" isLoading={buttonLoading}>
-              Criar conta
+              Registrar usuário
             </Button>
 
-            <Flex pt={3} fontSize={14} justify="center">
+            {/* <Flex pt={3} fontSize={14} justify="center">
               <Text>Já possui conta?</Text>
               <Text
                 ml={2}
@@ -192,7 +202,7 @@ export default function SignUp(): JSX.Element {
               >
                 <Link href="/login">Faça o login</Link>
               </Text>
-            </Flex>
+            </Flex> */}
           </VStack>
         </Box>
       </Flex>
