@@ -3,12 +3,17 @@ import { ReactNode } from 'react';
 
 interface NavSectionProps {
   title: string;
+  hidden?: boolean;
   children: ReactNode;
 }
 
-export function NavSection({ title, children }: NavSectionProps) {
+export function NavSection({
+  title,
+  hidden = false,
+  children,
+}: NavSectionProps) {
   return (
-    <Box>
+    <Box hidden={hidden}>
       <Text fontWeight="bold" color="gray.500" fontSize="small">
         {title}
       </Text>
