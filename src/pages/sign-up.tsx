@@ -7,8 +7,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { CheckCircleIcon } from '@chakra-ui/icons';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';

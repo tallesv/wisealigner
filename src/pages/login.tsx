@@ -1,6 +1,5 @@
 import { Box, Flex, VStack, Text, Alert, AlertIcon } from '@chakra-ui/react';
 import { useState } from 'react';
-import Link from 'next/link';
 import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -86,7 +85,7 @@ export default function Login() {
               <Box>
                 <Flex justifyContent="space-between">
                   <Text fontWeight={700}>Senha</Text>
-                  <Text
+                  {/* <Text
                     fontWeight={700}
                     color="purple.550"
                     _hover={{
@@ -94,7 +93,7 @@ export default function Login() {
                     }}
                   >
                     <Link href="/sign-up">Esqueceu a senha?</Link>
-                  </Text>
+                  </Text> */}
                 </Flex>
                 <Input
                   type="password"
@@ -112,7 +111,7 @@ export default function Login() {
           </Flex>
         </Box>
 
-        <Flex w={[358, 540]} pl={[2, 4]} fontSize={14} align="left">
+        {/* <Flex w={[358, 540]} pl={[2, 4]} fontSize={14} align="left">
           <Text>Não possui conta?</Text>
           <Text
             ml={2}
@@ -123,7 +122,7 @@ export default function Login() {
           >
             <Link href="/sign-up">Criar conta</Link>
           </Text>
-        </Flex>
+        </Flex> */}
       </VStack>
     </Box>
   );
