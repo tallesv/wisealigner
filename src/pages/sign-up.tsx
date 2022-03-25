@@ -107,33 +107,7 @@ export default function SignUp(): JSX.Element {
         direction="row"
         justifyContent={isDefaultSize ? 'space-between' : 'center'}
       >
-        {isDefaultSize && (
-          <Box pt={19} mr={16}>
-            <Text mb={8} fontSize={[24]} fontWeight={800}>
-              wisealigners
-            </Text>
-
-            <VStack spacing={5} align="stretch">
-              {[1, 2, 3].map(item => (
-                <Box key={item}>
-                  <Flex alignItems="center">
-                    <CheckCircleIcon color="purple.550" marginRight={2} />
-
-                    <Text fontWeight={800} fontSize={17}>
-                      Get started quickly
-                    </Text>
-                  </Flex>
-                  <Text ml={6}>
-                    Integrate with developer-friendly APIs or choose low-code or
-                    pre-built solutions.
-                  </Text>
-                </Box>
-              ))}
-            </VStack>
-          </Box>
-        )}
-
-        <Box as="form" onSubmit={handleSubmit(handleRegister)}>
+        <Box mx="auto" as="form" onSubmit={handleSubmit(handleRegister)}>
           <VStack
             spacing={5}
             align="stretch"
