@@ -11,7 +11,7 @@ export function SidebarNav() {
   return (
     <Stack spacing="8" align="flex-start">
       <NavSection title="PACIENTES">
-        <NavLink icon={RiInputMethodLine} href="/case/new">
+        <NavLink icon={RiInputMethodLine} href="/case">
           Novo caso
         </NavLink>
         <NavLink icon={RiDashboardLine} href="/cases-table">
