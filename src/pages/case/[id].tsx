@@ -3,23 +3,30 @@ import {
   Heading,
   Divider,
   Flex,
-  Text,
   VStack,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
-import { PacientData } from '../components/NewCase/PacientData';
-import { Button } from '../components/Button';
-import { Arco } from '../components/NewCase/Arco';
-import { RestricaoDeMovimentoDentario } from '../components/NewCase/RestricaoDeMovimentoDentario';
-import { Attachments } from '../components/NewCase/Attachments';
-import { RelacaoAnteroPosterior } from '../components/NewCase/RelacaoAnteroPosterior';
-import { Overjet } from '../components/NewCase/Overjet';
-import { Sobremordida } from '../components/NewCase/Sobremordida';
-import { LinhaMedia } from '../components/NewCase/LinhaMedia';
-import { ManejoDeEspaços } from '../components/NewCase/ManejoDeEspacos';
-import { InformacoesComplementares } from '../components/NewCase/InformacoesComplementares';
-import { Documentacao } from '../components/NewCase/Documentacao';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+
+import { useAuth } from '../../hooks/useAuth';
+import { PacientData } from '../../components/NewCase/PacientData';
+import { Button } from '../../components/Button';
+import { Arco } from '../../components/NewCase/Arco';
+import { RestricaoDeMovimentoDentario } from '../../components/NewCase/RestricaoDeMovimentoDentario';
+import { Attachments } from '../../components/NewCase/Attachments';
+import { RelacaoAnteroPosterior } from '../../components/NewCase/RelacaoAnteroPosterior';
+import { Overjet } from '../../components/NewCase/Overjet';
+import { Sobremordida } from '../../components/NewCase/Sobremordida';
+import { LinhaMedia } from '../../components/NewCase/LinhaMedia';
+import { ManejoDeEspaços } from '../../components/NewCase/ManejoDeEspacos';
+import { InformacoesComplementares } from '../../components/NewCase/InformacoesComplementares';
+import { Documentacao } from '../../components/NewCase/Documentacao';
+import api from '../../client/api';
+import { withSSRAuth } from '../../utils/withSSRAuth';
+import { getApiClient } from '../../client/apiClient';
 
 const steps = [
   { label: 'Dados do Paciente' },
@@ -43,13 +50,26 @@ type OverjetType = {
   overjet: string;
 };
 
-function NewCase() {
+interface NewCaseProps {
+  isNewCase: boolean;
+  newCase?: NewCaseType;
+}
+
+function NewCase({ isNewCase, newCase }: NewCaseProps) {
+  const { push } = useRouter();
+  const { user } = useAuth();
+  const toast = useToast();
+  const [personalDataFilled, setPersonalDataFilled] = useState(!isNewCase);
+  const [newCaseState, setNewCaseState] = useState<NewCaseType>(
+    newCase || ({} as NewCaseType),
+  );
+
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
 
-  const { nextStep, prevStep, reset, activeStep, setStep } = useSteps({
+  const { nextStep, prevStep, activeStep, setStep } = useSteps({
     initialStep: 0,
   });
 
@@ -61,7 +81,20 @@ function NewCase() {
     prevStep();
   }
 
-  function handleSubmitData(
+  function handleSetStep(step: number) {
+    if (activeStep === 0 && step !== activeStep && !personalDataFilled) {
+      toast({
+        title: `Você precisa preencher primeiro os dados do paciente.`,
+        status: 'warning',
+        position: 'top-right',
+        isClosable: true,
+      });
+    } else {
+      setStep(step);
+    }
+  }
+
+  async function handleSubmitData(
     values:
       | { dados_do_paciente: DadosDoPacienteType }
       | TratarArcoType
@@ -75,7 +108,20 @@ function NewCase() {
       | { informacoes_complementares: InformacoesComplementaresType }
       | { documentacao: DocumentacaoType },
   ) {
-    console.log(values);
+    if ('dados_do_paciente' in values && !personalDataFilled) {
+      const response = await api.post('/requests', {
+        ...values,
+        userId: user.id,
+      });
+      setNewCaseState(response.data.request);
+      setPersonalDataFilled(true);
+    } else {
+      const response = await api.put(`/requests/${newCaseState?.id}`, {
+        ...newCase,
+        ...values,
+      });
+      setNewCaseState(response.data.request);
+    }
     handleNextStep();
   }
 
@@ -85,10 +131,9 @@ function NewCase() {
       case 'Dados do Paciente':
         return (
           <PacientData
+            dadosDoPaciente={newCaseState.dados_do_paciente}
             inputSize={inputSize}
             isWideVersion={isWideVersion}
-            stepsSize={steps.length - 1}
-            activeStep={activeStep}
             handlePrevStep={() => handlePrevStep()}
             handleSubmitData={values => handleSubmitData(values)}
           />
@@ -96,6 +141,7 @@ function NewCase() {
       case 'Arco':
         return (
           <Arco
+            tratarArco={newCaseState.tratarArco}
             handleNextStep={() => handleNextStep()}
             handleSubmitData={values => handleSubmitData(values)}
           />
@@ -164,17 +210,17 @@ function NewCase() {
           />
         );
       default:
-        return <Text>Deafult</Text>;
+        return <>Default</>;
     }
   }
 
   return (
     <Box mx="auto" p={[6, 8]}>
-      <Heading size="lg">Novo Caso</Heading>
+      <Heading size="lg">{isNewCase ? 'Novo Caso' : 'Editar Caso'}</Heading>
       <Divider my="6" borderColor="gray.800" />
       <Steps
         orientation="vertical"
-        onClickStep={step => setStep(step)}
+        onClickStep={step => handleSetStep(step)}
         activeStep={activeStep}
         colorScheme="purple"
       >
@@ -186,31 +232,13 @@ function NewCase() {
           </Step>
         ))}
       </Steps>
-      {activeStep === steps.length ? (
+      {activeStep === steps.length && (
         <Flex px={4} py={4} width="100%" flexDirection="column">
           <Heading fontSize="xl" textAlign="center">
-            Woohoo! All steps completed!
+            Caso criado com sucesso!
           </Heading>
-          <Button mx="auto" mt={6} size="sm" onClick={reset}>
-            Reset
-          </Button>
-        </Flex>
-      ) : (
-        <Flex width="100%" justify="flex-end">
-          <Button
-            isDisabled={activeStep === 0}
-            mr={4}
-            onClick={() => handlePrevStep()}
-            size="sm"
-            variant="outline"
-            bgColor="white"
-            _hover={{ bgColor: 'white' }}
-            color="blue.450"
-          >
-            Prev
-          </Button>
-          <Button size="sm" onClick={() => handleNextStep()}>
-            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+          <Button mx="auto" mt={6} size="sm" onClick={() => push('/case/new')}>
+            Criar outro caso
           </Button>
         </Flex>
       )}
@@ -219,3 +247,35 @@ function NewCase() {
 }
 
 export default NewCase;
+
+export const getServerSideProps = withSSRAuth(
+  async ({ query: { id }, req }) => {
+    if (id === 'new') {
+      return {
+        props: {
+          isNewCase: true,
+        },
+      };
+    }
+
+    const { 'wisealigners.token': token } = req.cookies;
+
+    const apiClient = getApiClient(token);
+    const response = await apiClient.get(`requests/${id}`);
+
+    const newCase = response.data.request;
+
+    if (!newCase) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: {
+        isNewCase: false,
+        newCase,
+      },
+    };
+  },
+);

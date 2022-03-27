@@ -3,13 +3,14 @@ import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RadioGroup } from '../Form/RadioGroup';
 import { Button } from '../Button';
 
 interface ArcoProps {
+  tratarArco?: string;
   handleNextStep: () => void;
-  handleSubmitData: (value: { tratarArco: string }) => void;
+  handleSubmitData: (value: { tratarArco: string }) => Promise<void>;
 }
 
 const ArcoFormSchema = yup.object().shape({
@@ -18,8 +19,13 @@ const ArcoFormSchema = yup.object().shape({
     .required('Por favor escolha uma opção para o tratamento de Arco.'),
 });
 
-export function Arco({ handleNextStep, handleSubmitData }: ArcoProps) {
+export function Arco({
+  tratarArco,
+  handleNextStep,
+  handleSubmitData,
+}: ArcoProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [tratarArcoState, setTratarArcoState] = useState(tratarArco);
   const { handleSubmit, formState, setValue } = useForm<{
     tratarArco: string;
   }>({
@@ -32,9 +38,15 @@ export function Arco({ handleNextStep, handleSubmitData }: ArcoProps) {
     tratarArco: string;
   }> = async value => {
     setButtonLoading(true);
-    handleSubmitData(value);
+    await handleSubmitData(value);
     setButtonLoading(false);
   };
+
+  useEffect(() => {
+    if (tratarArco) {
+      setValue('tratarArco', tratarArco);
+    }
+  }, [setValue, tratarArco]);
 
   return (
     <VStack
@@ -47,8 +59,11 @@ export function Arco({ handleNextStep, handleSubmitData }: ArcoProps) {
         name="tratarArco"
         label="Tratar Arco"
         error={errors.tratarArco}
-        onChangeOption={value => setValue('tratarArco', value)}
-        value={undefined}
+        onChangeOption={value => {
+          setTratarArcoState(value);
+          setValue('tratarArco', value);
+        }}
+        value={tratarArcoState}
       >
         <VStack spacing={3} align="flex-start">
           <Radio value="ambos">Ambos</Radio>

@@ -13,7 +13,7 @@ import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Input } from '../Form/input';
 import { RadioGroup } from '../Form/RadioGroup';
 import { Button } from '../Button';
@@ -21,14 +21,13 @@ import { FileUpload } from '../Form/FileUpload';
 import deleteFile from '../../utils/deleteFile';
 
 interface PacientDataProps {
+  dadosDoPaciente?: DadosDoPacienteType;
   inputSize: string;
   isWideVersion: boolean | undefined;
-  stepsSize: number;
-  activeStep: number;
   handlePrevStep: () => void;
   handleSubmitData: (values: {
     dados_do_paciente: DadosDoPacienteType;
-  }) => void;
+  }) => Promise<void>;
 }
 
 const PacientDataFormSchema = yup.object().shape({
@@ -43,15 +42,15 @@ const PacientDataFormSchema = yup.object().shape({
 });
 
 export function PacientData({
+  dadosDoPaciente,
   inputSize,
   isWideVersion,
-  stepsSize,
-  activeStep,
   handleSubmitData,
 }: PacientDataProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [pacientImage, setPacientImage] = useState('');
+  const [pacientImage, setPacientImage] = useState(dadosDoPaciente?.avatar);
+  const [pacientGenero, setPacientGenero] = useState(dadosDoPaciente?.genero);
 
   const { register, handleSubmit, formState, setValue, getValues } =
     useForm<DadosDoPacienteType>({
@@ -64,7 +63,7 @@ export function PacientData({
     DadosDoPacienteType
   > = async values => {
     setButtonLoading(true);
-    handleSubmitData({ dados_do_paciente: { ...values } });
+    await handleSubmitData({ dados_do_paciente: { ...values } });
     setButtonLoading(false);
   };
 
@@ -78,6 +77,15 @@ export function PacientData({
     },
     [getValues, setValue],
   );
+
+  useEffect(() => {
+    if (dadosDoPaciente) {
+      setValue('nome_completo', dadosDoPaciente.nome_completo);
+      setValue('genero', dadosDoPaciente.genero);
+      setValue('data_de_nascimento', dadosDoPaciente.data_de_nascimento);
+      setValue('avatar', dadosDoPaciente.avatar);
+    }
+  }, [dadosDoPaciente, setValue]);
 
   return (
     <VStack
@@ -97,8 +105,11 @@ export function PacientData({
           name="genero"
           label="Gênero"
           error={errors.genero}
-          onChangeOption={value => setValue('genero', value)}
-          value={undefined}
+          onChangeOption={value => {
+            setPacientGenero(value);
+            setValue('genero', value);
+          }}
+          value={pacientGenero}
         >
           <HStack>
             <Radio value="masculine">Masculino</Radio>
@@ -140,7 +151,7 @@ export function PacientData({
           isLoading={buttonLoading}
           disabled={isUploading}
         >
-          {activeStep === stepsSize ? 'Finalizar' : 'Próximo'}
+          Próximo
         </Button>
       </Flex>
     </VStack>

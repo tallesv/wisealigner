@@ -1,4 +1,5 @@
 type NewCaseType = {
+  id: string;
   dados_do_paciente: DadosDoPacienteType;
   tratarArco: string;
   restricao_de_movimento_dentario: RestricaoDeMovimentoDentarioType;
