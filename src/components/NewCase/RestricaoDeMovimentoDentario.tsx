@@ -10,16 +10,17 @@ import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RadioGroup } from '../Form/RadioGroup';
 import { Button } from '../Button';
 import { CheckBoxGroup } from '../Form/CheckBoxGroup';
 
 interface RestricaoDeMovimentoDentarioProps {
+  restricaoDeMovimentoDenatrio?: RestricaoDeMovimentoDentarioType;
   handleNextStep: () => void;
   handleSubmitData: (values: {
     restricao_de_movimento_dentario: RestricaoDeMovimentoDentarioType;
-  }) => void;
+  }) => Promise<void>;
 }
 
 const RestricaoDeMovimentoDentarioFormSchema = yup.object().shape({
@@ -32,11 +33,16 @@ const RestricaoDeMovimentoDentarioFormSchema = yup.object().shape({
 });
 
 export function RestricaoDeMovimentoDentario({
+  restricaoDeMovimentoDenatrio,
   handleNextStep,
   handleSubmitData,
 }: RestricaoDeMovimentoDentarioProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [hideSubOptions, setHideSubOptions] = useState(true);
+  const [hideSubOptions, setHideSubOptions] = useState(
+    restricaoDeMovimentoDenatrio?.option === 'nao',
+  );
+
+  const [option, setOption] = useState(restricaoDeMovimentoDenatrio?.option);
 
   const checkBoxSize = useBreakpointValue({
     lg: 'md',
@@ -57,7 +63,12 @@ export function RestricaoDeMovimentoDentario({
 
   function handleSelectOption(value: string) {
     setValue('option', value);
+    setOption(value);
     setHideSubOptions(value === 'nao');
+
+    if (value === 'nao') {
+      setValue('sub_options', []);
+    }
   }
 
   function handleSelectSubOptions(value: string) {
@@ -82,9 +93,16 @@ export function RestricaoDeMovimentoDentario({
     RestricaoDeMovimentoDentarioType
   > = async values => {
     setButtonLoading(true);
-    handleSubmitData({ restricao_de_movimento_dentario: { ...values } });
+    await handleSubmitData({ restricao_de_movimento_dentario: { ...values } });
     setButtonLoading(false);
   };
+
+  useEffect(() => {
+    if (restricaoDeMovimentoDenatrio) {
+      setValue('option', restricaoDeMovimentoDenatrio.option);
+      setValue('sub_options', restricaoDeMovimentoDenatrio.sub_options);
+    }
+  }, [restricaoDeMovimentoDenatrio, setValue]);
 
   return (
     <VStack
@@ -95,10 +113,9 @@ export function RestricaoDeMovimentoDentario({
     >
       <RadioGroup
         name="option"
-        label="Restrição De Movimento Dentário"
         error={errors.option}
         onChangeOption={value => handleSelectOption(value)}
-        value={undefined}
+        value={option}
       >
         <VStack spacing={3} align="flex-start">
           <Radio value="nao">Não, movimentar todos os dentes</Radio>
@@ -109,6 +126,7 @@ export function RestricaoDeMovimentoDentario({
       <FormControl>
         <Box hidden={hideSubOptions}>
           <CheckBoxGroup
+            itensSelected={restricaoDeMovimentoDenatrio?.sub_options}
             isDefaultSize={isDefaultSize}
             checkBoxSize={checkBoxSize}
             onSelect={value => handleSelectSubOptions(value)}

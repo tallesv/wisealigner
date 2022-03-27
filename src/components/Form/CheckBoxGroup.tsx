@@ -1,12 +1,14 @@
 import { HStack, VStack, Stack, Text, Checkbox } from '@chakra-ui/react';
 
 interface CheckBoxGroupProps {
+  itensSelected?: string[];
   isDefaultSize: boolean | undefined;
   checkBoxSize: string | undefined;
   onSelect: (value: string) => void;
 }
 
 export function CheckBoxGroup({
+  itensSelected,
   isDefaultSize,
   checkBoxSize,
   onSelect,
@@ -14,7 +16,6 @@ export function CheckBoxGroup({
   function handleSelect(value: string) {
     onSelect(value);
   }
-
   return (
     <HStack spacing={3}>
       {isDefaultSize && (
@@ -38,6 +39,7 @@ export function CheckBoxGroup({
                     value={item}
                     onChange={e => handleSelect(e.target.value)}
                     size={checkBoxSize}
+                    defaultChecked={itensSelected?.includes(item)}
                   >
                     {item}
                   </Checkbox>
@@ -52,6 +54,7 @@ export function CheckBoxGroup({
                     value={item}
                     onChange={e => handleSelect(e.target.value)}
                     size={checkBoxSize}
+                    defaultChecked={itensSelected?.includes(item)}
                   >
                     {item}
                   </Checkbox>
@@ -71,6 +74,7 @@ export function CheckBoxGroup({
                     value={item}
                     onChange={e => handleSelect(e.target.value)}
                     size={checkBoxSize}
+                    defaultChecked={itensSelected?.includes(item)}
                   >
                     {item}
                   </Checkbox>
@@ -85,6 +89,7 @@ export function CheckBoxGroup({
                     value={item}
                     onChange={e => handleSelect(e.target.value)}
                     size={checkBoxSize}
+                    defaultChecked={itensSelected?.includes(item)}
                   >
                     {item}
                   </Checkbox>
