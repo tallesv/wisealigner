@@ -5,13 +5,11 @@ import {
   Flex,
   VStack,
   useBreakpointValue,
-  useToast,
 } from '@chakra-ui/react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { useAuth } from '../../hooks/useAuth';
 import { PacientData } from '../../components/NewCase/PacientData';
 import { Button } from '../../components/Button';
 import { Arco } from '../../components/NewCase/Arco';
@@ -50,19 +48,13 @@ type OverjetType = {
   overjet: string;
 };
 
-interface NewCaseProps {
-  isNewCase: boolean;
-  newCase?: NewCaseType;
+interface EditCaseProps {
+  newCase: NewCaseType;
 }
 
-function NewCase({ isNewCase, newCase }: NewCaseProps) {
+function EditCase({ newCase }: EditCaseProps) {
   const { push } = useRouter();
-  const { user } = useAuth();
-  const toast = useToast();
-  const [personalDataFilled, setPersonalDataFilled] = useState(!isNewCase);
-  const [newCaseState, setNewCaseState] = useState<NewCaseType>(
-    newCase || ({} as NewCaseType),
-  );
+  const [newCaseState, setNewCaseState] = useState<NewCaseType>(newCase);
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -81,19 +73,6 @@ function NewCase({ isNewCase, newCase }: NewCaseProps) {
     prevStep();
   }
 
-  function handleSetStep(step: number) {
-    if (activeStep === 0 && step !== activeStep && !personalDataFilled) {
-      toast({
-        title: `Você precisa preencher primeiro os dados do paciente.`,
-        status: 'warning',
-        position: 'top-right',
-        isClosable: true,
-      });
-    } else {
-      setStep(step);
-    }
-  }
-
   async function handleSubmitData(
     values:
       | { dados_do_paciente: DadosDoPacienteType }
@@ -108,20 +87,12 @@ function NewCase({ isNewCase, newCase }: NewCaseProps) {
       | { informacoes_complementares: InformacoesComplementaresType }
       | { documentacao: DocumentacaoType },
   ) {
-    if ('dados_do_paciente' in values && !personalDataFilled) {
-      const response = await api.post('/requests', {
-        ...values,
-        userId: user.id,
-      });
-      setNewCaseState(response.data.request);
-      setPersonalDataFilled(true);
-    } else {
-      const response = await api.put(`/requests/${newCaseState?.id}`, {
-        ...newCase,
-        ...values,
-      });
-      setNewCaseState(response.data.request);
-    }
+    const response = await api.put(`/requests/${newCaseState?.id}`, {
+      ...newCaseState,
+      ...values,
+    });
+    setNewCaseState(response.data.request);
+
     handleNextStep();
   }
 
@@ -149,6 +120,9 @@ function NewCase({ isNewCase, newCase }: NewCaseProps) {
       case 'Restrição De Movimento Dentário':
         return (
           <RestricaoDeMovimentoDentario
+            restricaoDeMovimentoDenatrio={
+              newCaseState.restricao_de_movimento_dentario
+            }
             handleNextStep={() => handleNextStep()}
             handleSubmitData={values => handleSubmitData(values)}
           />
@@ -156,6 +130,7 @@ function NewCase({ isNewCase, newCase }: NewCaseProps) {
       case 'Attachments':
         return (
           <Attachments
+            attachments={newCaseState.attachments}
             handleNextStep={() => handleNextStep()}
             handleSubmitData={values => handleSubmitData(values)}
           />
@@ -216,11 +191,11 @@ function NewCase({ isNewCase, newCase }: NewCaseProps) {
 
   return (
     <Box mx="auto" p={[6, 8]}>
-      <Heading size="lg">{isNewCase ? 'Novo Caso' : 'Editar Caso'}</Heading>
+      <Heading size="lg">Editar caso</Heading>
       <Divider my="6" borderColor="gray.800" />
       <Steps
         orientation="vertical"
-        onClickStep={step => handleSetStep(step)}
+        onClickStep={step => setStep(step)}
         activeStep={activeStep}
         colorScheme="purple"
       >
@@ -235,7 +210,7 @@ function NewCase({ isNewCase, newCase }: NewCaseProps) {
       {activeStep === steps.length && (
         <Flex px={4} py={4} width="100%" flexDirection="column">
           <Heading fontSize="xl" textAlign="center">
-            Caso criado com sucesso!
+            Caso editado com sucesso!
           </Heading>
           <Button mx="auto" mt={6} size="sm" onClick={() => push('/case/new')}>
             Criar outro caso
@@ -246,18 +221,10 @@ function NewCase({ isNewCase, newCase }: NewCaseProps) {
   );
 }
 
-export default NewCase;
+export default EditCase;
 
 export const getServerSideProps = withSSRAuth(
   async ({ query: { id }, req }) => {
-    if (id === 'new') {
-      return {
-        props: {
-          isNewCase: true,
-        },
-      };
-    }
-
     const { 'wisealigners.token': token } = req.cookies;
 
     const apiClient = getApiClient(token);
@@ -273,7 +240,6 @@ export const getServerSideProps = withSSRAuth(
 
     return {
       props: {
-        isNewCase: false,
         newCase,
       },
     };

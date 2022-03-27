@@ -16,8 +16,9 @@ import { Button } from '../Button';
 import { CheckBoxGroup } from '../Form/CheckBoxGroup';
 
 interface AttachmentsProps {
+  attachments?: AttachmentsType;
   handleNextStep: () => void;
-  handleSubmitData: (values: { attachments: AttachmentsType }) => void;
+  handleSubmitData: (values: { attachments: AttachmentsType }) => Promise<void>;
 }
 
 const AttachmentsFormSchema = yup.object().shape({
@@ -28,11 +29,14 @@ const AttachmentsFormSchema = yup.object().shape({
 });
 
 export function Attachments({
+  attachments,
   handleNextStep,
   handleSubmitData,
 }: AttachmentsProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [hideSubOptions, setHideSubOptions] = useState(true);
+
+  const [option, setOption] = useState(attachments?.option);
 
   const checkBoxSize = useBreakpointValue({
     lg: 'md',
@@ -53,7 +57,12 @@ export function Attachments({
 
   function handleSelectOption(value: string) {
     setValue('option', value);
+    setOption(value);
     setHideSubOptions(value === 'sim');
+
+    if (value === 'sim') {
+      setValue('sub_options', []);
+    }
   }
 
   function handleSelectSubOptions(value: string) {
@@ -78,7 +87,7 @@ export function Attachments({
     AttachmentsType
   > = async values => {
     setButtonLoading(true);
-    handleSubmitData({ attachments: { ...values } });
+    await handleSubmitData({ attachments: { ...values } });
     setButtonLoading(false);
   };
 
@@ -91,10 +100,9 @@ export function Attachments({
     >
       <RadioGroup
         name="option"
-        label="Attachments"
         error={errors.option}
         onChangeOption={value => handleSelectOption(value)}
-        value={undefined}
+        value={option}
       >
         <VStack spacing={3} align="flex-start">
           <Radio value="sim">Coloque attachments se necessário</Radio>
@@ -105,6 +113,7 @@ export function Attachments({
       <FormControl>
         <Box hidden={hideSubOptions}>
           <CheckBoxGroup
+            itensSelected={attachments?.sub_options}
             isDefaultSize={isDefaultSize}
             checkBoxSize={checkBoxSize}
             onSelect={value => handleSelectSubOptions(value)}
