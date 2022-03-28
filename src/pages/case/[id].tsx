@@ -138,6 +138,7 @@ function EditCase({ newCase }: EditCaseProps) {
       case 'Relação Ântero-Posterior (A-P)':
         return (
           <RelacaoAnteroPosterior
+            relacaoAnteroPosterior={newCaseState.relacao_antero_posterior}
             handleNextStep={() => handleNextStep()}
             handleSubmitData={values => handleSubmitData(values)}
           />

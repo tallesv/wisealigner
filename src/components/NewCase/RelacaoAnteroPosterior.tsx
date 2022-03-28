@@ -11,33 +11,45 @@ import {
 import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { RadioGroup } from '../Form/RadioGroup';
 import { Button } from '../Button';
 
 interface RelacaoAnteroPosteriorProps {
+  relacaoAnteroPosterior?: RelacaoAnteroPosteriorType;
   handleNextStep: () => void;
   handleSubmitData: (values: {
     relacao_antero_posterior: RelacaoAnteroPosteriorType;
-  }) => void;
+  }) => Promise<void>;
 }
 
 const RelacaoAnteroPosteriorFormSchema = yup.object().shape({
   e: yup.string().required('Por favor escolha uma opção para D.'),
   d: yup.string().required('Por favor escolha uma opção para E.'),
   option: yup.string().required('Por favor selecione uma opção.'),
-  subOptions: yup.array().of(yup.string()),
+  sub_options: yup.array().of(yup.string()),
   observation: yup.string(),
 });
 
 export function RelacaoAnteroPosterior({
+  relacaoAnteroPosterior,
   handleNextStep,
   handleSubmitData,
 }: RelacaoAnteroPosteriorProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [hideSubOptions, setHideSubOptions] = useState(true);
-  const [subOptionsSelected, setSubOptionsSelected] = useState<string[]>([]);
+  const [hideSubOptions, setHideSubOptions] = useState(
+    relacaoAnteroPosterior?.option !== 'movimento dentário',
+  );
+  const [subOptionsSelected, setSubOptionsSelected] = useState<string[]>(
+    relacaoAnteroPosterior?.sub_options
+      ? relacaoAnteroPosterior?.sub_options
+      : [],
+  );
+
+  const [eOption, setEOption] = useState(relacaoAnteroPosterior?.e);
+  const [dOption, setDOption] = useState(relacaoAnteroPosterior?.d);
+  const [option, setOption] = useState(relacaoAnteroPosterior?.option);
 
   const { register, handleSubmit, formState, setValue, getValues } =
     useForm<RelacaoAnteroPosteriorType>({
@@ -48,6 +60,7 @@ export function RelacaoAnteroPosterior({
 
   function handleSelectOption(value: string) {
     setValue('option', value);
+    setOption(value);
     setHideSubOptions(value !== 'movimento dentário');
     if (value !== 'movimento dentário') {
       setValue('sub_options', []);
@@ -83,9 +96,20 @@ export function RelacaoAnteroPosterior({
     RelacaoAnteroPosteriorType
   > = async values => {
     setButtonLoading(true);
-    handleSubmitData({ relacao_antero_posterior: { ...values } });
+    await handleSubmitData({ relacao_antero_posterior: { ...values } });
     setButtonLoading(false);
   };
+
+  useEffect(() => {
+    if (relacaoAnteroPosterior) {
+      setValue('d', relacaoAnteroPosterior.d);
+      setValue('e', relacaoAnteroPosterior.e);
+      setValue('option', relacaoAnteroPosterior.option);
+      setValue('sub_options', relacaoAnteroPosterior.sub_options);
+      setValue('observation', relacaoAnteroPosterior.observation);
+    }
+  }, [relacaoAnteroPosterior, setValue]);
+
   return (
     <VStack
       w="100%"
@@ -98,8 +122,11 @@ export function RelacaoAnteroPosterior({
           name="d"
           label="D"
           error={errors.d}
-          onChangeOption={value => setValue('d', value)}
-          value={undefined}
+          onChangeOption={value => {
+            setDOption(value);
+            setValue('d', value);
+          }}
+          value={dOption}
         >
           <VStack spacing={2} align="flex-start">
             <Radio value="manter">Manter</Radio>
@@ -116,8 +143,11 @@ export function RelacaoAnteroPosterior({
           name="e"
           label="E"
           error={errors.e}
-          onChangeOption={value => setValue('e', value)}
-          value={undefined}
+          onChangeOption={value => {
+            setEOption(value);
+            setValue('e', value);
+          }}
+          value={eOption}
         >
           <VStack spacing={2} align="flex-start">
             <Radio value="manter">Manter</Radio>
@@ -135,7 +165,7 @@ export function RelacaoAnteroPosterior({
         name="option"
         error={errors.option}
         onChangeOption={value => handleSelectOption(value)}
-        value={undefined}
+        value={option}
       >
         <VStack spacing={2} align="flex-start">
           <Radio value="movimento dentário">
