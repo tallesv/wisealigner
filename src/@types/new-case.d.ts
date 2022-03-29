@@ -9,7 +9,7 @@ type NewCaseType = {
   sobremordida: SobremordidaType;
   linha_media: LinhaMedia;
   manejo_de_espaços: ManejoDeEspaçosType;
-  informacoes_complementares: InformacoesComplementaresType;
+  additionalFields: InformacoesComplementaresType;
   documentacao: DocumentacaoType;
 };
 

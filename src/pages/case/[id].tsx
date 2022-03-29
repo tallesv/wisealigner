@@ -84,7 +84,7 @@ function EditCase({ newCase }: EditCaseProps) {
       | { sobremordida: SobremordidaType }
       | { linha_media: LinhaMediaType }
       | { manejo_de_espaços: ManejoDeEspaçosType }
-      | { informacoes_complementares: InformacoesComplementaresType }
+      | { additionalFields: InformacoesComplementaresType }
       | { documentacao: DocumentacaoType },
   ) {
     const response = await api.put(`/requests/${newCaseState?.id}`, {
@@ -146,6 +146,7 @@ function EditCase({ newCase }: EditCaseProps) {
       case 'Overjet':
         return (
           <Overjet
+            overjet={newCaseState.overjet}
             handleNextStep={() => handleNextStep()}
             handleSubmitData={values => handleSubmitData(values)}
           />
@@ -153,6 +154,7 @@ function EditCase({ newCase }: EditCaseProps) {
       case 'Sobremordida':
         return (
           <Sobremordida
+            sobreMordida={newCaseState.sobremordida}
             handleNextStep={() => handleNextStep()}
             handleSubmitData={values => handleSubmitData(values)}
           />
@@ -160,6 +162,7 @@ function EditCase({ newCase }: EditCaseProps) {
       case 'Linha Média':
         return (
           <LinhaMedia
+            linhaMedia={newCaseState.linha_media}
             handleNextStep={() => handleNextStep()}
             handleSubmitData={values => handleSubmitData(values)}
           />
@@ -167,6 +170,7 @@ function EditCase({ newCase }: EditCaseProps) {
       case 'Manejo de Espaços':
         return (
           <ManejoDeEspaços
+            manejoDeEspaços={newCaseState.manejo_de_espaços}
             handleNextStep={() => handleNextStep()}
             handleSubmitData={values => handleSubmitData(values)}
           />
@@ -174,6 +178,7 @@ function EditCase({ newCase }: EditCaseProps) {
       case 'Informações Complementares':
         return (
           <InformacoesComplementares
+            additionalFields={newCaseState.additionalFields}
             handleNextStep={() => handleNextStep()}
             handleSubmitData={values => handleSubmitData(values)}
           />
@@ -181,6 +186,7 @@ function EditCase({ newCase }: EditCaseProps) {
       case 'Documentação':
         return (
           <Documentacao
+            documentacao={newCaseState.documentacao}
             handleNextStep={() => handleNextStep()}
             handleSubmitData={values => handleSubmitData(values)}
           />

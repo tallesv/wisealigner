@@ -10,15 +10,16 @@ import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RadioGroup } from '../Form/RadioGroup';
 import { Button } from '../Button';
 
 interface InformacoesComplementaresProps {
+  additionalFields?: InformacoesComplementaresType;
   handleNextStep: () => void;
   handleSubmitData: (values: {
-    informacoes_complementares: InformacoesComplementaresType;
-  }) => void;
+    additionalFields: InformacoesComplementaresType;
+  }) => Promise<void>;
 }
 
 const InformacoesComplementaresFormSchema = yup.object().shape({
@@ -28,10 +29,18 @@ const InformacoesComplementaresFormSchema = yup.object().shape({
 });
 
 export function InformacoesComplementares({
+  additionalFields,
   handleNextStep,
   handleSubmitData,
 }: InformacoesComplementaresProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
+
+  const [terceirosMolaresOption, setTerceirosMolaresOption] = useState(
+    additionalFields?.terceiros_molares,
+  );
+  const [contencoesOption, setContencoesOption] = useState(
+    additionalFields?.contencoes,
+  );
 
   const { register, handleSubmit, formState, setValue } =
     useForm<InformacoesComplementaresType>({
@@ -44,10 +53,20 @@ export function InformacoesComplementares({
     InformacoesComplementaresType
   > = async values => {
     setButtonLoading(true);
-    handleSubmitData({ informacoes_complementares: { ...values } });
+    await handleSubmitData({ additionalFields: { ...values } });
     setButtonLoading(false);
   };
 
+  useEffect(() => {
+    if (additionalFields) {
+      setValue('contencoes', additionalFields.contencoes);
+      setValue('terceiros_molares', additionalFields.terceiros_molares);
+      setValue(
+        'informacoes_a_serem_compartilhadas',
+        additionalFields.informacoes_a_serem_compartilhadas,
+      );
+    }
+  }, [setValue, additionalFields]);
   return (
     <VStack
       w="100%"
@@ -71,8 +90,11 @@ export function InformacoesComplementares({
         name="terceiros_molares"
         label="Terceiros Molares"
         error={errors.terceiros_molares}
-        onChangeOption={value => setValue('terceiros_molares', value)}
-        value={undefined}
+        onChangeOption={value => {
+          setTerceirosMolaresOption(value);
+          setValue('terceiros_molares', value);
+        }}
+        value={terceirosMolaresOption}
       >
         <Text align="initial" mb={2}>
           A presença dos terceiros molares pode alterar a funcionalidade e
@@ -114,8 +136,11 @@ export function InformacoesComplementares({
         name="contencoes"
         label="Contencões"
         error={errors.terceiros_molares}
-        onChangeOption={value => setValue('contencoes', value)}
-        value={undefined}
+        onChangeOption={value => {
+          setContencoesOption(value);
+          setValue('contencoes', value);
+        }}
+        value={contencoesOption}
       >
         <VStack spacing={3} align="flex-start">
           <Radio value="Não há contenções">
