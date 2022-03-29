@@ -12,13 +12,16 @@ import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../Button';
 import { FileUpload } from '../Form/FileUpload';
 
 interface DocumentacaoProps {
+  documentacao?: DocumentacaoType;
   handleNextStep: () => void;
-  handleSubmitData: (values: { documentacao: DocumentacaoType }) => void;
+  handleSubmitData: (values: {
+    documentacao: DocumentacaoType;
+  }) => Promise<void>;
 }
 
 const DocumentacaoFormSchema = yup.object().shape({
@@ -43,11 +46,16 @@ const DocumentacaoFormSchema = yup.object().shape({
 });
 
 export function Documentacao({
+  documentacao,
   handleNextStep,
   handleSubmitData,
 }: DocumentacaoProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+
+  const [documentacaoState, setDocumentacaoState] = useState(
+    documentacao || ({} as DocumentacaoType),
+  );
 
   const imageSize = useBreakpointValue({
     lg: '200px',
@@ -55,10 +63,9 @@ export function Documentacao({
     sm: '150px',
   });
 
-  const { handleSubmit, formState, setValue, getValues } =
-    useForm<DocumentacaoType>({
-      resolver: yupResolver(DocumentacaoFormSchema),
-    });
+  const { handleSubmit, formState, setValue } = useForm<DocumentacaoType>({
+    resolver: yupResolver(DocumentacaoFormSchema),
+  });
 
   const { errors } = formState;
 
@@ -66,11 +73,26 @@ export function Documentacao({
     DocumentacaoType
   > = async values => {
     setButtonLoading(true);
-    console.log(values);
-    handleSubmitData({ documentacao: { ...values } });
+    await handleSubmitData({ documentacao: { ...values } });
     setButtonLoading(false);
   };
 
+  useEffect(() => {
+    if (documentacao) {
+      setValue('fotos.perfil', documentacao.fotos.perfil);
+      setValue('fotos.frente', documentacao.fotos.frente);
+      setValue('fotos.sorriso', documentacao.fotos.sorriso);
+      setValue('fotos.arca_direita', documentacao.fotos.arca_direita);
+      setValue('fotos.arca_esquerda', documentacao.fotos.arca_esquerda);
+      setValue('fotos.arca_superior', documentacao.fotos.arca_superior);
+      setValue('fotos.arca_inferior', documentacao.fotos.arca_inferior);
+      setValue('fotos.arca_frontal', documentacao.fotos.arca_frontal);
+      setValue('radiografia.frente', documentacao.radiografia.frente);
+      setValue('radiografia.perfil', documentacao.radiografia.perfil);
+      setValue('stls.inferior', documentacao.stls.inferior);
+      setValue('stls.superior', documentacao.stls.superior);
+    }
+  }, [setValue, documentacao]);
   return (
     <VStack
       w="100%"
@@ -88,15 +110,20 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().fotos?.perfil
-                    ? getValues().fotos.perfil
+                  documentacaoState?.fotos?.perfil
+                    ? documentacaoState?.fotos.perfil
                     : '/images/foto_perfil.jpg'
                 }
                 alt="perfil"
               />
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('fotos.perfil', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.fotos.perfil = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('fotos.perfil', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -112,8 +139,8 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().fotos?.frente
-                    ? getValues().fotos.frente
+                  documentacaoState?.fotos?.frente
+                    ? documentacaoState?.fotos.frente
                     : '/images/foto_frontal.jpg'
                 }
                 alt="frente"
@@ -121,7 +148,12 @@ export function Documentacao({
 
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('fotos.frente', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.fotos.frente = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('fotos.frente', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -137,8 +169,8 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().fotos?.sorriso
-                    ? getValues().fotos.sorriso
+                  documentacaoState?.fotos?.sorriso
+                    ? documentacaoState?.fotos.sorriso
                     : '/images/foto_sorriso.jpg'
                 }
                 alt="sorriso"
@@ -146,7 +178,12 @@ export function Documentacao({
 
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('fotos.sorriso', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.fotos.sorriso = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('fotos.sorriso', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -165,8 +202,8 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().fotos?.arca_superior
-                    ? getValues().fotos.arca_superior
+                  documentacaoState?.fotos?.arca_superior
+                    ? documentacaoState?.fotos.arca_superior
                     : '/images/arca_superior.jpg'
                 }
                 alt="arca superior"
@@ -174,7 +211,12 @@ export function Documentacao({
 
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('fotos.arca_superior', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.fotos.arca_superior = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('fotos.arca_superior', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -190,8 +232,8 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().fotos?.arca_inferior
-                    ? getValues().fotos.arca_inferior
+                  documentacaoState?.fotos?.arca_inferior
+                    ? documentacaoState?.fotos.arca_inferior
                     : '/images/arca_inferior.jpg'
                 }
                 alt="arca inferior"
@@ -199,7 +241,12 @@ export function Documentacao({
 
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('fotos.arca_inferior', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.fotos.arca_inferior = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('fotos.arca_inferior', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -218,8 +265,8 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().fotos?.arca_esquerda
-                    ? getValues().fotos.arca_esquerda
+                  documentacaoState?.fotos?.arca_esquerda
+                    ? documentacaoState?.fotos.arca_esquerda
                     : '/images/arca_esquerda.jpg'
                 }
                 alt="arca esquerda"
@@ -227,7 +274,12 @@ export function Documentacao({
 
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('fotos.arca_esquerda', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.fotos.arca_esquerda = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('fotos.arca_esquerda', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -243,8 +295,8 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().fotos?.arca_frontal
-                    ? getValues().fotos.arca_frontal
+                  documentacaoState?.fotos?.arca_frontal
+                    ? documentacaoState?.fotos.arca_frontal
                     : '/images/arca_frontal.jpg'
                 }
                 alt="arca frontal"
@@ -252,7 +304,12 @@ export function Documentacao({
 
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('fotos.arca_frontal', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.fotos.arca_frontal = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('fotos.arca_frontal', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -268,8 +325,8 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().fotos?.arca_direita
-                    ? getValues().fotos.arca_direita
+                  documentacaoState?.fotos?.arca_direita
+                    ? documentacaoState?.fotos.arca_direita
                     : '/images/arca_direita.jpg'
                 }
                 alt="arca esquerda"
@@ -277,7 +334,12 @@ export function Documentacao({
 
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('fotos.arca_direita', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.fotos.arca_direita = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('fotos.arca_direita', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -301,8 +363,8 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().radiografia?.frente
-                    ? getValues().radiografia.frente
+                  documentacaoState?.radiografia?.frente
+                    ? documentacaoState?.radiografia.frente
                     : '/images/radiografia_frontal.jpg'
                 }
                 alt="perfil"
@@ -310,7 +372,12 @@ export function Documentacao({
 
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('radiografia.frente', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.radiografia.frente = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('radiografia.frente', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -327,8 +394,8 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().radiografia?.perfil
-                    ? getValues().radiografia.perfil
+                  documentacaoState?.radiografia?.perfil
+                    ? documentacaoState?.radiografia.perfil
                     : '/images/radiografia_perfil.jpg'
                 }
                 alt="perfil"
@@ -336,7 +403,12 @@ export function Documentacao({
 
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('radiografia.perfil', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.radiografia.perfil = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('radiografia.perfil', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -360,15 +432,20 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().stls?.superior
-                    ? getValues().stls.superior
+                  documentacaoState?.stls?.superior
+                    ? documentacaoState?.stls.superior
                     : '/images/stls_superior.jpg'
                 }
                 alt="perfil"
               />
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('stls.superior', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.stls.superior = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('stls.superior', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -385,15 +462,20 @@ export function Documentacao({
               <Image
                 boxSize={imageSize}
                 src={
-                  getValues().stls?.inferior
-                    ? getValues().stls.inferior
+                  documentacaoState?.stls?.inferior
+                    ? documentacaoState?.stls.inferior
                     : '/images/stls_inferior.jpg'
                 }
                 alt="perfil"
               />
               <FileUpload
                 label="Adicionar"
-                onUploadImage={url => setValue('stls.inferior', url)}
+                onUploadImage={url => {
+                  const updateDocumentacao = { ...documentacaoState };
+                  updateDocumentacao.stls.inferior = url;
+                  setDocumentacaoState(updateDocumentacao);
+                  setValue('stls.inferior', url);
+                }}
                 isUploading={uploading => setIsUploading(uploading)}
                 mt={2}
               />
@@ -412,6 +494,7 @@ export function Documentacao({
           size="sm"
           type="submit"
           isLoading={buttonLoading}
+          disabled={isUploading}
           onClick={() => handleNextStep()}
         >
           Finalizar

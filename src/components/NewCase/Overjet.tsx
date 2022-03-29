@@ -3,13 +3,14 @@ import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RadioGroup } from '../Form/RadioGroup';
 import { Button } from '../Button';
 
 interface OverjetProps {
+  overjet?: string;
   handleNextStep: () => void;
-  handleSubmitData: (value: { overjet: string }) => void;
+  handleSubmitData: (value: { overjet: string }) => Promise<void>;
 }
 
 const OverjetFormSchema = yup.object().shape({
@@ -18,8 +19,14 @@ const OverjetFormSchema = yup.object().shape({
     .required('Por favor escolha uma opção para o tratamento de Overjet.'),
 });
 
-export function Overjet({ handleNextStep, handleSubmitData }: OverjetProps) {
+export function Overjet({
+  overjet,
+  handleNextStep,
+  handleSubmitData,
+}: OverjetProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [option, setOption] = useState(overjet);
+
   const { handleSubmit, formState, setValue } = useForm<{
     overjet: string;
   }>({
@@ -32,9 +39,15 @@ export function Overjet({ handleNextStep, handleSubmitData }: OverjetProps) {
     overjet: string;
   }> = async value => {
     setButtonLoading(true);
-    handleSubmitData(value);
+    await handleSubmitData(value);
     setButtonLoading(false);
   };
+
+  useEffect(() => {
+    if (overjet) {
+      setValue('overjet', overjet);
+    }
+  }, [setValue, overjet]);
 
   return (
     <VStack
@@ -46,8 +59,11 @@ export function Overjet({ handleNextStep, handleSubmitData }: OverjetProps) {
       <RadioGroup
         name="overjet"
         error={errors.overjet}
-        onChangeOption={value => setValue('overjet', value)}
-        value={undefined}
+        onChangeOption={value => {
+          setOption(value);
+          setValue('overjet', value);
+        }}
+        value={option}
       >
         <VStack spacing={3} align="flex-start">
           <Radio value="mostrar o overjet apos alinhamneto">

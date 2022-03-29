@@ -16,14 +16,33 @@ import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RadioGroup } from '../Form/RadioGroup';
 import { Button } from '../Button';
 import { CheckBoxGroup } from '../Form/CheckBoxGroup';
 
+type ApinhamentoType = {
+  corrigir_superior: {
+    expandir: string;
+    vestibularizar: string;
+    ipr_anterior: string;
+    ipr_posterior_direito: string;
+    ipr_posterior_esquerdo: string;
+  };
+  corrigir_inferior: {
+    expandir: string;
+    vestibularizar: string;
+    ipr_anterior: string;
+    ipr_posterior_direito: string;
+    ipr_posterior_esquerdo: string;
+  };
+};
 interface ManejoDeEspaçosProps {
+  manejoDeEspaços?: ManejoDeEspaçosType;
   handleNextStep: () => void;
-  handleSubmitData: (value: { manejo_de_espaços: ManejoDeEspaçosType }) => void;
+  handleSubmitData: (value: {
+    manejo_de_espaços: ManejoDeEspaçosType;
+  }) => Promise<void>;
 }
 
 const ManejoDeEspaçosFormSchema = yup.object().shape({
@@ -98,13 +117,38 @@ const ManejoDeEspaçosFormSchema = yup.object().shape({
 });
 
 export function ManejoDeEspaços({
+  manejoDeEspaços,
   handleNextStep,
   handleSubmitData,
 }: ManejoDeEspaçosProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [hideDiastemasObservation, setHideDiastemasObservation] =
-    useState(true);
-  const [hideExtraçoesSubOptions, setHideExtraçoesSubOptions] = useState(true);
+  const [hideDiastemasObservation, setHideDiastemasObservation] = useState(
+    () => {
+      if (manejoDeEspaços?.diastemas) {
+        return manejoDeEspaços?.diastemas?.option === 'fechar';
+      }
+      return true;
+    },
+  );
+  const [hideExtraçoesSubOptions, setHideExtraçoesSubOptions] = useState(() => {
+    if (manejoDeEspaços?.diastemas) {
+      return manejoDeEspaços?.extracoes?.option === 'nenhuma';
+    }
+    return true;
+  });
+
+  const [diasTemasOption, setDiastemasOption] = useState(
+    manejoDeEspaços?.diastemas?.option,
+  );
+  const [extracoesOption, setExtracoesOption] = useState(
+    manejoDeEspaços?.extracoes?.option,
+  );
+  const [apinhamento, setApinhamento] = useState(
+    manejoDeEspaços?.apinhamento
+      ? manejoDeEspaços?.apinhamento
+      : ({} as ApinhamentoType),
+  );
+
   const { register, handleSubmit, formState, setValue, getValues } =
     useForm<ManejoDeEspaçosType>({
       resolver: yupResolver(ManejoDeEspaçosFormSchema),
@@ -128,11 +172,13 @@ export function ManejoDeEspaços({
 
   function handleChangeDiastemasOption(value: string) {
     setValue('diastemas.option', value);
+    setDiastemasOption(value);
     setHideDiastemasObservation(value === 'fechar');
   }
 
   function handleChangeExtraçoesOption(value: string) {
     setValue('extracoes.option', value);
+    setExtracoesOption(value);
     setHideExtraçoesSubOptions(value === 'nenhuma');
     if (value === 'nenhuma') {
       setValue('extracoes.sub_options', []);
@@ -161,9 +207,25 @@ export function ManejoDeEspaços({
     ManejoDeEspaçosType
   > = async value => {
     setButtonLoading(true);
-    handleSubmitData({ manejo_de_espaços: { ...value } });
+    await handleSubmitData({ manejo_de_espaços: { ...value } });
     setButtonLoading(false);
   };
+
+  useEffect(() => {
+    if (manejoDeEspaços) {
+      setValue('diastemas.option', manejoDeEspaços?.diastemas?.option);
+      setValue(
+        'diastemas.observation',
+        manejoDeEspaços?.diastemas?.observation,
+      );
+      setValue('apinhamento', manejoDeEspaços.apinhamento);
+      setValue('extracoes.option', manejoDeEspaços?.extracoes?.option);
+      setValue(
+        'extracoes.sub_options',
+        manejoDeEspaços?.extracoes?.sub_options,
+      );
+    }
+  }, [setValue, manejoDeEspaços]);
 
   return (
     <VStack
@@ -177,7 +239,7 @@ export function ManejoDeEspaços({
         label="Diastemas"
         error={errors.diastemas?.option}
         onChangeOption={value => handleChangeDiastemasOption(value)}
-        value={undefined}
+        value={diasTemasOption}
       >
         <VStack spacing={3} align="flex-start">
           <Radio value="fechar">Fechar todos os espaços</Radio>
@@ -214,9 +276,13 @@ export function ManejoDeEspaços({
                 <FormLabel fontWeight={500}>Expandir:</FormLabel>
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_superior.expandir"
-                  onChange={value =>
-                    setValue('apinhamento.corrigir_superior.expandir', value)
-                  }
+                  onChange={value => {
+                    const updateApinhamento = { ...apinhamento };
+                    updateApinhamento.corrigir_superior.expandir = value;
+                    setApinhamento(updateApinhamento);
+                    setValue('apinhamento.corrigir_superior.expandir', value);
+                  }}
+                  value={apinhamento?.corrigir_superior.expandir}
                 >
                   <Stack
                     spacing={4}
@@ -247,12 +313,16 @@ export function ManejoDeEspaços({
                 <FormLabel fontWeight={500}>Vestibularizar:</FormLabel>
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_superior.vestibularizar"
-                  onChange={value =>
+                  onChange={value => {
+                    const updateApinhamento = { ...apinhamento };
+                    updateApinhamento.corrigir_superior.vestibularizar = value;
+                    setApinhamento(updateApinhamento);
                     setValue(
                       'apinhamento.corrigir_superior.vestibularizar',
                       value,
-                    )
-                  }
+                    );
+                  }}
+                  value={apinhamento?.corrigir_superior.vestibularizar}
                 >
                   <Stack
                     spacing={4}
@@ -284,12 +354,16 @@ export function ManejoDeEspaços({
                 <FormLabel fontWeight={500}>IPR - Anterior:</FormLabel>
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_superior.ipr_anterior"
-                  onChange={value =>
+                  onChange={value => {
+                    const updateApinhamento = { ...apinhamento };
+                    updateApinhamento.corrigir_superior.ipr_anterior = value;
+                    setApinhamento(updateApinhamento);
                     setValue(
                       'apinhamento.corrigir_superior.ipr_anterior',
                       value,
-                    )
-                  }
+                    );
+                  }}
+                  value={apinhamento?.corrigir_superior.ipr_anterior}
                 >
                   <Stack
                     spacing={4}
@@ -323,12 +397,17 @@ export function ManejoDeEspaços({
                 <FormLabel fontWeight={500}>IPR - Posterior Direito:</FormLabel>
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_superior.ipr_posterior_direito"
-                  onChange={value =>
+                  onChange={value => {
+                    const updateApinhamento = { ...apinhamento };
+                    updateApinhamento.corrigir_superior.ipr_posterior_direito =
+                      value;
+                    setApinhamento(updateApinhamento);
                     setValue(
                       'apinhamento.corrigir_superior.ipr_posterior_direito',
                       value,
-                    )
-                  }
+                    );
+                  }}
+                  value={apinhamento?.corrigir_superior.ipr_posterior_direito}
                 >
                   <Stack
                     spacing={4}
@@ -365,12 +444,17 @@ export function ManejoDeEspaços({
                 </FormLabel>
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_superior.ipr_posterior_esquerdo"
-                  onChange={value =>
+                  onChange={value => {
+                    const updateApinhamento = { ...apinhamento };
+                    updateApinhamento.corrigir_superior.ipr_posterior_esquerdo =
+                      value;
+                    setApinhamento(updateApinhamento);
                     setValue(
                       'apinhamento.corrigir_superior.ipr_posterior_esquerdo',
                       value,
-                    )
-                  }
+                    );
+                  }}
+                  value={apinhamento?.corrigir_superior.ipr_posterior_esquerdo}
                 >
                   <Stack
                     spacing={4}
@@ -406,9 +490,13 @@ export function ManejoDeEspaços({
                 <FormLabel fontWeight={500}>Expandir:</FormLabel>
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_inferior.expandir"
-                  onChange={value =>
-                    setValue('apinhamento.corrigir_inferior.expandir', value)
-                  }
+                  onChange={value => {
+                    const updateApinhamento = { ...apinhamento };
+                    updateApinhamento.corrigir_inferior.expandir = value;
+                    setApinhamento(updateApinhamento);
+                    setValue('apinhamento.corrigir_inferior.expandir', value);
+                  }}
+                  value={apinhamento?.corrigir_inferior.expandir}
                 >
                   <Stack
                     spacing={4}
@@ -439,12 +527,16 @@ export function ManejoDeEspaços({
                 <FormLabel fontWeight={500}>Vestibularizar:</FormLabel>
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_inferior.vestibularizar"
-                  onChange={value =>
+                  onChange={value => {
+                    const updateApinhamento = { ...apinhamento };
+                    updateApinhamento.corrigir_inferior.vestibularizar = value;
+                    setApinhamento(updateApinhamento);
                     setValue(
                       'apinhamento.corrigir_inferior.vestibularizar',
                       value,
-                    )
-                  }
+                    );
+                  }}
+                  value={apinhamento?.corrigir_inferior.vestibularizar}
                 >
                   <Stack
                     spacing={4}
@@ -476,12 +568,16 @@ export function ManejoDeEspaços({
                 <FormLabel fontWeight={500}>IPR - Anterior:</FormLabel>
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_inferior.ipr_anterior"
-                  onChange={value =>
+                  onChange={value => {
+                    const updateApinhamento = { ...apinhamento };
+                    updateApinhamento.corrigir_inferior.ipr_anterior = value;
+                    setApinhamento(updateApinhamento);
                     setValue(
                       'apinhamento.corrigir_inferior.ipr_anterior',
                       value,
-                    )
-                  }
+                    );
+                  }}
+                  value={apinhamento?.corrigir_inferior.ipr_anterior}
                 >
                   <Stack
                     spacing={4}
@@ -515,12 +611,17 @@ export function ManejoDeEspaços({
                 <FormLabel fontWeight={500}>IPR - Posterior Direito:</FormLabel>
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_inferior.ipr_posterior_direito"
-                  onChange={value =>
+                  onChange={value => {
+                    const updateApinhamento = { ...apinhamento };
+                    updateApinhamento.corrigir_inferior.ipr_posterior_direito =
+                      value;
+                    setApinhamento(updateApinhamento);
                     setValue(
                       'apinhamento.corrigir_inferior.ipr_posterior_direito',
                       value,
-                    )
-                  }
+                    );
+                  }}
+                  value={apinhamento?.corrigir_inferior.ipr_posterior_direito}
                 >
                   <Stack
                     spacing={4}
@@ -557,12 +658,17 @@ export function ManejoDeEspaços({
                 </FormLabel>
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_inferior.ipr_posterior_esquerdo"
-                  onChange={value =>
+                  onChange={value => {
+                    const updateApinhamento = { ...apinhamento };
+                    updateApinhamento.corrigir_inferior.ipr_posterior_esquerdo =
+                      value;
+                    setApinhamento(updateApinhamento);
                     setValue(
                       'apinhamento.corrigir_inferior.ipr_posterior_esquerdo',
                       value,
-                    )
-                  }
+                    );
+                  }}
+                  value={apinhamento?.corrigir_inferior.ipr_posterior_esquerdo}
                 >
                   <Stack
                     spacing={4}
@@ -594,7 +700,7 @@ export function ManejoDeEspaços({
         label="Extrações"
         error={errors.extracoes?.option}
         onChangeOption={value => handleChangeExtraçoesOption(value)}
-        value={undefined}
+        value={extracoesOption}
       >
         <VStack spacing={3} align="flex-start">
           <Radio value="nenhuma">Nenhuma</Radio>

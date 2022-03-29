@@ -11,14 +11,15 @@ import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RadioGroup } from '../Form/RadioGroup';
 import { Button } from '../Button';
 import { Input } from '../Form/input';
 
 interface LinhaMediaProps {
+  linhaMedia?: LinhaMediaType;
   handleNextStep: () => void;
-  handleSubmitData: (value: { linha_media: LinhaMediaType }) => void;
+  handleSubmitData: (value: { linha_media: LinhaMediaType }) => Promise<void>;
 }
 
 const LinhaMediaFormSchema = yup.object().shape({
@@ -32,11 +33,15 @@ const LinhaMediaFormSchema = yup.object().shape({
 });
 
 export function LinhaMedia({
+  linhaMedia,
   handleNextStep,
   handleSubmitData,
 }: LinhaMediaProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [hideSubOptions, setHideSubOptions] = useState(true);
+  const [hideSubOptions, setHideSubOptions] = useState(
+    linhaMedia?.option === 'manter',
+  );
+  const [option, setOption] = useState(linhaMedia?.option);
 
   const isMobileSize = useBreakpointValue({
     md: true,
@@ -51,6 +56,7 @@ export function LinhaMedia({
 
   function handleSelectOption(value: string) {
     setValue('option', value);
+    setOption(value);
     setHideSubOptions(value === 'manter');
     if (value === 'manter') {
       setValue('inferior.direita', '');
@@ -62,9 +68,31 @@ export function LinhaMedia({
 
   const handleSubmitLinhaMedia: SubmitHandler<LinhaMediaType> = async value => {
     setButtonLoading(true);
-    handleSubmitData({ linha_media: { ...value } });
+    await handleSubmitData({ linha_media: { ...value } });
     setButtonLoading(false);
   };
+
+  useEffect(() => {
+    if (linhaMedia) {
+      setValue('option', linhaMedia.option);
+      setValue(
+        'inferior.direita',
+        linhaMedia?.inferior?.direita ? linhaMedia?.inferior?.direita : '',
+      );
+      setValue(
+        'inferior.esquerda',
+        linhaMedia?.inferior?.esquerda ? linhaMedia?.inferior?.esquerda : '',
+      );
+      setValue(
+        'superior.direita',
+        linhaMedia?.superior?.direita ? linhaMedia?.superior?.direita : '',
+      );
+      setValue(
+        'superior.esquerda',
+        linhaMedia?.superior?.esquerda ? linhaMedia?.superior?.esquerda : '',
+      );
+    }
+  }, [setValue, linhaMedia]);
 
   return (
     <VStack
@@ -77,7 +105,7 @@ export function LinhaMedia({
         name="option"
         error={errors.option}
         onChangeOption={value => handleSelectOption(value)}
-        value={undefined}
+        value={option}
       >
         <VStack spacing={3} align="flex-start">
           <Radio value="manter">

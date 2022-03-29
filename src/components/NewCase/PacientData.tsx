@@ -52,7 +52,7 @@ export function PacientData({
   const [pacientImage, setPacientImage] = useState(dadosDoPaciente?.avatar);
   const [pacientGenero, setPacientGenero] = useState(dadosDoPaciente?.genero);
 
-  const { register, handleSubmit, formState, setValue, getValues } =
+  const { register, handleSubmit, formState, setValue, getValues, reset } =
     useForm<DadosDoPacienteType>({
       resolver: yupResolver(PacientDataFormSchema),
     });
@@ -85,8 +85,7 @@ export function PacientData({
       setValue('data_de_nascimento', dadosDoPaciente.data_de_nascimento);
       setValue('avatar', dadosDoPaciente.avatar);
     }
-  }, [dadosDoPaciente, setValue]);
-
+  }, [dadosDoPaciente, setValue, reset]);
   return (
     <VStack
       w="100%"

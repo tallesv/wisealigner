@@ -10,14 +10,17 @@ import {
 import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { RadioGroup } from '../Form/RadioGroup';
 import { Button } from '../Button';
 
 interface SobremordidaProps {
+  sobreMordida?: SobremordidaType;
   handleNextStep: () => void;
-  handleSubmitData: (values: { sobremordida: SobremordidaType }) => void;
+  handleSubmitData: (values: {
+    sobremordida: SobremordidaType;
+  }) => Promise<void>;
 }
 
 const SobremordidaFormSchema = yup.object().shape({
@@ -27,13 +30,22 @@ const SobremordidaFormSchema = yup.object().shape({
 });
 
 export function Sobremordida({
+  sobreMordida,
   handleNextStep,
   handleSubmitData,
 }: SobremordidaProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [hideAbertaSubOptions, setHideAbertaSubOptions] = useState(true);
-  const [hideProfundaSubOptions, setHideProfundaSubOptions] = useState(true);
-  const [subOptionsSelected, setSubOptionsSelected] = useState<string[]>([]);
+  const [hideAbertaSubOptions, setHideAbertaSubOptions] = useState(
+    sobreMordida?.option !== 'corrigir mordida aberta',
+  );
+  const [hideProfundaSubOptions, setHideProfundaSubOptions] = useState(
+    sobreMordida?.option !== 'corrigir mordida profunda',
+  );
+
+  const [option, setOption] = useState(sobreMordida?.option);
+  const [subOptionsSelected, setSubOptionsSelected] = useState<string[]>(
+    sobreMordida?.sub_options ? sobreMordida?.sub_options : [],
+  );
 
   const { register, handleSubmit, formState, setValue, getValues } =
     useForm<SobremordidaType>({
@@ -44,6 +56,7 @@ export function Sobremordida({
 
   function handleSelectOption(value: string) {
     setValue('option', value);
+    setOption(value);
     setHideAbertaSubOptions(value !== 'corrigir mordida aberta');
     setHideProfundaSubOptions(value !== 'corrigir mordida profunda');
 
@@ -79,9 +92,18 @@ export function Sobremordida({
     SobremordidaType
   > = async values => {
     setButtonLoading(true);
-    handleSubmitData({ sobremordida: { ...values } });
+    await handleSubmitData({ sobremordida: { ...values } });
     setButtonLoading(false);
   };
+
+  useEffect(() => {
+    if (sobreMordida) {
+      setValue('option', sobreMordida.option);
+      setValue('sub_options', sobreMordida.sub_options);
+      setValue('observation', sobreMordida.observation);
+    }
+  }, [sobreMordida, setValue]);
+
   return (
     <VStack
       w="100%"
@@ -93,7 +115,7 @@ export function Sobremordida({
         name="option"
         error={errors.option}
         onChangeOption={value => handleSelectOption(value)}
-        value={undefined}
+        value={option}
       >
         <VStack spacing={2} align="flex-start">
           <Radio value="mostrar resultado de sobremordida">
