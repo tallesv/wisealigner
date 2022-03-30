@@ -21,22 +21,14 @@ import { RadioGroup } from '../Form/RadioGroup';
 import { Button } from '../Button';
 import { CheckBoxGroup } from '../Form/CheckBoxGroup';
 
-type ApinhamentoType = {
-  corrigir_superior: {
-    expandir: string;
-    vestibularizar: string;
-    ipr_anterior: string;
-    ipr_posterior_direito: string;
-    ipr_posterior_esquerdo: string;
-  };
-  corrigir_inferior: {
-    expandir: string;
-    vestibularizar: string;
-    ipr_anterior: string;
-    ipr_posterior_direito: string;
-    ipr_posterior_esquerdo: string;
-  };
+type Corrigir = {
+  expandir: string;
+  vestibularizar: string;
+  ipr_anterior: string;
+  ipr_posterior_direito: string;
+  ipr_posterior_esquerdo: string;
 };
+
 interface ManejoDeEspaçosProps {
   manejoDeEspaços?: ManejoDeEspaçosType;
   handleNextStep: () => void;
@@ -143,10 +135,17 @@ export function ManejoDeEspaços({
   const [extracoesOption, setExtracoesOption] = useState(
     manejoDeEspaços?.extracoes?.option,
   );
-  const [apinhamento, setApinhamento] = useState(
-    manejoDeEspaços?.apinhamento
-      ? manejoDeEspaços?.apinhamento
-      : ({} as ApinhamentoType),
+
+  const [corrigirSuperior, setCorrigirSuperior] = useState(
+    manejoDeEspaços?.apinhamento?.corrigir_superior
+      ? manejoDeEspaços?.apinhamento.corrigir_superior
+      : ({} as Corrigir),
+  );
+
+  const [corrigirInferior, setCorrigirInferior] = useState(
+    manejoDeEspaços?.apinhamento?.corrigir_inferior
+      ? manejoDeEspaços?.apinhamento.corrigir_inferior
+      : ({} as Corrigir),
   );
 
   const { register, handleSubmit, formState, setValue, getValues } =
@@ -277,12 +276,13 @@ export function ManejoDeEspaços({
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_superior.expandir"
                   onChange={value => {
-                    const updateApinhamento = { ...apinhamento };
-                    updateApinhamento.corrigir_superior.expandir = value;
-                    setApinhamento(updateApinhamento);
+                    setCorrigirSuperior({
+                      ...corrigirSuperior,
+                      expandir: value,
+                    });
                     setValue('apinhamento.corrigir_superior.expandir', value);
                   }}
-                  value={apinhamento?.corrigir_superior.expandir}
+                  value={corrigirSuperior.expandir}
                 >
                   <Stack
                     spacing={4}
@@ -314,15 +314,16 @@ export function ManejoDeEspaços({
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_superior.vestibularizar"
                   onChange={value => {
-                    const updateApinhamento = { ...apinhamento };
-                    updateApinhamento.corrigir_superior.vestibularizar = value;
-                    setApinhamento(updateApinhamento);
+                    setCorrigirSuperior({
+                      ...corrigirSuperior,
+                      vestibularizar: value,
+                    });
                     setValue(
                       'apinhamento.corrigir_superior.vestibularizar',
                       value,
                     );
                   }}
-                  value={apinhamento?.corrigir_superior.vestibularizar}
+                  value={corrigirSuperior.vestibularizar}
                 >
                   <Stack
                     spacing={4}
@@ -355,15 +356,16 @@ export function ManejoDeEspaços({
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_superior.ipr_anterior"
                   onChange={value => {
-                    const updateApinhamento = { ...apinhamento };
-                    updateApinhamento.corrigir_superior.ipr_anterior = value;
-                    setApinhamento(updateApinhamento);
+                    setCorrigirSuperior({
+                      ...corrigirSuperior,
+                      ipr_anterior: value,
+                    });
                     setValue(
                       'apinhamento.corrigir_superior.ipr_anterior',
                       value,
                     );
                   }}
-                  value={apinhamento?.corrigir_superior.ipr_anterior}
+                  value={corrigirSuperior.ipr_anterior}
                 >
                   <Stack
                     spacing={4}
@@ -398,16 +400,16 @@ export function ManejoDeEspaços({
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_superior.ipr_posterior_direito"
                   onChange={value => {
-                    const updateApinhamento = { ...apinhamento };
-                    updateApinhamento.corrigir_superior.ipr_posterior_direito =
-                      value;
-                    setApinhamento(updateApinhamento);
+                    setCorrigirSuperior({
+                      ...corrigirSuperior,
+                      ipr_posterior_direito: value,
+                    });
                     setValue(
                       'apinhamento.corrigir_superior.ipr_posterior_direito',
                       value,
                     );
                   }}
-                  value={apinhamento?.corrigir_superior.ipr_posterior_direito}
+                  value={corrigirSuperior.ipr_posterior_direito}
                 >
                   <Stack
                     spacing={4}
@@ -445,16 +447,16 @@ export function ManejoDeEspaços({
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_superior.ipr_posterior_esquerdo"
                   onChange={value => {
-                    const updateApinhamento = { ...apinhamento };
-                    updateApinhamento.corrigir_superior.ipr_posterior_esquerdo =
-                      value;
-                    setApinhamento(updateApinhamento);
+                    setCorrigirSuperior({
+                      ...corrigirSuperior,
+                      ipr_posterior_esquerdo: value,
+                    });
                     setValue(
                       'apinhamento.corrigir_superior.ipr_posterior_esquerdo',
                       value,
                     );
                   }}
-                  value={apinhamento?.corrigir_superior.ipr_posterior_esquerdo}
+                  value={corrigirSuperior.ipr_posterior_esquerdo}
                 >
                   <Stack
                     spacing={4}
@@ -491,12 +493,13 @@ export function ManejoDeEspaços({
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_inferior.expandir"
                   onChange={value => {
-                    const updateApinhamento = { ...apinhamento };
-                    updateApinhamento.corrigir_inferior.expandir = value;
-                    setApinhamento(updateApinhamento);
+                    setCorrigirInferior({
+                      ...corrigirInferior,
+                      expandir: value,
+                    });
                     setValue('apinhamento.corrigir_inferior.expandir', value);
                   }}
-                  value={apinhamento?.corrigir_inferior.expandir}
+                  value={corrigirInferior?.expandir}
                 >
                   <Stack
                     spacing={4}
@@ -528,15 +531,16 @@ export function ManejoDeEspaços({
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_inferior.vestibularizar"
                   onChange={value => {
-                    const updateApinhamento = { ...apinhamento };
-                    updateApinhamento.corrigir_inferior.vestibularizar = value;
-                    setApinhamento(updateApinhamento);
+                    setCorrigirInferior({
+                      ...corrigirInferior,
+                      vestibularizar: value,
+                    });
                     setValue(
                       'apinhamento.corrigir_inferior.vestibularizar',
                       value,
                     );
                   }}
-                  value={apinhamento?.corrigir_inferior.vestibularizar}
+                  value={corrigirInferior?.vestibularizar}
                 >
                   <Stack
                     spacing={4}
@@ -569,15 +573,16 @@ export function ManejoDeEspaços({
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_inferior.ipr_anterior"
                   onChange={value => {
-                    const updateApinhamento = { ...apinhamento };
-                    updateApinhamento.corrigir_inferior.ipr_anterior = value;
-                    setApinhamento(updateApinhamento);
+                    setCorrigirInferior({
+                      ...corrigirInferior,
+                      ipr_anterior: value,
+                    });
                     setValue(
                       'apinhamento.corrigir_inferior.ipr_anterior',
                       value,
                     );
                   }}
-                  value={apinhamento?.corrigir_inferior.ipr_anterior}
+                  value={corrigirInferior?.ipr_anterior}
                 >
                   <Stack
                     spacing={4}
@@ -612,16 +617,16 @@ export function ManejoDeEspaços({
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_inferior.ipr_posterior_direito"
                   onChange={value => {
-                    const updateApinhamento = { ...apinhamento };
-                    updateApinhamento.corrigir_inferior.ipr_posterior_direito =
-                      value;
-                    setApinhamento(updateApinhamento);
+                    setCorrigirInferior({
+                      ...corrigirInferior,
+                      ipr_posterior_direito: value,
+                    });
                     setValue(
                       'apinhamento.corrigir_inferior.ipr_posterior_direito',
                       value,
                     );
                   }}
-                  value={apinhamento?.corrigir_inferior.ipr_posterior_direito}
+                  value={corrigirInferior?.ipr_posterior_direito}
                 >
                   <Stack
                     spacing={4}
@@ -659,16 +664,16 @@ export function ManejoDeEspaços({
                 <ChakraRadioGroup
                   name="apinhamento.corrigir_inferior.ipr_posterior_esquerdo"
                   onChange={value => {
-                    const updateApinhamento = { ...apinhamento };
-                    updateApinhamento.corrigir_inferior.ipr_posterior_esquerdo =
-                      value;
-                    setApinhamento(updateApinhamento);
+                    setCorrigirInferior({
+                      ...corrigirInferior,
+                      ipr_posterior_esquerdo: value,
+                    });
                     setValue(
                       'apinhamento.corrigir_inferior.ipr_posterior_esquerdo',
                       value,
                     );
                   }}
-                  value={apinhamento?.corrigir_inferior.ipr_posterior_esquerdo}
+                  value={corrigirInferior?.ipr_posterior_esquerdo}
                 >
                   <Stack
                     spacing={4}
