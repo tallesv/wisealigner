@@ -141,7 +141,7 @@ export function Documentacao({
                 alt="perfil"
               />
               <FileUpload
-                label="Adicionar"
+                label="Escolher foto"
                 onUploadImage={url => {
                   setFotos({ ...fotos, perfil: url });
                   setValue('fotos.perfil', url);
@@ -165,7 +165,7 @@ export function Documentacao({
               />
 
               <FileUpload
-                label="Adicionar"
+                label="Escolher foto"
                 onUploadImage={url => {
                   setFotos({ ...fotos, frente: url });
                   setValue('fotos.frente', url);
@@ -191,7 +191,7 @@ export function Documentacao({
               />
 
               <FileUpload
-                label="Adicionar"
+                label="Escolher foto"
                 onUploadImage={url => {
                   setFotos({ ...fotos, sorriso: url });
                   setValue('fotos.sorriso', url);
@@ -222,7 +222,7 @@ export function Documentacao({
               />
 
               <FileUpload
-                label="Adicionar"
+                label="Escolher foto"
                 onUploadImage={url => {
                   setFotos({ ...fotos, arca_superior: url });
                   setValue('fotos.arca_superior', url);
@@ -250,7 +250,7 @@ export function Documentacao({
               />
 
               <FileUpload
-                label="Adicionar"
+                label="Escolher foto"
                 onUploadImage={url => {
                   setFotos({ ...fotos, arca_inferior: url });
                   setValue('fotos.arca_inferior', url);
@@ -281,7 +281,7 @@ export function Documentacao({
               />
 
               <FileUpload
-                label="Adicionar"
+                label="Escolher foto"
                 onUploadImage={url => {
                   setFotos({ ...fotos, arca_esquerda: url });
                   setValue('fotos.arca_esquerda', url);
@@ -309,7 +309,7 @@ export function Documentacao({
               />
 
               <FileUpload
-                label="Adicionar"
+                label="Escolher foto"
                 onUploadImage={url => {
                   setFotos({ ...fotos, arca_frontal: url });
                   setValue('fotos.arca_frontal', url);
@@ -337,7 +337,7 @@ export function Documentacao({
               />
 
               <FileUpload
-                label="Adicionar"
+                label="Escolher foto"
                 onUploadImage={url => {
                   setFotos({ ...fotos, arca_direita: url });
                   setValue('fotos.arca_direita', url);
@@ -373,7 +373,7 @@ export function Documentacao({
               />
 
               <FileUpload
-                label="Adicionar"
+                label="Escolher radiografia"
                 onUploadImage={url => {
                   setRadiografia({ ...radiografia, frente: url });
                   setValue('radiografia.frente', url);
@@ -402,7 +402,7 @@ export function Documentacao({
               />
 
               <FileUpload
-                label="Adicionar"
+                label="Escolher radiografia"
                 onUploadImage={url => {
                   setRadiografia({ ...radiografia, perfil: url });
                   setValue('radiografia.perfil', url);
@@ -435,7 +435,7 @@ export function Documentacao({
                 alt="perfil"
               />
               <FileUpload
-                label="Adicionar"
+                label="Escolher stl"
                 onUploadImage={url => {
                   setStls({ ...stls, superior: url });
                   setValue('stls.superior', url);
@@ -461,7 +461,7 @@ export function Documentacao({
                 alt="perfil"
               />
               <FileUpload
-                label="Adicionar"
+                label="Escolher stl"
                 onUploadImage={url => {
                   setStls({ ...stls, inferior: url });
                   setValue('stls.inferior', url);
