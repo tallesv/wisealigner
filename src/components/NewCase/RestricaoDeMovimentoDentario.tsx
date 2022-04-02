@@ -64,9 +64,9 @@ export function RestricaoDeMovimentoDentario({
   function handleSelectOption(value: string) {
     setValue('option', value);
     setOption(value);
-    setHideSubOptions(value === 'nao');
+    setHideSubOptions(value === 'Não, movimentar todos os dentes');
 
-    if (value === 'nao') {
+    if (value === 'Não, movimentar todos os dentes') {
       setValue('sub_options', []);
     }
   }
@@ -118,8 +118,12 @@ export function RestricaoDeMovimentoDentario({
         value={option}
       >
         <VStack spacing={3} align="flex-start">
-          <Radio value="nao">Não, movimentar todos os dentes</Radio>
-          <Radio value="sim">Sim, não mover os dentes abaixo</Radio>
+          <Radio value="Não, movimentar todos os dentes">
+            Não, movimentar todos os dentes
+          </Radio>
+          <Radio value="Sim, não mover os dentes abaixo">
+            Sim, não mover os dentes abaixo
+          </Radio>
         </VStack>
       </RadioGroup>
 

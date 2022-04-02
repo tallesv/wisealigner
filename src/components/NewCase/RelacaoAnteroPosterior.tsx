@@ -39,7 +39,8 @@ export function RelacaoAnteroPosterior({
 }: RelacaoAnteroPosteriorProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [hideSubOptions, setHideSubOptions] = useState(
-    relacaoAnteroPosterior?.option !== 'movimento dentário',
+    relacaoAnteroPosterior?.option !==
+      'Opções de movimento dentário (se selecionar mais de uma opção, indicar quantidade e sequência em observações)',
   );
   const [subOptionsSelected, setSubOptionsSelected] = useState<string[]>(
     relacaoAnteroPosterior?.sub_options
@@ -61,8 +62,14 @@ export function RelacaoAnteroPosterior({
   function handleSelectOption(value: string) {
     setValue('option', value);
     setOption(value);
-    setHideSubOptions(value !== 'movimento dentário');
-    if (value !== 'movimento dentário') {
+    setHideSubOptions(
+      value !==
+        'Opções de movimento dentário (se selecionar mais de uma opção, indicar quantidade e sequência em observações)',
+    );
+    if (
+      value !==
+      'Opções de movimento dentário (se selecionar mais de uma opção, indicar quantidade e sequência em observações)'
+    ) {
       setValue('sub_options', []);
       setSubOptionsSelected([]);
     }
@@ -129,11 +136,11 @@ export function RelacaoAnteroPosterior({
           value={dOption}
         >
           <VStack spacing={2} align="flex-start">
-            <Radio value="manter">Manter</Radio>
-            <Radio value="melhorar">
+            <Radio value="Manter">Manter</Radio>
+            <Radio value="Melhorar relacionamento de canino somente">
               Melhorar relacionamento de canino somente
             </Radio>
-            <Radio value="correção">
+            <Radio value="Correção para Classe I(canino e molar)">
               Correção para Classe I(canino e molar)
             </Radio>
           </VStack>
@@ -150,11 +157,11 @@ export function RelacaoAnteroPosterior({
           value={eOption}
         >
           <VStack spacing={2} align="flex-start">
-            <Radio value="manter">Manter</Radio>
-            <Radio value="melhorar">
+            <Radio value="Manter">Manter</Radio>
+            <Radio value="Melhorar relacionamento de canino somente">
               Melhorar relacionamento de canino somente
             </Radio>
-            <Radio value="correção">
+            <Radio value="Correção para Classe I(canino e molar)">
               Correção para Classe I(canino e molar)
             </Radio>
           </VStack>
@@ -168,36 +175,44 @@ export function RelacaoAnteroPosterior({
         value={option}
       >
         <VStack spacing={2} align="flex-start">
-          <Radio value="movimento dentário">
+          <Radio value="Opções de movimento dentário (se selecionar mais de uma opção, indicar quantidade e sequência em observações)">
             Opções de movimento dentário (se selecionar mais de uma opção,
             indicar quantidade e sequência em observações)
           </Radio>
           <VStack align="flex-start" pl={10} hidden={hideSubOptions}>
             <Checkbox
-              value="desgastes"
-              isChecked={subOptionsSelected.includes('desgastes')}
+              value="Desgastes interproximais posteriores"
+              isChecked={subOptionsSelected.includes(
+                'Desgastes interproximais posteriores',
+              )}
               onChange={e => handleSelectSubOptions(e.target.value)}
             >
               Desgastes interproximais posteriores
             </Checkbox>
             <Checkbox
-              value="simulacao"
-              isChecked={subOptionsSelected.includes('simulacao')}
+              value="Simulação de correção de Classe II/III"
+              isChecked={subOptionsSelected.includes(
+                'Simulação de correção de Classe II/III',
+              )}
               onChange={e => handleSelectSubOptions(e.target.value)}
             >
               Simulação de correção de Classe II/III
             </Checkbox>
             <Checkbox
-              value="distalizacao"
-              isChecked={subOptionsSelected.includes('distalizacao')}
+              value="Distalização dente-a-dente (é mais previsível, porém resulta em uma maior quantidade de alinhadores)"
+              isChecked={subOptionsSelected.includes(
+                'Distalização dente-a-dente (é mais previsível, porém resulta em uma maior quantidade de alinhadores)',
+              )}
               onChange={e => handleSelectSubOptions(e.target.value)}
             >
               Distalização dente-a-dente (é mais previsível, porém resulta em
               uma maior quantidade de alinhadores)
             </Checkbox>
           </VStack>
-          <Radio value="simulação">Simulação de cirurgia ortognática</Radio>
-          <Radio value="outro">Outro</Radio>
+          <Radio value="Simulação de cirurgia ortognática">
+            Simulação de cirurgia ortognática
+          </Radio>
+          <Radio value="Outro">Outro</Radio>
         </VStack>
       </RadioGroup>
 

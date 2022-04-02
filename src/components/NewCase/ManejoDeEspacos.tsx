@@ -117,14 +117,14 @@ export function ManejoDeEspaços({
   const [hideDiastemasObservation, setHideDiastemasObservation] = useState(
     () => {
       if (manejoDeEspaços?.diastemas) {
-        return manejoDeEspaços?.diastemas?.option === 'fechar';
+        return manejoDeEspaços?.diastemas?.option === 'Fechar todos os espaços';
       }
       return true;
     },
   );
   const [hideExtraçoesSubOptions, setHideExtraçoesSubOptions] = useState(() => {
     if (manejoDeEspaços?.diastemas) {
-      return manejoDeEspaços?.extracoes?.option === 'nenhuma';
+      return manejoDeEspaços?.extracoes?.option === 'Nenhuma';
     }
     return true;
   });
@@ -172,14 +172,14 @@ export function ManejoDeEspaços({
   function handleChangeDiastemasOption(value: string) {
     setValue('diastemas.option', value);
     setDiastemasOption(value);
-    setHideDiastemasObservation(value === 'fechar');
+    setHideDiastemasObservation(value === 'Fechar todos os espaços');
   }
 
   function handleChangeExtraçoesOption(value: string) {
     setValue('extracoes.option', value);
     setExtracoesOption(value);
-    setHideExtraçoesSubOptions(value === 'nenhuma');
-    if (value === 'nenhuma') {
+    setHideExtraçoesSubOptions(value === 'Nenhuma');
+    if (value === 'Nenhuma') {
       setValue('extracoes.sub_options', []);
     }
   }
@@ -241,8 +241,8 @@ export function ManejoDeEspaços({
         value={diasTemasOption}
       >
         <VStack spacing={3} align="flex-start">
-          <Radio value="fechar">Fechar todos os espaços</Radio>
-          <Radio value="abrir">
+          <Radio value="Fechar todos os espaços">Fechar todos os espaços</Radio>
+          <Radio value="Abrir ou manter espaços. Favor descrever entre quais dentes no espaço abaixo...">
             Abrir ou manter espaços. Favor descrever entre quais dentes no
             espaço abaixo...
           </Radio>
@@ -288,9 +288,9 @@ export function ManejoDeEspaços({
                     spacing={4}
                     direction={isMobileSize ? 'row' : 'column'}
                   >
-                    <Radio value="primeiro">Primeiro</Radio>
-                    <Radio value="quanto necessario">Quanto Necessario</Radio>
-                    <Radio value="nenhum">Nenhum</Radio>
+                    <Radio value="Primeiro">Primeiro</Radio>
+                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
 
@@ -329,9 +329,9 @@ export function ManejoDeEspaços({
                     spacing={4}
                     direction={isMobileSize ? 'row' : 'column'}
                   >
-                    <Radio value="primeiro">Primeiro</Radio>
-                    <Radio value="quanto necessario">Quanto Necessario</Radio>
-                    <Radio value="nenhum">Nenhum</Radio>
+                    <Radio value="Primeiro">Primeiro</Radio>
+                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
 
@@ -371,9 +371,9 @@ export function ManejoDeEspaços({
                     spacing={4}
                     direction={isMobileSize ? 'row' : 'column'}
                   >
-                    <Radio value="primeiro">Primeiro</Radio>
-                    <Radio value="quanto necessario">Quanto Necessario</Radio>
-                    <Radio value="nenhum">Nenhum</Radio>
+                    <Radio value="Primeiro">Primeiro</Radio>
+                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
 
@@ -415,9 +415,9 @@ export function ManejoDeEspaços({
                     spacing={4}
                     direction={isMobileSize ? 'row' : 'column'}
                   >
-                    <Radio value="primeiro">Primeiro</Radio>
-                    <Radio value="quanto necessario">Quanto Necessario</Radio>
-                    <Radio value="nenhum">Nenhum</Radio>
+                    <Radio value="Primeiro">Primeiro</Radio>
+                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
 
@@ -462,9 +462,9 @@ export function ManejoDeEspaços({
                     spacing={4}
                     direction={isMobileSize ? 'row' : 'column'}
                   >
-                    <Radio value="primeiro">Primeiro</Radio>
-                    <Radio value="quanto necessario">Quanto Necessario</Radio>
-                    <Radio value="nenhum">Nenhum</Radio>
+                    <Radio value="Primeiro">Primeiro</Radio>
+                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
 
@@ -505,9 +505,9 @@ export function ManejoDeEspaços({
                     spacing={4}
                     direction={isMobileSize ? 'row' : 'column'}
                   >
-                    <Radio value="primeiro">Primeiro</Radio>
-                    <Radio value="quanto necessario">Quanto Necessario</Radio>
-                    <Radio value="nenhum">Nenhum</Radio>
+                    <Radio value="Primeiro">Primeiro</Radio>
+                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
 
@@ -546,9 +546,9 @@ export function ManejoDeEspaços({
                     spacing={4}
                     direction={isMobileSize ? 'row' : 'column'}
                   >
-                    <Radio value="primeiro">Primeiro</Radio>
-                    <Radio value="quanto necessario">Quanto Necessario</Radio>
-                    <Radio value="nenhum">Nenhum</Radio>
+                    <Radio value="Primeiro">Primeiro</Radio>
+                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
 
@@ -588,9 +588,9 @@ export function ManejoDeEspaços({
                     spacing={4}
                     direction={isMobileSize ? 'row' : 'column'}
                   >
-                    <Radio value="primeiro">Primeiro</Radio>
-                    <Radio value="quanto necessario">Quanto Necessario</Radio>
-                    <Radio value="nenhum">Nenhum</Radio>
+                    <Radio value="Primeiro">Primeiro</Radio>
+                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
 
@@ -632,9 +632,9 @@ export function ManejoDeEspaços({
                     spacing={4}
                     direction={isMobileSize ? 'row' : 'column'}
                   >
-                    <Radio value="primeiro">Primeiro</Radio>
-                    <Radio value="quanto necessario">Quanto Necessario</Radio>
-                    <Radio value="nenhum">Nenhum</Radio>
+                    <Radio value="Primeiro">Primeiro</Radio>
+                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
 
@@ -679,9 +679,9 @@ export function ManejoDeEspaços({
                     spacing={4}
                     direction={isMobileSize ? 'row' : 'column'}
                   >
-                    <Radio value="primeiro">Primeiro</Radio>
-                    <Radio value="quanto necessario">Quanto Necessario</Radio>
-                    <Radio value="nenhum">Nenhum</Radio>
+                    <Radio value="Primeiro">Primeiro</Radio>
+                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
 
@@ -708,8 +708,10 @@ export function ManejoDeEspaços({
         value={extracoesOption}
       >
         <VStack spacing={3} align="flex-start">
-          <Radio value="nenhuma">Nenhuma</Radio>
-          <Radio value="extraçao">Extração dos dentes abaixo</Radio>
+          <Radio value="Nenhuma">Nenhuma</Radio>
+          <Radio value="Extração dos dentes abaixo">
+            Extração dos dentes abaixo
+          </Radio>
         </VStack>
       </RadioGroup>
 

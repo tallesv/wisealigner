@@ -66,9 +66,9 @@ export function Arco({
         value={tratarArcoState}
       >
         <VStack spacing={3} align="flex-start">
-          <Radio value="ambos">Ambos</Radio>
-          <Radio value="superior">Superior</Radio>
-          <Radio value="inferior">Inferior</Radio>
+          <Radio value="Ambos">Ambos</Radio>
+          <Radio value="Superior">Superior</Radio>
+          <Radio value="Inferior">Inferior</Radio>
         </VStack>
       </RadioGroup>
 

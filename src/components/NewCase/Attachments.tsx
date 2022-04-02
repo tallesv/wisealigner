@@ -58,9 +58,9 @@ export function Attachments({
   function handleSelectOption(value: string) {
     setValue('option', value);
     setOption(value);
-    setHideSubOptions(value === 'sim');
+    setHideSubOptions(value === 'Coloque attachments se necessário');
 
-    if (value === 'sim') {
+    if (value === 'Coloque attachments se necessário') {
       setValue('sub_options', []);
     }
   }
@@ -105,8 +105,12 @@ export function Attachments({
         value={option}
       >
         <VStack spacing={3} align="flex-start">
-          <Radio value="sim">Coloque attachments se necessário</Radio>
-          <Radio value="nao">Não coloque attachments nos dentes abaixo</Radio>
+          <Radio value="Coloque attachments se necessário">
+            Coloque attachments se necessário
+          </Radio>
+          <Radio value="Não coloque attachments nos dentes abaixo">
+            Não coloque attachments nos dentes abaixo
+          </Radio>
         </VStack>
       </RadioGroup>
 

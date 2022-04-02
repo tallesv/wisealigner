@@ -57,8 +57,8 @@ export function Sobremordida({
   function handleSelectOption(value: string) {
     setValue('option', value);
     setOption(value);
-    setHideAbertaSubOptions(value !== 'corrigir mordida aberta');
-    setHideProfundaSubOptions(value !== 'corrigir mordida profunda');
+    setHideAbertaSubOptions(value !== 'Corrigir mordida aberta');
+    setHideProfundaSubOptions(value !== 'Corrigir mordida profunda');
 
     setValue('sub_options', []);
     setSubOptionsSelected([]);
@@ -118,56 +118,56 @@ export function Sobremordida({
         value={option}
       >
         <VStack spacing={2} align="flex-start">
-          <Radio value="mostrar resultado de sobremordida">
+          <Radio value="Mostrar resultado de sobremordida">
             Mostrar resultado de sobremordida
           </Radio>
-          <Radio value="corrigir mordida aberta">Corrigir mordida aberta</Radio>
+          <Radio value="Corrigir mordida aberta">Corrigir mordida aberta</Radio>
           <VStack align="flex-start" pl={10} hidden={hideAbertaSubOptions}>
             <Checkbox
-              value="extruir dentes superiores"
+              value="Extruir dentes superiores"
               isChecked={subOptionsSelected.includes(
-                'extruir dentes superiores',
+                'Extruir dentes superiores',
               )}
               onChange={e => handleSelectSubOptions(e.target.value)}
             >
               Extruir dentes superiores
             </Checkbox>
             <Checkbox
-              value="extruir dentes inferiores"
+              value="Extruir dentes inferiores"
               isChecked={subOptionsSelected.includes(
-                'extruir dentes inferiores',
+                'Extruir dentes inferiores',
               )}
               onChange={e => handleSelectSubOptions(e.target.value)}
             >
               Extruir dentes inferiores
             </Checkbox>
           </VStack>
-          <Radio value="corrigir mordida profunda">
+          <Radio value="Corrigir mordida profunda">
             Corrigir mordida profunda
           </Radio>
           <VStack align="flex-start" pl={10} hidden={hideProfundaSubOptions}>
             <Checkbox
-              value="intruir dentes superiores"
+              value="Intruir dentes superiores"
               isChecked={subOptionsSelected.includes(
-                'intruir dentes superiores',
+                'Intruir dentes superiores',
               )}
               onChange={e => handleSelectSubOptions(e.target.value)}
             >
               Intruir dentes superiores
             </Checkbox>
             <Checkbox
-              value="intruir dentes inferiores"
+              value="Intruir dentes inferiores"
               isChecked={subOptionsSelected.includes(
-                'intruir dentes inferiores',
+                'Intruir dentes inferiores',
               )}
               onChange={e => handleSelectSubOptions(e.target.value)}
             >
               Intruir dentes inferiores
             </Checkbox>
             <Checkbox
-              value="adicionar bite ramps nos incisivos superiores"
+              value="Adicionar Bite Ramps nos incisivos superiores"
               isChecked={subOptionsSelected.includes(
-                'adicionar bite ramps nos incisivos superiores',
+                'Adicionar Bite Ramps nos incisivos superiores',
               )}
               onChange={e => handleSelectSubOptions(e.target.value)}
             >

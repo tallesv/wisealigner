@@ -39,7 +39,7 @@ export function LinhaMedia({
 }: LinhaMediaProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [hideSubOptions, setHideSubOptions] = useState(
-    linhaMedia?.option === 'manter',
+    linhaMedia?.option === 'Manter linha média de acordo com o alinhamento',
   );
   const [option, setOption] = useState(linhaMedia?.option);
 
@@ -57,8 +57,10 @@ export function LinhaMedia({
   function handleSelectOption(value: string) {
     setValue('option', value);
     setOption(value);
-    setHideSubOptions(value === 'manter');
-    if (value === 'manter') {
+    setHideSubOptions(
+      value === 'Manter linha média de acordo com o alinhamento',
+    );
+    if (value === 'Manter linha média de acordo com o alinhamento') {
       setValue('inferior.direita', '');
       setValue('inferior.esquerda', '');
       setValue('superior.direita', '');
@@ -108,13 +110,13 @@ export function LinhaMedia({
         value={option}
       >
         <VStack spacing={3} align="flex-start">
-          <Radio value="manter">
+          <Radio value="Manter linha média de acordo com o alinhamento">
             Manter linha média de acordo com o alinhamento
           </Radio>
-          <Radio value="modificar com irp">
+          <Radio value="Modificar a linha média com IPR">
             Modificar a linha média com IPR
           </Radio>
-          <Radio value="modificar sem ipr">
+          <Radio value="Modificar linha média sem IPR (se houver excesso de espaço)">
             Modificar linha média sem IPR (se houver excesso de espaço)
           </Radio>
         </VStack>

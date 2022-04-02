@@ -143,10 +143,10 @@ export function InformacoesComplementares({
         value={contencoesOption}
       >
         <VStack spacing={3} align="flex-start">
-          <Radio value="Não há contenções">
+          <Radio value="Não há contenções coladas no escaneamento">
             Não há contenções coladas no escaneamento
           </Radio>
-          <Radio value=" Há contenções">
+          <Radio value="Há contenções coladas no escamento. Favor removê-la(s) digitalmente.">
             Há contenções coladas no escamento. Favor removê-la(s) digitalmente.
           </Radio>
           <Text fontSize={14} pl={6}>

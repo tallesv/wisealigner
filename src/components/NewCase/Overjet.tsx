@@ -66,13 +66,13 @@ export function Overjet({
         value={option}
       >
         <VStack spacing={3} align="flex-start">
-          <Radio value="mostrar o overjet apos alinhamneto">
+          <Radio value="Mostrar o overjet após alinhamneto">
             Mostrar o overjet após alinhamneto
           </Radio>
-          <Radio value="melhorar o overjet com desgastes interpoximais">
+          <Radio value="Melhorar o overjet com desgastes interpoximais">
             Melhorar o overjet com desgastes interpoximais
           </Radio>
-          <Radio value="melhorar o overjet com abertura de espaços">
+          <Radio value="Melhorar o overjet com abertura de espaços">
             Melhorar o overjet com abertura de espaços
           </Radio>
         </VStack>
