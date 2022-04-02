@@ -204,7 +204,7 @@ function EditCase({ newCase }: EditCaseProps) {
         orientation="vertical"
         onClickStep={step => setStep(step)}
         activeStep={activeStep}
-        colorScheme="purple"
+        colorScheme="teal"
       >
         {steps.map(({ label }) => (
           <Step width="100%" label={label} key={label}>

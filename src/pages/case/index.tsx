@@ -227,7 +227,7 @@ function NewCase() {
         orientation="vertical"
         onClickStep={step => handleSetStep(step)}
         activeStep={activeStep}
-        colorScheme="purple"
+        colorScheme="teal"
       >
         {steps.map(({ label }) => (
           <Step width="100%" label={label} key={label}>

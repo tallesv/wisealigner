@@ -5,6 +5,9 @@ export default extendTheme({
     gray: {
       '550': '#31343d',
     },
+    teal: {
+      '650': '#006e70',
+    },
     blue: {
       '450': '#3c4257',
     },

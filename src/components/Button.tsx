@@ -14,8 +14,8 @@ export function Button({ children, ...rest }: ButtonProps) {
       size="lg"
       fontSize="lg"
       color="white"
-      bgColor="purple.550"
-      _hover={{ bgColor: 'purple.550' }}
+      bgColor="teal.650"
+      _hover={{ bgColor: 'teal.650' }}
       {...rest}
     >
       {children}
