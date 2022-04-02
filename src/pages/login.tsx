@@ -1,4 +1,12 @@
-import { Box, Flex, VStack, Text, Alert, AlertIcon } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  VStack,
+  Text,
+  Alert,
+  AlertIcon,
+  Image,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -47,11 +55,14 @@ export default function Login() {
 
   return (
     <Box>
-      <VStack pt={[7, 14]} mx="auto" maxW={1000} spacing={10}>
-        <Box h={6} w={[358, 540]} pl={[4, 8]}>
-          <Text fontSize={[24]} fontWeight={800}>
-            wisealigners
-          </Text>
+      <VStack pt={[7, 14]} mx="auto" maxW={1000} spacing={3}>
+        <Box h={150} w={[358, 540]} pl={[4, 8]}>
+          <Image
+            maxW="220px"
+            maxH="200px"
+            mx="auto"
+            src="wisealignerslogo.png"
+          />
         </Box>
 
         <Box

@@ -11,6 +11,8 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&display=swap"
             rel="stylesheet"
           />
+          <link rel="icon" href="wisealignerslogo.png" />
+          <title>Wise Aligners</title>
         </Head>
         <body>
           <Main />

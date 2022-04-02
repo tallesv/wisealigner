@@ -10,6 +10,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Image,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -61,16 +62,7 @@ export function Header() {
           aria-label="Navigate to home page"
           suppressHydrationWarning
         >
-          <Text
-            fontSize={['2xl', '3xl']}
-            fontWeight="bold"
-            letterSpacing="tight"
-          >
-            wisealigners
-            <Text as="span" ml={1} color="purple.550">
-              .
-            </Text>
-          </Text>
+          <Image maxW="120px" maxH="100px" src="wisealignerslogo.png" />
         </IconButton>
       </Flex>
 
