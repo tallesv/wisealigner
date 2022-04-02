@@ -39,7 +39,7 @@ function UsersTable() {
   return (
     <Box p={[6, 8]}>
       <Flex mx="auto">
-        <Heading size="lg">Casos</Heading>
+        <Heading size="lg">Usuários</Heading>
       </Flex>
 
       <Table variant="simple" mt={5}>

@@ -28,6 +28,7 @@ import api from '../../client/api';
 import { FileUpload } from '../../components/Form/FileUpload';
 import deleteFile from '../../utils/deleteFile';
 import { getApiClient } from '../../client/apiClient';
+import { useAuth } from '../../hooks/useAuth';
 
 type EditUserFormData = {
   avatar: string;
@@ -189,6 +190,7 @@ function EditUser({ user }: EditUserProps) {
           variant="outline"
           size="md"
           disabled={isLoading}
+          hidden={useAuth().user.id !== user.id}
         >
           Alterar senha
         </Button>
