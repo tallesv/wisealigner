@@ -77,7 +77,7 @@ function CaseTable() {
         <Thead>
           <Tr bgColor="gray.200">
             <Th>Nome</Th>
-            <Th>Email</Th>
+            <Th>Gênero</Th>
             <Th>Data</Th>
             <Th isNumeric>Opções</Th>
           </Tr>
@@ -96,7 +96,7 @@ function CaseTable() {
                 </Flex>
               </Td>
               <Td>{caseItem.dados_do_paciente.genero}</Td>
-              <Td>{caseItem.dados_do_paciente.data_de_nascimento}</Td>
+              <Td>{new Date(caseItem.date).toLocaleDateString('pt-BR')}</Td>
               <Td isNumeric>
                 <Tooltip label="Deletar caso" aria-label="delete case">
                   <IconButton

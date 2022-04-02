@@ -111,8 +111,8 @@ export function PacientData({
           value={pacientGenero}
         >
           <HStack>
-            <Radio value="masculine">Masculino</Radio>
-            <Radio value="feminine">Feminino</Radio>
+            <Radio value="Masculino">Masculino</Radio>
+            <Radio value="Feminino">Feminino</Radio>
           </HStack>
         </RadioGroup>
         <Input

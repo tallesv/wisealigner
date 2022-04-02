@@ -105,6 +105,7 @@ function NewCase() {
     if ('dados_do_paciente' in values && !personalDataFilled) {
       const response = await api.post('/requests', {
         ...values,
+        date: new Date(),
         userId: user.id,
       });
       setNewCaseState(response.data.request);
