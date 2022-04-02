@@ -17,7 +17,7 @@ import {
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { RiDeleteBin2Line, RiEditLine } from 'react-icons/ri';
+import { RiEditLine } from 'react-icons/ri';
 import api from '../client/api';
 import { Pagination } from '../components/Pagination';
 

@@ -13,6 +13,7 @@ import {
   Tooltip,
   IconButton,
   Spinner,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -20,13 +21,30 @@ import { useEffect, useState } from 'react';
 import { RiDeleteBin2Line, RiEditLine } from 'react-icons/ri';
 import api from '../client/api';
 import { Pagination } from '../components/Pagination';
+import { DeleteDialog } from '../components/UsersTable/DeleteDialog';
 
 function CaseTable() {
   const [page, setPage] = useState(1);
   const [isLoadindCase, setIsLoadingCases] = useState(false);
   const [cases, setCases] = useState<NewCaseType[]>([]);
+  const [caseToDelete, setCaseToDelete] = useState<NewCaseType | undefined>();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { push } = useRouter();
+
+  function handleDeleteCase(caseItem: NewCaseType) {
+    setCaseToDelete(caseItem);
+    onOpen();
+  }
+
+  function afterDeletedCase() {
+    const updateCases = [...cases].filter(
+      caseItem => caseItem.id !== caseToDelete?.id,
+    );
+    setCases(updateCases);
+    setCaseToDelete(undefined);
+  }
 
   useEffect(() => {
     async function loadCases() {
@@ -41,6 +59,14 @@ function CaseTable() {
 
   return (
     <Box p={[6, 8]}>
+      <DeleteDialog
+        pacientName={caseToDelete?.dados_do_paciente.nome_completo}
+        caseId={caseToDelete?.id}
+        isOpen={isOpen}
+        onClose={onClose}
+        onDelete={() => afterDeletedCase()}
+      />
+
       <Flex mx="auto">
         <Heading size="lg">
           Casos
@@ -77,6 +103,7 @@ function CaseTable() {
                     aria-label="Delte case"
                     bgColor="white"
                     icon={<RiDeleteBin2Line />}
+                    onClick={() => handleDeleteCase(caseItem)}
                   />
                 </Tooltip>
                 <Tooltip label="Editar caso" aria-label="edit case">
