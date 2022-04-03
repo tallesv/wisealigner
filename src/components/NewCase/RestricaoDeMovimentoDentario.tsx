@@ -16,7 +16,8 @@ import { Button } from '../Button';
 import { CheckBoxGroup } from '../Form/CheckBoxGroup';
 
 interface RestricaoDeMovimentoDentarioProps {
-  restricaoDeMovimentoDenatrio?: RestricaoDeMovimentoDentarioType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  restricaoDeMovimentoDenatrio?: any;
   handleNextStep: () => void;
   handleSubmitData: (values: {
     restricao_de_movimento_dentario: RestricaoDeMovimentoDentarioType;
@@ -39,9 +40,10 @@ export function RestricaoDeMovimentoDentario({
 }: RestricaoDeMovimentoDentarioProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [hideSubOptions, setHideSubOptions] = useState(
-    restricaoDeMovimentoDenatrio?.option === 'nao',
+    restricaoDeMovimentoDenatrio === '' ||
+      restricaoDeMovimentoDenatrio?.option ===
+        'Não, movimentar todos os dentes',
   );
-
   const [option, setOption] = useState(restricaoDeMovimentoDenatrio?.option);
 
   const checkBoxSize = useBreakpointValue({

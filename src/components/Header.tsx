@@ -62,7 +62,7 @@ export function Header() {
           aria-label="Navigate to home page"
           suppressHydrationWarning
         >
-          <Image maxW="120px" maxH="100px" src="wisealignerslogo.png" />
+          <Image maxW="120px" maxH="100px" src="/images/wisealignerslogo.png" />
         </IconButton>
       </Flex>
 

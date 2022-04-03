@@ -61,7 +61,7 @@ export default function Login() {
             maxW="220px"
             maxH="200px"
             mx="auto"
-            src="wisealignerslogo.png"
+            src="images/wisealignerslogo.png"
           />
         </Box>
 

@@ -17,7 +17,8 @@ import { Button } from '../Button';
 import { Input } from '../Form/input';
 
 interface LinhaMediaProps {
-  linhaMedia?: LinhaMediaType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  linhaMedia?: any;
   handleNextStep: () => void;
   handleSubmitData: (value: { linha_media: LinhaMediaType }) => Promise<void>;
 }
@@ -39,7 +40,8 @@ export function LinhaMedia({
 }: LinhaMediaProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [hideSubOptions, setHideSubOptions] = useState(
-    linhaMedia?.option === 'Manter linha média de acordo com o alinhamento',
+    linhaMedia === '' ||
+      linhaMedia?.option === 'Manter linha média de acordo com o alinhamento',
   );
   const [option, setOption] = useState(linhaMedia?.option);
 
