@@ -13,6 +13,7 @@ import {
   AvatarBadge,
   IconButton,
   Tooltip,
+  useToast,
 } from '@chakra-ui/react';
 import { RiCloseLine } from 'react-icons/ri';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -29,6 +30,7 @@ import { FileUpload } from '../../components/Form/FileUpload';
 import deleteFile from '../../utils/deleteFile';
 import { getApiClient } from '../../client/apiClient';
 import { useAuth } from '../../hooks/useAuth';
+import { auth } from '../../config/firebase';
 
 type EditUserFormData = {
   avatar: string;
@@ -80,6 +82,8 @@ interface EditUserProps {
 function EditUser({ user }: EditUserProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [userToEdit, setUserToEdit] = useState<UserType>(user);
+
+  const toast = useToast();
 
   const inputSize = 'md';
 
@@ -168,6 +172,33 @@ function EditUser({ user }: EditUserProps) {
     });
   }
 
+  async function handleSendResetPasswordEmail() {
+    try {
+      setIsLoading(true);
+      await auth.sendPasswordResetEmail(user.email);
+      toast({
+        title: 'Email enviado',
+        description:
+          'Um email com o link para resetar a senha foi enviado para o seu email.',
+        status: 'info',
+        duration: 10000,
+        position: 'top-right',
+        isClosable: true,
+      });
+    } catch (err) {
+      toast({
+        title: 'Houve um erro ao enviar o email para resetar a sua senha.',
+        description: 'Por favo tente novamente',
+        status: 'error',
+        position: 'top-right',
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     setUserValues(user);
   }, [setUserValues, user]);
@@ -190,6 +221,7 @@ function EditUser({ user }: EditUserProps) {
           variant="outline"
           size="md"
           disabled={isLoading}
+          onClick={() => handleSendResetPasswordEmail()}
           hidden={useAuth().user.id !== user.id}
         >
           Alterar senha
