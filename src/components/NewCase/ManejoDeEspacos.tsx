@@ -255,7 +255,7 @@ export function ManejoDeEspaços({
             Observações
           </FormLabel>
           <Textarea
-            focusBorderColor="purple.400"
+            focusBorderColor="teal.600"
             {...register('diastemas.observation')}
           />
         </FormControl>

@@ -182,7 +182,7 @@ export function Sobremordida({
         <FormLabel fontWeight={700} htmlFor="observation">
           Observações
         </FormLabel>
-        <Textarea focusBorderColor="purple.400" {...register('observation')} />
+        <Textarea focusBorderColor="teal.600" {...register('observation')} />
       </FormControl>
 
       <Flex>

@@ -41,7 +41,7 @@ export const FileUpload = ({
       <ChakraInput
         type="file"
         hidden
-        focusBorderColor="purple.400"
+        focusBorderColor="teal.600"
         ref={e => {
           inputRef.current = e;
         }}

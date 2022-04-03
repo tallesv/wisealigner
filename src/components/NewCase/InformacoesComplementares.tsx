@@ -81,7 +81,7 @@ export function InformacoesComplementares({
         </Text>
 
         <Textarea
-          focusBorderColor="purple.400"
+          focusBorderColor="teal.600"
           {...register('informacoes_a_serem_compartilhadas')}
         />
       </FormControl>
