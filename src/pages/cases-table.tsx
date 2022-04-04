@@ -22,6 +22,7 @@ import { RiDeleteBin2Line, RiEditLine } from 'react-icons/ri';
 import api from '../client/api';
 import { Pagination } from '../components/Pagination';
 import { DeleteDialog } from '../components/UsersTable/DeleteDialog';
+import { useAuth } from '../hooks/useAuth';
 
 function CaseTable() {
   const [page, setPage] = useState(1);
@@ -29,6 +30,7 @@ function CaseTable() {
   const [cases, setCases] = useState<NewCaseType[]>([]);
   const [caseToDelete, setCaseToDelete] = useState<NewCaseType | undefined>();
 
+  const { user } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { push } = useRouter();
@@ -50,12 +52,19 @@ function CaseTable() {
     async function loadCases() {
       setIsLoadingCases(true);
       const response = await api.get('/requests');
-      setCases(response.data);
+      if (user.type === 'Admin') {
+        setCases(response.data);
+      } else {
+        const filterCases = response.data.filter(
+          (caseItem: NewCaseType) => caseItem.userId === user.id,
+        );
+        setCases(filterCases);
+      }
       setIsLoadingCases(false);
     }
 
     loadCases();
-  }, []);
+  }, [user, user.id, user.type]);
 
   return (
     <Box p={[6, 8]}>

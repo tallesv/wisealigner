@@ -107,6 +107,7 @@ function NewCase() {
         ...values,
         date: new Date(),
         userId: user.id,
+        userName: user.name,
       });
       setNewCaseState(response.data.request);
       setPersonalDataFilled(true);
