@@ -436,7 +436,19 @@ export default EditUser;
 
 export const getServerSideProps = withSSRAuth(
   async ({ query: { id }, req }) => {
-    const { 'wisealigners.token': token } = req.cookies;
+    const { 'wisealigners.token': token, 'wisealigners.user': userFromCookie } =
+      req.cookies;
+
+    const userParsed = JSON.parse(userFromCookie);
+
+    if (userParsed.type !== 'Admin' && id !== userParsed.id) {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+    }
 
     const apiClient = getApiClient(token);
     const response = await apiClient.get(`users/${id}`);

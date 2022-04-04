@@ -232,12 +232,24 @@ export default EditCase;
 
 export const getServerSideProps = withSSRAuth(
   async ({ query: { id }, req }) => {
-    const { 'wisealigners.token': token } = req.cookies;
+    const { 'wisealigners.token': token, 'wisealigners.user': user } =
+      req.cookies;
 
     const apiClient = getApiClient(token);
     const response = await apiClient.get(`requests/${id}`);
 
     const newCase = response.data.request;
+
+    const userParsed = JSON.parse(user);
+
+    if (userParsed.type !== 'Admin' && newCase.userId !== userParsed.id) {
+      return {
+        redirect: {
+          destination: '/cases-table',
+          permanent: false,
+        },
+      };
+    }
 
     if (!newCase) {
       return {
