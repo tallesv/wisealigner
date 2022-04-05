@@ -106,6 +106,7 @@ type DocumentacaoType = {
   radiografia: {
     frente: string;
     perfil: string;
+    others: string[];
   };
   stls: {
     superior: string;

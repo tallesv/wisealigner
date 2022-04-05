@@ -7,14 +7,16 @@ import {
   FormErrorMessage,
   Image,
   Text,
+  Button as ChakraButton,
 } from '@chakra-ui/react';
 import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '../Button';
 import { FileUpload } from '../Form/FileUpload';
+import deleteFile from '../../utils/deleteFile';
 
 type Fotos = {
   perfil: string;
@@ -58,6 +60,7 @@ const DocumentacaoFormSchema = yup.object().shape({
   radiografia: yup.object().shape({
     frente: yup.string().required('Por favor insira todas as radiografias.'),
     perfil: yup.string().required('Por favor insira todas as radiografias.'),
+    others: yup.array().of(yup.string()),
   }),
   stls: yup.object().shape({
     superior: yup.string().required('Por favor insira todas as stls.'),
@@ -79,6 +82,10 @@ export function Documentacao({
 
   const [radiografia, setRadiografia] = useState(
     documentacao?.radiografia ? documentacao.radiografia : ({} as Radiografia),
+  );
+
+  const [radiografiaOthers, setRadiografiaOthers] = useState(
+    documentacao?.radiografia?.others ? documentacao?.radiografia.others : [],
   );
 
   const [stls, setStls] = useState(
@@ -105,6 +112,27 @@ export function Documentacao({
     setButtonLoading(false);
   };
 
+  function handleAddOthersRadiografia(url: string) {
+    const updateOthersRadiografia = [...radiografiaOthers];
+    updateOthersRadiografia.push(url);
+
+    setRadiografiaOthers(updateOthersRadiografia);
+    setValue('radiografia.others', updateOthersRadiografia);
+  }
+
+  const handleRemoveOthersRadiografia = useCallback(
+    async (url: string) => {
+      await deleteFile(url);
+
+      const updateOthersRadiografia = [...radiografiaOthers].filter(
+        item => item !== url,
+      );
+      setRadiografiaOthers(updateOthersRadiografia);
+      setValue('radiografia.others', updateOthersRadiografia);
+    },
+    [radiografiaOthers, setValue],
+  );
+
   useEffect(() => {
     if (documentacao) {
       setValue('fotos.perfil', documentacao.fotos.perfil);
@@ -117,6 +145,7 @@ export function Documentacao({
       setValue('fotos.arca_frontal', documentacao.fotos.arca_frontal);
       setValue('radiografia.frente', documentacao.radiografia.frente);
       setValue('radiografia.perfil', documentacao.radiografia.perfil);
+      setValue('radiografia.others', documentacao.radiografia.others);
       setValue('stls.inferior', documentacao.stls.inferior);
       setValue('stls.superior', documentacao.stls.superior);
     }
@@ -417,6 +446,46 @@ export function Documentacao({
               )}
             </FormControl>
           </Flex>
+
+          {radiografiaOthers.map(item => (
+            <Flex key={item} direction="column" alignItems="center" my={4}>
+              <Image boxSize={imageSize} src={item} alt={item} />
+
+              <ChakraButton
+                isLoading={buttonLoading}
+                fontSize={[11, 16]}
+                colorScheme="red"
+                mt={2}
+                onClick={() => handleRemoveOthersRadiografia(item)}
+              >
+                Remover
+              </ChakraButton>
+            </Flex>
+          ))}
+
+          {radiografia.frente && radiografia.perfil && (
+            <Flex direction="column" alignItems="center" my={4}>
+              <FormControl isInvalid>
+                <Image
+                  boxSize={imageSize}
+                  src="/images/radiografia_frontal.jpg"
+                  alt="perfil"
+                />
+
+                <FileUpload
+                  label="Adicionar mais uma radiografia"
+                  onUploadImage={url => handleAddOthersRadiografia(url)}
+                  isUploading={uploading => setIsUploading(uploading)}
+                  mt={2}
+                />
+                {!!errors.radiografia?.perfil && (
+                  <FormErrorMessage>
+                    {errors.radiografia?.perfil.message}
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+            </Flex>
+          )}
         </Flex>
       </Box>
 
