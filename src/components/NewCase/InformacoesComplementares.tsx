@@ -167,7 +167,7 @@ export function InformacoesComplementares({
           isLoading={buttonLoading}
           onClick={() => handleNextStep()}
         >
-          Próximo
+          Salvar
         </Button>
       </Flex>
     </VStack>

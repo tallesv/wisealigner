@@ -732,7 +732,7 @@ export function ManejoDeEspaços({
           isLoading={buttonLoading}
           onClick={() => handleNextStep()}
         >
-          Próximo
+          Salvar
         </Button>
       </Flex>
     </VStack>

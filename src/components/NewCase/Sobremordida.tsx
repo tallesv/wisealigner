@@ -192,7 +192,7 @@ export function Sobremordida({
           isLoading={buttonLoading}
           onClick={() => handleNextStep()}
         >
-          Próximo
+          Salvar
         </Button>
       </Flex>
     </VStack>

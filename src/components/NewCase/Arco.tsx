@@ -79,7 +79,7 @@ export function Arco({
           isLoading={buttonLoading}
           onClick={() => handleNextStep()}
         >
-          Próximo
+          Salvar
         </Button>
       </Flex>
     </VStack>

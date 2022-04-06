@@ -175,7 +175,7 @@ export function LinhaMedia({
           isLoading={buttonLoading}
           onClick={() => handleNextStep()}
         >
-          Próximo
+          Salvar
         </Button>
       </Flex>
     </VStack>

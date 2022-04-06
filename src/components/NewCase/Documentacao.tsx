@@ -556,7 +556,7 @@ export function Documentacao({
           disabled={isUploading}
           onClick={() => handleNextStep()}
         >
-          Finalizar
+          Salvar
         </Button>
       </Flex>
     </VStack>

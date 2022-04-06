@@ -150,7 +150,7 @@ export function PacientData({
           isLoading={buttonLoading}
           disabled={isUploading}
         >
-          Próximo
+          Salvar
         </Button>
       </Flex>
     </VStack>

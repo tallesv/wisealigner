@@ -146,7 +146,7 @@ export function RestricaoDeMovimentoDentario({
           isLoading={buttonLoading}
           onClick={() => handleNextStep()}
         >
-          Próximo
+          Salvar
         </Button>
       </Flex>
     </VStack>
