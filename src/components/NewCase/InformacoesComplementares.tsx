@@ -24,8 +24,12 @@ interface InformacoesComplementaresProps {
 
 const InformacoesComplementaresFormSchema = yup.object().shape({
   informacoes_a_serem_compartilhadas: yup.string(),
-  terceiros_molares: yup.string(),
-  contencoes: yup.string(),
+  terceiros_molares: yup
+    .string()
+    .required('Por favor escolha uma opção para os Terceiros Molares.'),
+  contencoes: yup
+    .string()
+    .required('Por favor escolha uma opção para as Conteçẽs.'),
 });
 
 export function InformacoesComplementares({
@@ -134,7 +138,7 @@ export function InformacoesComplementares({
 
       <RadioGroup
         name="contencoes"
-        label="Contencões"
+        label="Contenções"
         error={errors.terceiros_molares}
         onChangeOption={value => {
           setContencoesOption(value);
