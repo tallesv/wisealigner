@@ -1,5 +1,9 @@
 import { Stack } from '@chakra-ui/react';
-import { RiDashboardLine, RiInputMethodLine } from 'react-icons/ri';
+import {
+  RiDashboardLine,
+  RiInputMethodLine,
+  RiMoneyDollarBoxLine,
+} from 'react-icons/ri';
 import { useAuth } from '../../hooks/useAuth';
 
 import { NavLink } from './NavLink';
@@ -16,6 +20,12 @@ export function SidebarNav() {
         </NavLink>
         <NavLink icon={RiDashboardLine} href="/cases-table">
           Listar casos
+        </NavLink>
+      </NavSection>
+
+      <NavSection title="PREÇOS">
+        <NavLink icon={RiMoneyDollarBoxLine} href="/values">
+          Valores
         </NavLink>
       </NavSection>
       <NavSection hidden={user.type !== 'Admin'} title="USUÁRIOS">
