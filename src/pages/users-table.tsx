@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react';
 import { RiEditLine } from 'react-icons/ri';
 import api from '../client/api';
 import { Pagination } from '../components/Pagination';
+import { withSSRAuth } from '../utils/withSSRAuth';
 
 function UsersTable() {
   const [page, setPage] = useState(1);
@@ -99,3 +100,9 @@ function UsersTable() {
 }
 
 export default UsersTable;
+
+export const getServerSideProps = withSSRAuth(async () => {
+  return {
+    props: {},
+  };
+});

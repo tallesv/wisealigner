@@ -23,6 +23,7 @@ import api from '../client/api';
 import { Pagination } from '../components/Pagination';
 import { DeleteDialog } from '../components/UsersTable/DeleteDialog';
 import { useAuth } from '../hooks/useAuth';
+import { withSSRAuth } from '../utils/withSSRAuth';
 
 function CaseTable() {
   const [page, setPage] = useState(1);
@@ -140,3 +141,9 @@ function CaseTable() {
 }
 
 export default CaseTable;
+
+export const getServerSideProps = withSSRAuth(async () => {
+  return {
+    props: {},
+  };
+});

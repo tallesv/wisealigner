@@ -15,6 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '../components/Form/input';
 import { Button } from '../components/Button';
 import api from '../client/api';
+import { withSSRAuth } from '../utils/withSSRAuth';
 
 type RegisterFormData = {
   email: string;
@@ -181,3 +182,9 @@ export default function SignUp(): JSX.Element {
     </Box>
   );
 }
+
+export const getServerSideProps = withSSRAuth(async () => {
+  return {
+    props: {},
+  };
+});
