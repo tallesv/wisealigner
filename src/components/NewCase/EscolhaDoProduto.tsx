@@ -18,20 +18,30 @@ export function EscolhaDoProduto({ handleSubmitData }: EscolhaDoProdutoProps) {
 
   return (
     <Flex p={[2, 8]} w="100%" justifyContent="space-around">
-      <a href="https://www.google.com" target="_blank" rel="noreferrer">
+      <a
+        href="https://wisealigners.vercel.app/"
+        target="_blank"
+        rel="noreferrer"
+      >
         <Button
           isLoading={buttonLoading}
-          onClick={() => handleSelectProduct('Produto 1')}
+          onClick={() =>
+            handleSelectProduct('Tratamento completo (Setup + alinhadores)')
+          }
         >
-          Produto 1
+          Tratamento completo (Setup + alinhadores)
         </Button>
       </a>
-      <a href="https://www.google.com" target="_blank" rel="noreferrer">
+      <a
+        href="https://wisealigners.vercel.app/"
+        target="_blank"
+        rel="noreferrer"
+      >
         <Button
           isLoading={buttonLoading}
-          onClick={() => handleSelectProduct('Produto 2')}
+          onClick={() => handleSelectProduct('Somente setup')}
         >
-          Produto 2
+          Somente setup
         </Button>
       </a>
     </Flex>
