@@ -3,6 +3,7 @@ import {
   RiDashboardLine,
   RiInputMethodLine,
   RiMoneyDollarBoxLine,
+  RiFile2Line,
 } from 'react-icons/ri';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -22,10 +23,14 @@ export function SidebarNav() {
           Listar casos
         </NavLink>
       </NavSection>
-
-      <NavSection title="PREÇOS">
+      <NavSection title="VALORES">
         <NavLink icon={RiMoneyDollarBoxLine} href="/values">
-          Valores
+          Consultar
+        </NavLink>
+      </NavSection>
+      <NavSection title="ARQUIVOS ÚTEIS">
+        <NavLink icon={RiFile2Line} href="/files">
+          Arquivos
         </NavLink>
       </NavSection>
       <NavSection hidden={user.type !== 'Admin'} title="USUÁRIOS">
