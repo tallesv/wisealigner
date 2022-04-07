@@ -34,6 +34,7 @@ import { auth } from '../../config/firebase';
 
 type EditUserFormData = {
   avatar: string;
+  type: string;
   name: string;
   last_name: string;
   email: string;
@@ -54,13 +55,14 @@ type EditUserFormData = {
 
 const editUserFormSchema = yup.object().shape({
   avatar: yup.string(),
+  type: yup.string(),
   name: yup.string().required('Nome obrigatório'),
   last_name: yup.string(),
   email: yup
     .string()
     .required('E-mail obrigatório')
     .email('E-mail obrigatório'),
-  cpf: yup.string().required('CPF obrigatório'),
+  cpf: yup.string(),
   fixed_phone: yup.string(),
   phone: yup.string(),
   clinic: yup.string(),
@@ -82,6 +84,8 @@ interface EditUserProps {
 function EditUser({ user }: EditUserProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [userToEdit, setUserToEdit] = useState<UserType>(user);
+
+  const { user: userLogged } = useAuth();
 
   const toast = useToast();
 
@@ -272,6 +276,28 @@ function EditUser({ user }: EditUserProps) {
               />
             </Flex>
           </Stack>
+
+          {userLogged.type === 'Admin' && (
+            <>
+              <Divider borderColor="gray.300" />
+
+              <Stack
+                w="100%"
+                direction={['column', 'column', 'row']}
+                justifyContent="space-between"
+              >
+                <Heading mb={5} as="h3" size="md">
+                  Permissões
+                </Heading>
+                <VStack maxW={400} w="100%" spacing={3}>
+                  <Select {...register('type')}>
+                    <option value="Client">Cliente</option>
+                    <option value="Admin">Admin</option>
+                  </Select>
+                </VStack>
+              </Stack>
+            </>
+          )}
 
           <Divider borderColor="gray.300" />
 
