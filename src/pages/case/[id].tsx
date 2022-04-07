@@ -25,6 +25,7 @@ import { Documentacao } from '../../components/NewCase/Documentacao';
 import api from '../../client/api';
 import { withSSRAuth } from '../../utils/withSSRAuth';
 import { getApiClient } from '../../client/apiClient';
+import { EscolhaDoProduto } from '../../components/NewCase/EscolhaDoProduto';
 
 const steps = [
   { label: 'Dados do Paciente' },
@@ -38,6 +39,7 @@ const steps = [
   { label: 'Manejo de Espaços' },
   { label: 'Informações Complementares' },
   { label: 'Documentação' },
+  { label: 'Escolha do Produto' },
 ];
 
 type TratarArcoType = {
@@ -46,6 +48,10 @@ type TratarArcoType = {
 
 type OverjetType = {
   overjet: string;
+};
+
+type ProductSelectedType = {
+  productPropose: string;
 };
 
 interface EditCaseProps {
@@ -85,7 +91,8 @@ function EditCase({ newCase }: EditCaseProps) {
       | { linha_media: LinhaMediaType }
       | { manejo_de_espaços: ManejoDeEspaçosType }
       | { additionalFields: InformacoesComplementaresType }
-      | { documentacao: DocumentacaoType },
+      | { documentacao: DocumentacaoType }
+      | ProductSelectedType,
   ) {
     const response = await api.put(`/requests/${newCaseState?.id}`, {
       ...newCaseState,
@@ -188,6 +195,12 @@ function EditCase({ newCase }: EditCaseProps) {
           <Documentacao
             documentacao={newCaseState.documentacao}
             handleNextStep={() => handleNextStep()}
+            handleSubmitData={values => handleSubmitData(values)}
+          />
+        );
+      case 'Escolha do Produto':
+        return (
+          <EscolhaDoProduto
             handleSubmitData={values => handleSubmitData(values)}
           />
         );

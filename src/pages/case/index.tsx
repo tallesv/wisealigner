@@ -26,6 +26,7 @@ import { InformacoesComplementares } from '../../components/NewCase/InformacoesC
 import { Documentacao } from '../../components/NewCase/Documentacao';
 import api from '../../client/api';
 import { withSSRAuth } from '../../utils/withSSRAuth';
+import { EscolhaDoProduto } from '../../components/NewCase/EscolhaDoProduto';
 
 const steps = [
   { label: 'Dados do Paciente' },
@@ -39,6 +40,7 @@ const steps = [
   { label: 'Manejo de Espaços' },
   { label: 'Informações Complementares' },
   { label: 'Documentação' },
+  { label: 'Escolha do Produto' },
 ];
 
 type TratarArcoType = {
@@ -47,6 +49,10 @@ type TratarArcoType = {
 
 type OverjetType = {
   overjet: string;
+};
+
+type ProductSelectedType = {
+  productPropose: string;
 };
 
 function NewCase() {
@@ -100,7 +106,8 @@ function NewCase() {
       | { linha_media: LinhaMediaType }
       | { manejo_de_espaços: ManejoDeEspaçosType }
       | { additionalFields: InformacoesComplementaresType }
-      | { documentacao: DocumentacaoType },
+      | { documentacao: DocumentacaoType }
+      | ProductSelectedType,
   ) {
     if ('dados_do_paciente' in values && !personalDataFilled) {
       const response = await api.post('/requests', {
@@ -213,6 +220,12 @@ function NewCase() {
           <Documentacao
             documentacao={newCaseState.documentacao}
             handleNextStep={() => handleNextStep()}
+            handleSubmitData={values => handleSubmitData(values)}
+          />
+        );
+      case 'Escolha do Produto':
+        return (
+          <EscolhaDoProduto
             handleSubmitData={values => handleSubmitData(values)}
           />
         );
