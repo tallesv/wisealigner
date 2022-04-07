@@ -133,6 +133,7 @@ function EditUser({ user }: EditUserProps) {
   const setUserValues = useCallback(
     (userToSet: UserType) => {
       setValue('avatar', userToSet.avatar);
+      setValue('type', userToSet.type);
       setValue('name', userToSet.name);
       setValue('last_name', userToSet.last_name);
       setValue('email', userToSet.email);
