@@ -10,12 +10,11 @@ function Values() {
 
       <Divider my="6" />
 
-      <Box mt={10}>
-        <Image
-          mx="auto"
-          src="https://restrita.orthoemotion.com.br/dist/img/tabela-valores-20-01-22.jpg"
-        />
-      </Box>
+      <Flex mt={10} direction="column">
+        <Image mx="auto" src="/images/valores1.jpeg" />
+
+        <Image mx="auto" src="/images/valores2.jpeg" />
+      </Flex>
     </Box>
   );
 }
