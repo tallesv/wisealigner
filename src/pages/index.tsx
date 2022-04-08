@@ -27,6 +27,13 @@ export default Home;
 
 export const getServerSideProps = withSSRAuth(async () => {
   return {
+    redirect: {
+      destination: '/cases-table',
+      permanent: false,
+    },
+  };
+
+  return {
     props: {},
   };
 });
