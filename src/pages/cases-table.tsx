@@ -99,7 +99,7 @@ function CaseTable() {
                 <Flex align="center">
                   <Avatar
                     size="md"
-                    name="teste"
+                    name={caseItem.dados_do_paciente.nome_completo}
                     src={caseItem.dados_do_paciente.avatar}
                   />
                   <Text ml={3}>{caseItem.dados_do_paciente.nome_completo}</Text>

@@ -57,7 +57,7 @@ function UsersTable() {
             <Tr key={user.id}>
               <Td>
                 <Flex align="center">
-                  <Avatar size="md" name="teste" src={user.avatar} />
+                  <Avatar size="md" name={user.name} src={user.avatar} />
                   <Text ml={3}>{user.name}</Text>
                 </Flex>
               </Td>
