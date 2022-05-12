@@ -54,7 +54,7 @@ function UsersTable() {
         </Thead>
         <Tbody>
           {users.slice((page - 1) * 10, page * 10).map(user => (
-            <Tr>
+            <Tr key={user.id}>
               <Td>
                 <Flex align="center">
                   <Avatar size="md" name="teste" src={user.avatar} />
