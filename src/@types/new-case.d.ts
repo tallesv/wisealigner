@@ -10,7 +10,7 @@ type NewCaseType = {
   relacao_antero_posterior: RelacaoAnteroPosteriorType;
   overjet: string;
   sobremordida: SobremordidaType;
-  linha_media: LinhaMedia;
+  linha_media: LinhaMediaType;
   manejo_de_espaços: ManejoDeEspaçosType;
   additionalFields: InformacoesComplementaresType;
   documentacao: DocumentacaoType;
