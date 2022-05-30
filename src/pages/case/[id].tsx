@@ -1,279 +1,586 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import {
+  Avatar,
   Box,
-  Heading,
   Divider,
   Flex,
-  VStack,
+  Heading,
+  List,
+  ListItem,
+  Spinner,
+  Stack,
+  Text,
+  UnorderedList,
   useBreakpointValue,
+  VStack,
 } from '@chakra-ui/react';
-import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-
-import { PacientData } from '../../components/NewCase/PacientData';
-import { Button } from '../../components/Button';
-import { Arco } from '../../components/NewCase/Arco';
-import { RestricaoDeMovimentoDentario } from '../../components/NewCase/RestricaoDeMovimentoDentario';
-import { Attachments } from '../../components/NewCase/Attachments';
-import { RelacaoAnteroPosterior } from '../../components/NewCase/RelacaoAnteroPosterior';
-import { Overjet } from '../../components/NewCase/Overjet';
-import { Sobremordida } from '../../components/NewCase/Sobremordida';
-import { LinhaMedia } from '../../components/NewCase/LinhaMedia';
-import { ManejoDeEspaços } from '../../components/NewCase/ManejoDeEspacos';
-import { InformacoesComplementares } from '../../components/NewCase/InformacoesComplementares';
-import { Documentacao } from '../../components/NewCase/Documentacao';
+import { useEffect, useState } from 'react';
 import api from '../../client/api';
-import { withSSRAuth } from '../../utils/withSSRAuth';
-import { getApiClient } from '../../client/apiClient';
-import { EscolhaDoProduto } from '../../components/NewCase/EscolhaDoProduto';
+import { CheckBoxGroup } from '../../components/Form/CheckBoxGroup';
 
-const steps = [
-  { label: 'Dados do Paciente' },
-  { label: 'Arco' },
-  { label: 'Restrição De Movimento Dentário' },
-  { label: 'Attachments' },
-  { label: 'Relação Ântero-Posterior (A-P)' },
-  { label: 'Overjet' },
-  { label: 'Sobremordida' },
-  { label: 'Linha Média' },
-  { label: 'Manejo de Espaços' },
-  { label: 'Informações Complementares' },
-  { label: 'Documentação' },
-  { label: 'Escolha do Produto' },
-];
+function ShowCase() {
+  const [isLoadingCase, setIsLoadingCase] = useState(false);
+  const [clientCase, setClientCase] = useState<ShowNewCaseType>();
+  const { query } = useRouter();
 
-type TratarArcoType = {
-  tratarArco: string;
-};
-
-type OverjetType = {
-  overjet: string;
-};
-
-type ProductSelectedType = {
-  productPropose: string;
-};
-
-interface EditCaseProps {
-  newCase: NewCaseType;
-}
-
-function EditCase({ newCase }: EditCaseProps) {
-  const { push } = useRouter();
-  const [newCaseState, setNewCaseState] = useState<NewCaseType>(newCase);
-
-  const isWideVersion = useBreakpointValue({
-    base: false,
-    lg: true,
+  const checkBoxSize = useBreakpointValue({
+    lg: 'md',
+    sm: 'sm',
   });
 
-  const { nextStep, prevStep, activeStep, setStep } = useSteps({
-    initialStep: 0,
+  const isDefaultSize = useBreakpointValue({
+    xl: true,
+    lg: false,
   });
 
-  function handleNextStep() {
-    nextStep();
-  }
-
-  function handlePrevStep() {
-    prevStep();
-  }
-
-  async function handleSubmitData(
-    values:
-      | { dados_do_paciente: DadosDoPacienteType }
-      | TratarArcoType
-      | { restricao_de_movimento_dentario: RestricaoDeMovimentoDentarioType }
-      | { attachments: AttachmentsType }
-      | { relacao_antero_posterior: RelacaoAnteroPosteriorType }
-      | OverjetType
-      | { sobremordida: SobremordidaType }
-      | { linha_media: LinhaMediaType }
-      | { manejo_de_espaços: ManejoDeEspaçosType }
-      | { additionalFields: InformacoesComplementaresType }
-      | { documentacao: DocumentacaoType }
-      | ProductSelectedType,
-  ) {
-    const response = await api.put(`/requests/${newCaseState?.id}`, {
-      ...newCaseState,
-      ...values,
-    });
-    setNewCaseState(response.data.request);
-
-    handleNextStep();
-  }
-
-  function getInputsForStep(step: string): JSX.Element {
-    const inputSize = 'md';
-    switch (step) {
-      case 'Dados do Paciente':
-        return (
-          <PacientData
-            dadosDoPaciente={newCaseState.dados_do_paciente}
-            inputSize={inputSize}
-            isWideVersion={isWideVersion}
-            handlePrevStep={() => handlePrevStep()}
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      case 'Arco':
-        return (
-          <Arco
-            tratarArco={newCaseState.tratarArco}
-            handleNextStep={() => handleNextStep()}
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      case 'Restrição De Movimento Dentário':
-        return (
-          <RestricaoDeMovimentoDentario
-            restricaoDeMovimentoDenatrio={
-              newCaseState.restricao_de_movimento_dentario
-            }
-            handleNextStep={() => handleNextStep()}
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      case 'Attachments':
-        return (
-          <Attachments
-            attachments={newCaseState.attachments}
-            handleNextStep={() => handleNextStep()}
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      case 'Relação Ântero-Posterior (A-P)':
-        return (
-          <RelacaoAnteroPosterior
-            relacaoAnteroPosterior={newCaseState.relacao_antero_posterior}
-            handleNextStep={() => handleNextStep()}
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      case 'Overjet':
-        return (
-          <Overjet
-            overjet={newCaseState.overjet}
-            handleNextStep={() => handleNextStep()}
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      case 'Sobremordida':
-        return (
-          <Sobremordida
-            sobreMordida={newCaseState.sobremordida}
-            handleNextStep={() => handleNextStep()}
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      case 'Linha Média':
-        return (
-          <LinhaMedia
-            linhaMedia={newCaseState.linha_media}
-            handleNextStep={() => handleNextStep()}
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      case 'Manejo de Espaços':
-        return (
-          <ManejoDeEspaços
-            manejoDeEspaços={newCaseState.manejo_de_espaços}
-            handleNextStep={() => handleNextStep()}
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      case 'Informações Complementares':
-        return (
-          <InformacoesComplementares
-            additionalFields={newCaseState.additionalFields}
-            handleNextStep={() => handleNextStep()}
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      case 'Documentação':
-        return (
-          <Documentacao
-            documentacao={newCaseState.documentacao}
-            handleNextStep={() => handleNextStep()}
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      case 'Escolha do Produto':
-        return (
-          <EscolhaDoProduto
-            handleSubmitData={values => handleSubmitData(values)}
-          />
-        );
-      default:
-        return <>Default</>;
+  useEffect(() => {
+    async function loadData() {
+      setIsLoadingCase(true);
+      const response = await api.get(`requests/${query.id}`);
+      setClientCase(response.data.request);
+      setIsLoadingCase(false);
     }
-  }
+
+    if (query.id) {
+      loadData();
+    }
+  }, [query.id]);
 
   return (
     <Box mx="auto" p={[6, 8]}>
-      <Heading size="lg">Editar caso</Heading>
-      <Divider my="6" borderColor="gray.800" />
-      <Steps
-        orientation="vertical"
-        onClickStep={step => setStep(step)}
-        activeStep={activeStep}
-        colorScheme="teal"
-      >
-        {steps.map(({ label }) => (
-          <Step width="100%" label={label} key={label}>
-            <VStack w="100%" spacing={3}>
-              {getInputsForStep(label)}
-            </VStack>
-          </Step>
-        ))}
-      </Steps>
-      {activeStep === steps.length && (
-        <Flex px={4} py={4} width="100%" flexDirection="column">
-          <Heading fontSize="xl" textAlign="center">
-            Caso editado com sucesso!
-          </Heading>
-          <Button mx="auto" mt={6} size="sm" onClick={() => push('/case/new')}>
-            Criar outro caso
-          </Button>
-        </Flex>
-      )}
+      <Heading size="lg">
+        Caso
+        {isLoadingCase && <Spinner ml={5} />}
+        {clientCase &&
+          clientCase.dados_do_paciente !== '' &&
+          ` - ${clientCase.dados_do_paciente.nome_completo}`}
+      </Heading>
+
+      <Divider my="6" borderColor="gray.300" />
+      <Box hidden={clientCase === undefined}>
+        {clientCase?.dados_do_paciente !== '' && (
+          <Box>
+            <Text
+              fontSize={{ base: '16px', lg: '18px' }}
+              color="yellow.500"
+              fontWeight="500"
+              textTransform="uppercase"
+              mb="4"
+            >
+              Dados do Paciente
+            </Text>
+
+            <Stack
+              direction={['column-reverse', 'column-reverse', 'row']}
+              justifyContent="space-between"
+              spacing={5}
+            >
+              <List spacing={2} w="50%">
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    Nome Completo do paciente:
+                  </Text>{' '}
+                  {clientCase?.dados_do_paciente.nome_completo}
+                </ListItem>
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    Gênero:
+                  </Text>{' '}
+                  {clientCase?.dados_do_paciente.genero}
+                </ListItem>
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    Data de nascimento:
+                  </Text>{' '}
+                  {clientCase?.dados_do_paciente.data_de_nascimento &&
+                    new Date(
+                      clientCase?.dados_do_paciente.data_de_nascimento,
+                    ).toLocaleDateString('pt-BR')}
+                </ListItem>
+              </List>
+              <Box w="50%">
+                <Avatar
+                  mx="auto"
+                  size={isDefaultSize ? 'xl' : 'lg'}
+                  src={clientCase?.dados_do_paciente.avatar}
+                />
+              </Box>
+            </Stack>
+          </Box>
+        )}
+
+        <Divider my="6" borderColor="gray.300" />
+
+        <Box>
+          <Text
+            fontSize={{ base: '16px', lg: '18px' }}
+            color="yellow.500"
+            fontWeight="500"
+            textTransform="uppercase"
+            mb="4"
+          >
+            Arco
+          </Text>
+
+          <List spacing={2}>
+            <ListItem>
+              {clientCase?.tratarArco === ''
+                ? 'Não informado'
+                : clientCase?.tratarArco}
+            </ListItem>
+          </List>
+        </Box>
+
+        <Divider my="6" borderColor="gray.300" />
+
+        <Box>
+          <Text
+            fontSize={{ base: '16px', lg: '18px' }}
+            color="yellow.500"
+            fontWeight="500"
+            textTransform="uppercase"
+            mb="4"
+          >
+            Restrição De Movimento Dentário
+          </Text>
+
+          <List spacing={2}>
+            <ListItem>
+              {clientCase === undefined ||
+              clientCase?.restricao_de_movimento_dentario === '' ? (
+                'Não informado'
+              ) : (
+                <Box>
+                  <Text align="initial">
+                    {clientCase?.restricao_de_movimento_dentario.option}
+                  </Text>
+                  <Box>
+                    <CheckBoxGroup
+                      itensSelected={
+                        clientCase?.restricao_de_movimento_dentario.sub_options
+                      }
+                      isDefaultSize={isDefaultSize}
+                      isDisabled
+                      checkBoxSize={checkBoxSize}
+                      onSelect={() => {}}
+                    />
+                  </Box>
+                </Box>
+              )}
+            </ListItem>
+          </List>
+        </Box>
+
+        <Divider my="6" borderColor="gray.300" />
+
+        <Box>
+          <Text
+            fontSize={{ base: '16px', lg: '18px' }}
+            color="yellow.500"
+            fontWeight="500"
+            textTransform="uppercase"
+            mb="4"
+          >
+            Attachments
+          </Text>
+
+          <List spacing={2}>
+            <ListItem>
+              {clientCase === undefined || clientCase?.attachments === '' ? (
+                'Não informado'
+              ) : (
+                <Box>
+                  <Text align="initial">{clientCase?.attachments.option}</Text>
+                  <Box>
+                    <CheckBoxGroup
+                      itensSelected={clientCase?.attachments.sub_options}
+                      isDefaultSize={isDefaultSize}
+                      isDisabled
+                      checkBoxSize={checkBoxSize}
+                      onSelect={() => {}}
+                    />
+                  </Box>
+                </Box>
+              )}
+            </ListItem>
+          </List>
+        </Box>
+
+        <Divider my="6" borderColor="gray.300" />
+
+        <Box>
+          <Text
+            fontSize={{ base: '16px', lg: '18px' }}
+            color="yellow.500"
+            fontWeight="500"
+            textTransform="uppercase"
+            mb="4"
+          >
+            Relação Ântero-Posterior (A-P)
+          </Text>
+          <List spacing={2}>
+            {clientCase === undefined ||
+            clientCase?.relacao_antero_posterior === '' ? (
+              <Text>Não informado</Text>
+            ) : (
+              <>
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    D:
+                  </Text>{' '}
+                  {clientCase?.relacao_antero_posterior.d}
+                </ListItem>
+
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    E:
+                  </Text>{' '}
+                  {clientCase?.relacao_antero_posterior.e}
+                </ListItem>
+
+                <ListItem>
+                  {clientCase.relacao_antero_posterior.option}
+                </ListItem>
+                <ListItem>
+                  <UnorderedList pl={3}>
+                    {clientCase.relacao_antero_posterior.sub_options?.map(
+                      subOption => (
+                        <ListItem key={subOption}>{subOption}</ListItem>
+                      ),
+                    )}
+                  </UnorderedList>
+                </ListItem>
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    Observações:
+                  </Text>{' '}
+                  {clientCase?.relacao_antero_posterior.observation === ''
+                    ? 'Nao informado'
+                    : clientCase?.relacao_antero_posterior.observation}
+                </ListItem>
+              </>
+            )}
+          </List>
+        </Box>
+
+        <Divider my="6" borderColor="gray.300" />
+
+        <Box>
+          <Text
+            fontSize={{ base: '16px', lg: '18px' }}
+            color="yellow.500"
+            fontWeight="500"
+            textTransform="uppercase"
+            mb="4"
+          >
+            Overjet
+          </Text>
+          <List spacing={2}>
+            <ListItem>
+              {clientCase === undefined || clientCase.overjet === ''
+                ? 'Não informado'
+                : clientCase.overjet}
+            </ListItem>
+          </List>
+        </Box>
+
+        <Divider my="6" borderColor="gray.300" />
+
+        <Box>
+          <Text
+            fontSize={{ base: '16px', lg: '18px' }}
+            color="yellow.500"
+            fontWeight="500"
+            textTransform="uppercase"
+            mb="4"
+          >
+            Sobremordida
+          </Text>
+          <List spacing={2}>
+            {clientCase === undefined || clientCase?.sobremordida === '' ? (
+              <Text>Não informado</Text>
+            ) : (
+              <>
+                <ListItem>{clientCase.sobremordida.option}</ListItem>
+                <ListItem>
+                  <UnorderedList pl={3}>
+                    {clientCase.sobremordida.sub_options?.map(subOption => (
+                      <ListItem key={subOption}>{subOption}</ListItem>
+                    ))}
+                  </UnorderedList>
+                </ListItem>
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    Observações:
+                  </Text>{' '}
+                  {clientCase?.sobremordida.observation === ''
+                    ? 'Nao informado'
+                    : clientCase?.sobremordida.observation}
+                </ListItem>
+              </>
+            )}
+          </List>
+        </Box>
+
+        <Divider my="6" borderColor="gray.300" />
+
+        <Box>
+          <Text
+            fontSize={{ base: '16px', lg: '18px' }}
+            color="yellow.500"
+            fontWeight="500"
+            textTransform="uppercase"
+            mb="4"
+          >
+            Linha Média
+          </Text>
+          <List spacing={2}>
+            {clientCase === undefined || clientCase?.linha_media === '' ? (
+              <Text>Não informado</Text>
+            ) : (
+              <>
+                <ListItem>{clientCase.linha_media.option}</ListItem>
+                <ListItem
+                  hidden={
+                    clientCase.linha_media.option ===
+                    'Manter linha média de acordo com o alinhamento'
+                  }
+                >
+                  <Stack
+                    direction={isDefaultSize ? 'row' : 'column'}
+                    justifyContent="space-between"
+                    spacing={1}
+                  >
+                    <Box w="100%">
+                      <Text as="span" fontWeight="bold">
+                        Superior
+                      </Text>
+                      <Box mt={1}>
+                        <Flex justifyContent="space-around">
+                          <Box>
+                            <Text as="span" fontWeight="bold">
+                              Para Esquerda:
+                            </Text>{' '}
+                            {clientCase?.linha_media.superior?.esquerda === ''
+                              ? 'Nao informado'
+                              : `${clientCase?.linha_media.superior?.esquerda}mm`}
+                          </Box>
+                          <Box>
+                            <Text as="span" fontWeight="bold">
+                              Para Direita:
+                            </Text>{' '}
+                            {clientCase?.linha_media.superior?.esquerda === ''
+                              ? 'Nao informado'
+                              : `${clientCase?.linha_media.superior?.direita}mm`}
+                          </Box>
+                        </Flex>
+                      </Box>
+                    </Box>
+                    <Box w="100%">
+                      <Text as="span" fontWeight="bold">
+                        Inferior
+                      </Text>
+                      <Box mt={1}>
+                        <Flex justifyContent="space-around">
+                          <Box>
+                            <Text as="span" fontWeight="bold">
+                              Para Esquerda:
+                            </Text>{' '}
+                            {clientCase?.linha_media.inferior?.esquerda === ''
+                              ? 'Nao informado'
+                              : `${clientCase?.linha_media.inferior?.esquerda}mm`}
+                          </Box>
+                          <Box>
+                            <Text as="span" fontWeight="bold">
+                              Para Direita:
+                            </Text>{' '}
+                            {clientCase?.linha_media.inferior?.esquerda === ''
+                              ? 'Nao informado'
+                              : `${clientCase?.linha_media.inferior?.direita}mm`}
+                          </Box>
+                        </Flex>
+                      </Box>
+                    </Box>
+                  </Stack>
+                </ListItem>
+              </>
+            )}
+          </List>
+        </Box>
+
+        <Divider my="6" borderColor="gray.300" />
+
+        <Box>
+          <Text
+            fontSize={{ base: '16px', lg: '18px' }}
+            color="yellow.500"
+            fontWeight="500"
+            textTransform="uppercase"
+            mb="4"
+          >
+            Manejo de Espaços
+          </Text>
+          <List spacing={2}>
+            {clientCase === undefined ||
+            clientCase?.manejo_de_espaços === '' ? (
+              <Text>Não informado</Text>
+            ) : (
+              <>
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    Diastemas:
+                  </Text>{' '}
+                  {clientCase.manejo_de_espaços.diastemas.option}
+                </ListItem>
+                <ListItem
+                  hidden={
+                    clientCase.manejo_de_espaços.diastemas.option ===
+                    'Fechar todos os espaços'
+                  }
+                >
+                  <Text as="span" fontWeight="bold">
+                    Observações:
+                  </Text>{' '}
+                  {clientCase?.manejo_de_espaços.diastemas.observation === ''
+                    ? 'Nao informado'
+                    : clientCase?.manejo_de_espaços.diastemas.observation}
+                </ListItem>
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    Apinhamento
+                  </Text>
+                  <Stack
+                    direction={['column', 'column', 'row']}
+                    justifyContent="space-around"
+                    spacing={4}
+                  >
+                    <VStack mt={2} spacing={3} align="stretch">
+                      <Text fontWeight="bold">Corrigir Superior</Text>
+                      <Text>{`Expandir: ${clientCase.manejo_de_espaços.apinhamento.corrigir_superior.expandir}`}</Text>
+                      <Text>{`Vestibularizar: ${clientCase.manejo_de_espaços.apinhamento.corrigir_superior.vestibularizar}`}</Text>
+                      <Text>{`IPR - Anterior: ${clientCase.manejo_de_espaços.apinhamento.corrigir_superior.ipr_anterior}`}</Text>
+                      <Text>{`IPR - Posterior Direito: ${clientCase.manejo_de_espaços.apinhamento.corrigir_superior.ipr_posterior_direito}`}</Text>
+                      <Text>{`IPR - Posterior Esquerdo: ${clientCase.manejo_de_espaços.apinhamento.corrigir_superior.ipr_posterior_esquerdo}`}</Text>
+                    </VStack>
+                    <VStack mt={2} spacing={3} align="stretch">
+                      <Text fontWeight="bold">Corrigir Inferior</Text>
+                      <Text>{`Expandir: ${clientCase.manejo_de_espaços.apinhamento.corrigir_inferior.expandir}`}</Text>
+                      <Text>{`Vestibularizar: ${clientCase.manejo_de_espaços.apinhamento.corrigir_inferior.vestibularizar}`}</Text>
+                      <Text>{`IPR - Anterior: ${clientCase.manejo_de_espaços.apinhamento.corrigir_inferior.ipr_anterior}`}</Text>
+                      <Text>{`IPR - Posterior Direito: ${clientCase.manejo_de_espaços.apinhamento.corrigir_inferior.ipr_posterior_direito}`}</Text>
+                      <Text>{`IPR - Posterior Esquerdo: ${clientCase.manejo_de_espaços.apinhamento.corrigir_inferior.ipr_posterior_esquerdo}`}</Text>
+                    </VStack>
+                  </Stack>
+                </ListItem>
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    Extrações:
+                  </Text>{' '}
+                  {clientCase.manejo_de_espaços.extracoes.option}
+                </ListItem>
+                <ListItem
+                  hidden={
+                    clientCase.manejo_de_espaços.extracoes.option === 'Nenhuma'
+                  }
+                >
+                  <CheckBoxGroup
+                    itensSelected={
+                      clientCase?.manejo_de_espaços.extracoes.sub_options
+                    }
+                    isDefaultSize={isDefaultSize}
+                    isDisabled
+                    checkBoxSize={checkBoxSize}
+                    onSelect={() => {}}
+                  />
+                </ListItem>
+              </>
+            )}
+          </List>
+        </Box>
+
+        <Divider my="6" borderColor="gray.300" />
+
+        <Box>
+          <Text
+            fontSize={{ base: '16px', lg: '18px' }}
+            color="yellow.500"
+            fontWeight="500"
+            textTransform="uppercase"
+            mb="4"
+          >
+            Informações Complementares
+          </Text>
+          <List spacing={2}>
+            {clientCase === undefined || clientCase?.additionalFields === '' ? (
+              <Text>Não informado</Text>
+            ) : (
+              <>
+                <ListItem>
+                  {
+                    clientCase?.additionalFields
+                      .informacoes_a_serem_compartilhadas
+                  }
+                </ListItem>
+
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    Terceiro Molares:
+                  </Text>{' '}
+                  {clientCase?.additionalFields.terceiros_molares}
+                </ListItem>
+                <ListItem>
+                  <Text as="span" fontWeight="bold">
+                    Contenções:
+                  </Text>{' '}
+                  {clientCase?.additionalFields.contencoes}
+                </ListItem>
+              </>
+            )}
+          </List>
+        </Box>
+
+        <Divider my="6" borderColor="gray.300" />
+
+        <Box>
+          <Text
+            fontSize={{ base: '16px', lg: '18px' }}
+            color="yellow.500"
+            fontWeight="500"
+            textTransform="uppercase"
+            mb="4"
+          >
+            Documentação
+          </Text>
+          <List spacing={2}>
+            {clientCase === undefined || clientCase?.documentacao === '' ? (
+              <Text>Não informado</Text>
+            ) : (
+              ''
+            )}
+          </List>
+        </Box>
+      </Box>
     </Box>
   );
 }
 
-export default EditCase;
+export default ShowCase;
 
-export const getServerSideProps = withSSRAuth(
-  async ({ query: { id }, req }) => {
-    const { 'wisealigners.token': token, 'wisealigners.user': user } =
-      req.cookies;
-
-    const apiClient = getApiClient(token);
-    const response = await apiClient.get(`requests/${id}`);
-
-    const newCase = response.data.request;
-
-    const userParsed = JSON.parse(user);
-
-    if (userParsed.type !== 'Admin' && newCase.userId !== userParsed.id) {
-      return {
-        redirect: {
-          destination: '/cases-table',
-          permanent: false,
-        },
-      };
-    }
-
-    if (!newCase) {
-      return {
-        notFound: true,
-      };
-    }
-
-    return {
-      props: {
-        newCase,
-      },
-    };
-  },
-);
+type ShowNewCaseType = {
+  id: string | '';
+  date: Date | '';
+  userId: string | '';
+  userName: string | '';
+  dados_do_paciente: DadosDoPacienteType | '';
+  tratarArco: string | '';
+  restricao_de_movimento_dentario: RestricaoDeMovimentoDentarioType | '';
+  attachments: AttachmentsType | '';
+  relacao_antero_posterior: RelacaoAnteroPosteriorType | '';
+  overjet: string | '';
+  sobremordida: SobremordidaType | '';
+  linha_media: LinhaMediaType | '';
+  manejo_de_espaços: ManejoDeEspaçosType | '';
+  additionalFields: InformacoesComplementaresType | '';
+  documentacao: DocumentacaoType | '';
+};
