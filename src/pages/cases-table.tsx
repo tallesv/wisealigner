@@ -18,7 +18,7 @@ import {
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { RiDeleteBin2Line, RiEditLine } from 'react-icons/ri';
+import { RiDeleteBin2Line, RiEditLine, RiShareBoxLine } from 'react-icons/ri';
 import api from '../client/api';
 import { Pagination } from '../components/Pagination';
 import { DeleteDialog } from '../components/UsersTable/DeleteDialog';
@@ -89,7 +89,7 @@ function CaseTable() {
             <Th>Nome</Th>
             <Th>Gênero</Th>
             <Th>Data</Th>
-            <Th isNumeric>Opções</Th>
+            <Th>Opções</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -107,13 +107,13 @@ function CaseTable() {
               </Td>
               <Td>{caseItem.dados_do_paciente.genero}</Td>
               <Td>{new Date(caseItem.date).toLocaleDateString('pt-BR')}</Td>
-              <Td isNumeric>
-                <Tooltip label="Deletar caso" aria-label="delete case">
+              <Td>
+                <Tooltip label="Ver caso" aria-label="see case">
                   <IconButton
-                    aria-label="Delte case"
+                    aria-label="See case"
                     bgColor="white"
-                    icon={<RiDeleteBin2Line />}
-                    onClick={() => handleDeleteCase(caseItem)}
+                    icon={<RiShareBoxLine />}
+                    onClick={() => push(`/case/${caseItem.id}`)}
                   />
                 </Tooltip>
                 <Tooltip label="Editar caso" aria-label="edit case">
@@ -122,7 +122,15 @@ function CaseTable() {
                     bgColor="white"
                     icon={<RiEditLine />}
                     ml={3}
-                    onClick={() => push(`/case/${caseItem.id}`)}
+                    onClick={() => push(`/case/edit/${caseItem.id}`)}
+                  />
+                </Tooltip>
+                <Tooltip label="Deletar caso" aria-label="delete case">
+                  <IconButton
+                    aria-label="Delte case"
+                    bgColor="white"
+                    icon={<RiDeleteBin2Line />}
+                    onClick={() => handleDeleteCase(caseItem)}
                   />
                 </Tooltip>
               </Td>
