@@ -3,6 +3,7 @@ import { HStack, VStack, Stack, Text, Checkbox } from '@chakra-ui/react';
 interface CheckBoxGroupProps {
   itensSelected?: string[];
   isDefaultSize: boolean | undefined;
+  isDisabled?: boolean;
   checkBoxSize: string | undefined;
   onSelect: (value: string) => void;
 }
@@ -10,6 +11,7 @@ interface CheckBoxGroupProps {
 export function CheckBoxGroup({
   itensSelected,
   isDefaultSize,
+  isDisabled,
   checkBoxSize,
   onSelect,
 }: CheckBoxGroupProps) {
@@ -36,6 +38,7 @@ export function CheckBoxGroup({
                 item => (
                   <Checkbox
                     key={item}
+                    isDisabled={isDisabled}
                     value={item}
                     onChange={e => handleSelect(e.target.value)}
                     size={checkBoxSize}
@@ -51,6 +54,7 @@ export function CheckBoxGroup({
                 item => (
                   <Checkbox
                     key={item}
+                    isDisabled={isDisabled}
                     value={item}
                     onChange={e => handleSelect(e.target.value)}
                     size={checkBoxSize}
@@ -71,6 +75,7 @@ export function CheckBoxGroup({
                 item => (
                   <Checkbox
                     key={item}
+                    isDisabled={isDisabled}
                     value={item}
                     onChange={e => handleSelect(e.target.value)}
                     size={checkBoxSize}
@@ -86,6 +91,7 @@ export function CheckBoxGroup({
                 item => (
                   <Checkbox
                     key={item}
+                    isDisabled={isDisabled}
                     value={item}
                     onChange={e => handleSelect(e.target.value)}
                     size={checkBoxSize}
