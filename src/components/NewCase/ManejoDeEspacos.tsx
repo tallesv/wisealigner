@@ -289,7 +289,7 @@ export function ManejoDeEspaços({
                     direction={isMobileSize ? 'row' : 'column'}
                   >
                     <Radio value="Primeiro">Primeiro</Radio>
-                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Quanto necessário">Quanto necessário</Radio>
                     <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
@@ -330,7 +330,7 @@ export function ManejoDeEspaços({
                     direction={isMobileSize ? 'row' : 'column'}
                   >
                     <Radio value="Primeiro">Primeiro</Radio>
-                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Quanto necessário">Quanto necessário</Radio>
                     <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
@@ -372,7 +372,7 @@ export function ManejoDeEspaços({
                     direction={isMobileSize ? 'row' : 'column'}
                   >
                     <Radio value="Primeiro">Primeiro</Radio>
-                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Quanto necessário">Quanto necessário</Radio>
                     <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
@@ -416,7 +416,7 @@ export function ManejoDeEspaços({
                     direction={isMobileSize ? 'row' : 'column'}
                   >
                     <Radio value="Primeiro">Primeiro</Radio>
-                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Quanto necessário">Quanto necessário</Radio>
                     <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
@@ -463,7 +463,7 @@ export function ManejoDeEspaços({
                     direction={isMobileSize ? 'row' : 'column'}
                   >
                     <Radio value="Primeiro">Primeiro</Radio>
-                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Quanto necessário">Quanto necessário</Radio>
                     <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
@@ -506,7 +506,7 @@ export function ManejoDeEspaços({
                     direction={isMobileSize ? 'row' : 'column'}
                   >
                     <Radio value="Primeiro">Primeiro</Radio>
-                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Quanto necessário">Quanto necessário</Radio>
                     <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
@@ -547,7 +547,7 @@ export function ManejoDeEspaços({
                     direction={isMobileSize ? 'row' : 'column'}
                   >
                     <Radio value="Primeiro">Primeiro</Radio>
-                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Quanto necessário">Quanto necessário</Radio>
                     <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
@@ -589,7 +589,7 @@ export function ManejoDeEspaços({
                     direction={isMobileSize ? 'row' : 'column'}
                   >
                     <Radio value="Primeiro">Primeiro</Radio>
-                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Quanto necessário">Quanto necessário</Radio>
                     <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
@@ -633,7 +633,7 @@ export function ManejoDeEspaços({
                     direction={isMobileSize ? 'row' : 'column'}
                   >
                     <Radio value="Primeiro">Primeiro</Radio>
-                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Quanto necessário">Quanto necessário</Radio>
                     <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
@@ -680,7 +680,7 @@ export function ManejoDeEspaços({
                     direction={isMobileSize ? 'row' : 'column'}
                   >
                     <Radio value="Primeiro">Primeiro</Radio>
-                    <Radio value="Quanto Necessario">Quanto Necessario</Radio>
+                    <Radio value="Quanto necessário">Quanto necessário</Radio>
                     <Radio value="Nenhum">Nenhum</Radio>
                   </Stack>
                 </ChakraRadioGroup>
