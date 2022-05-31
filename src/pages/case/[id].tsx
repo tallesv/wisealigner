@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import api from '../../client/api';
 import { CheckBoxGroup } from '../../components/Form/CheckBoxGroup';
+import { ImagesSlider } from '../../components/ImagesSlider/index';
 
 function ShowCase() {
   const [isLoadingCase, setIsLoadingCase] = useState(false);
@@ -38,7 +39,8 @@ function ShowCase() {
     async function loadData() {
       setIsLoadingCase(true);
       const response = await api.get(`requests/${query.id}`);
-      setClientCase(response.data.request);
+      const caseFromRequest = response.data.request;
+      setClientCase(caseFromRequest);
       setIsLoadingCase(false);
     }
 
@@ -556,7 +558,42 @@ function ShowCase() {
             {clientCase === undefined || clientCase?.documentacao === '' ? (
               <Text>Não informado</Text>
             ) : (
-              ''
+              <Box m="auto" maxHeight={900} maxWidth={600}>
+                <ImagesSlider
+                  images={
+                    clientCase.documentacao.radiografia.others
+                      ? [
+                          clientCase.documentacao.fotos.perfil,
+                          clientCase.documentacao.fotos.frente,
+                          clientCase.documentacao.fotos.sorriso,
+                          clientCase.documentacao.fotos.arca_superior,
+                          clientCase.documentacao.fotos.arca_inferior,
+                          clientCase.documentacao.fotos.arca_direita,
+                          clientCase.documentacao.fotos.arca_frontal,
+                          clientCase.documentacao.fotos.arca_esquerda,
+                          clientCase.documentacao.radiografia.frente,
+                          clientCase.documentacao.radiografia.perfil,
+                          ...clientCase.documentacao.radiografia.others,
+                          clientCase.documentacao.stls.superior,
+                          clientCase.documentacao.stls.inferior,
+                        ]
+                      : [
+                          clientCase.documentacao.fotos.perfil,
+                          clientCase.documentacao.fotos.frente,
+                          clientCase.documentacao.fotos.sorriso,
+                          clientCase.documentacao.fotos.arca_superior,
+                          clientCase.documentacao.fotos.arca_inferior,
+                          clientCase.documentacao.fotos.arca_direita,
+                          clientCase.documentacao.fotos.arca_frontal,
+                          clientCase.documentacao.fotos.arca_esquerda,
+                          clientCase.documentacao.radiografia.frente,
+                          clientCase.documentacao.radiografia.perfil,
+                          clientCase.documentacao.stls.superior,
+                          clientCase.documentacao.stls.inferior,
+                        ]
+                  }
+                />
+              </Box>
             )}
           </List>
         </Box>

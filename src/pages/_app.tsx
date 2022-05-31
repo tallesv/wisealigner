@@ -2,6 +2,9 @@ import type { AppProps } from 'next/app';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
 import { useRouter } from 'next/router';
+// eslint-disable-next-line import/no-unresolved
+import 'swiper/css/bundle';
+import '../components/ImagesSlider/style.css';
 
 import { AuthProvider } from '../hooks/useAuth';
 import theme from '../../styles/theme';
