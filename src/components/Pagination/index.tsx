@@ -49,13 +49,15 @@ export function Pagination({
       <Box>
         <strong>{(currentPage - 1) * registerPerPage}</strong> -{' '}
         <strong>
-          {totalCountOfRegisters > registerPerPage
-            ? currentPage * registerPerPage
-            : totalCountOfRegisters}
+          {totalCountOfRegisters > registerPerPage &&
+            currentPage * registerPerPage < totalCountOfRegisters &&
+            currentPage * registerPerPage}
+          {totalCountOfRegisters > registerPerPage &&
+            currentPage * registerPerPage > totalCountOfRegisters &&
+            totalCountOfRegisters}
+          {totalCountOfRegisters < registerPerPage && totalCountOfRegisters}
         </strong>
-        {totalCountOfRegisters > 10 && (
-          <strong> de {totalCountOfRegisters}</strong>
-        )}
+        <strong> de {totalCountOfRegisters}</strong>
       </Box>
 
       <Stack direction="row" spacing="2">
