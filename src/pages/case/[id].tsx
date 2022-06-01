@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react';
 import api from '../../client/api';
 import { CheckBoxGroup } from '../../components/Form/CheckBoxGroup';
 import { ImagesSlider } from '../../components/ImagesSlider/index';
+import { withSSRAuth } from '../../utils/withSSRAuth';
 
 function ShowCase() {
   const [isLoadingCase, setIsLoadingCase] = useState(false);
@@ -603,6 +604,12 @@ function ShowCase() {
 }
 
 export default ShowCase;
+
+export const getServerSideProps = withSSRAuth(async () => {
+  return {
+    props: {},
+  };
+});
 
 type ShowNewCaseType = {
   id: string | '';
