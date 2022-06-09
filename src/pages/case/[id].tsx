@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Avatar,
   Box,
   Divider,
@@ -17,6 +22,7 @@ import {
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import api from '../../client/api';
+import { CommentBox } from '../../components/CommentBox';
 import { CheckBoxGroup } from '../../components/Form/CheckBoxGroup';
 import { ImagesSlider } from '../../components/ImagesSlider/index';
 import { withSSRAuth } from '../../utils/withSSRAuth';
@@ -25,6 +31,8 @@ function ShowCase() {
   const [isLoadingCase, setIsLoadingCase] = useState(false);
   const [clientCase, setClientCase] = useState<ShowNewCaseType>();
   const { query } = useRouter();
+
+  const caseId = query.id as string;
 
   const checkBoxSize = useBreakpointValue({
     lg: 'md',
@@ -39,16 +47,16 @@ function ShowCase() {
   useEffect(() => {
     async function loadData() {
       setIsLoadingCase(true);
-      const response = await api.get(`requests/${query.id}`);
+      const response = await api.get(`requests/${caseId}`);
       const caseFromRequest = response.data.request;
       setClientCase(caseFromRequest);
       setIsLoadingCase(false);
     }
 
-    if (query.id) {
+    if (caseId) {
       loadData();
     }
-  }, [query.id]);
+  }, [caseId]);
 
   return (
     <Box mx="auto" p={[6, 8]}>
@@ -60,8 +68,28 @@ function ShowCase() {
           ` - ${clientCase.dados_do_paciente.nome_completo}`}
       </Heading>
 
-      <Divider my="6" borderColor="gray.300" />
-      <Box hidden={clientCase === undefined}>
+      <Accordion mt={10} allowMultiple hidden={clientCase === undefined}>
+        <AccordionItem>
+          <AccordionButton pl={0}>
+            <Box flex="1" textAlign="left">
+              <Text
+                fontSize={{ base: '16px', lg: '18px' }}
+                color="yellow.500"
+                fontWeight="500"
+                textTransform="uppercase"
+              >
+                Comentários
+              </Text>
+            </Box>
+            <AccordionIcon />
+          </AccordionButton>
+          <AccordionPanel pb={4}>
+            <CommentBox caseId={caseId} />
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+
+      <Box mt={5} hidden={clientCase === undefined}>
         {clientCase?.dados_do_paciente !== '' && (
           <Box>
             <Text
