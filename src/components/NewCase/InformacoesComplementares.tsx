@@ -80,8 +80,8 @@ export function InformacoesComplementares({
     >
       <FormControl>
         <Text align="initial" mb={2}>
-          Descreva aqui quaisquer informações a serem compartilhadas com o
-          A-Team
+          Descreva aqui quaisquer informações a serem compartilhadas com a nossa
+          equipe
         </Text>
 
         <Textarea
