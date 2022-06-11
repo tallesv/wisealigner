@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { useBreakpointValue, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 
 import { Button } from '../Button';
@@ -7,8 +7,52 @@ interface EscolhaDoProdutoProps {
   handleSubmitData: (value: { productPropose: string }) => Promise<void>;
 }
 
+const plans = [
+  {
+    id: '196626103-7e1a63dc-1dc2-47fa-9084-d4708ff2423f',
+    name: 'Plano Fast - Wise Aligners',
+  },
+  {
+    id: '196626103-dbac1459-2e1e-4301-815d-a9c6885cc321',
+    name: 'Plano Confort - Wise Aligners',
+  },
+  {
+    id: '196626103-b5177cb6-9f7a-42e3-aeb1-2305ac0d26cd',
+    name: 'Plano Plus - Wise Aligners',
+  },
+  {
+    id: '196626103-3b61d179-cf57-49b5-bafa-dd6a99cca59a',
+    name: 'Plano Infinity - Wise Aligners',
+  },
+  {
+    id: '196626103-e6782644-cf2e-4311-aec6-e7eb55e58c4f',
+    name: 'Plano Restart - Wise Aligners',
+  },
+  {
+    id: '196626103-a7a192f7-8471-4dc3-a794-e7b7745c6496',
+    name: 'Contenção - Wise Aligners',
+  },
+  {
+    id: '196626103-9c55b3aa-1584-4fcd-af63-38732ef3af7e',
+    name: 'Wise Aligners IDB (01 Arcada) Guia de Colagem indireta',
+  },
+  {
+    id: '196626103-b0a4fca2-c419-4a50-8b7d-d69786b624cc',
+    name: 'Wise Aligners IDB (02 arcadas) Guia de colagem indireta',
+  },
+  {
+    id: '196626103-0f5f6d13-8fcb-42d0-8df1-340978710420',
+    name: 'Set Up virtual de Alinhadores Wise Aligners',
+  },
+];
+
 export function EscolhaDoProduto({ handleSubmitData }: EscolhaDoProdutoProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
+
+  const checkBoxSize = useBreakpointValue({
+    lg: 'md',
+    sm: 'sm',
+  });
 
   async function handleSelectProduct(product: string) {
     setButtonLoading(true);
@@ -17,33 +61,26 @@ export function EscolhaDoProduto({ handleSubmitData }: EscolhaDoProdutoProps) {
   }
 
   return (
-    <Flex p={[2, 8]} w="100%" justifyContent="space-around">
-      <a
-        href="https://wisealigners.vercel.app/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <Button
-          isLoading={buttonLoading}
-          onClick={() =>
-            handleSelectProduct('Tratamento completo (Setup + alinhadores)')
-          }
+    <VStack align="flex-start" spacing={6} w="100%">
+      {plans.map(plan => (
+        <a
+          key={plan.id}
+          href={`https://www.mercadopago.com.br/payment-link/v1/redirect?preference-id=${plan.id}&source=link`}
+          target="_blank"
+          rel="noreferrer"
         >
-          Tratamento completo (Setup + alinhadores)
-        </Button>
-      </a>
-      <a
-        href="https://wisealigners.vercel.app/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <Button
-          isLoading={buttonLoading}
-          onClick={() => handleSelectProduct('Somente setup')}
-        >
-          Somente setup
-        </Button>
-      </a>
-    </Flex>
+          <Button
+            size={checkBoxSize}
+            fontSize={['sm', 'sm', 'lg']}
+            isLoading={buttonLoading}
+            whiteSpace="normal"
+            py={1}
+            onClick={() => handleSelectProduct(plan.name)}
+          >
+            {plan.name}
+          </Button>
+        </a>
+      ))}
+    </VStack>
   );
 }
