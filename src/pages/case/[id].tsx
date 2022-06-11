@@ -90,6 +90,28 @@ function ShowCase() {
       </Accordion>
 
       <Box mt={5} hidden={clientCase === undefined}>
+        <Box>
+          <Text
+            fontSize={{ base: '16px', lg: '18px' }}
+            color="yellow.500"
+            fontWeight="500"
+            textTransform="uppercase"
+            mb="4"
+          >
+            Produto Escolhido
+          </Text>
+
+          <List spacing={2}>
+            <ListItem>
+              {clientCase?.productPropose === ''
+                ? 'Produto não escolhido'
+                : clientCase?.productPropose}
+            </ListItem>
+          </List>
+        </Box>
+
+        <Divider my="6" borderColor="gray.300" />
+
         {clientCase?.dados_do_paciente !== '' && (
           <Box>
             <Text
@@ -655,4 +677,5 @@ type ShowNewCaseType = {
   manejo_de_espaços: ManejoDeEspaçosType | '';
   additionalFields: InformacoesComplementaresType | '';
   documentacao: DocumentacaoType | '';
+  productPropose: string | '';
 };
