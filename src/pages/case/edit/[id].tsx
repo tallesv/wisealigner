@@ -220,7 +220,12 @@ function EditCase({ newCase }: EditCaseProps) {
         colorScheme="teal"
       >
         {steps.map(({ label }) => (
-          <Step width="100%" label={label} key={label}>
+          <Step
+            width="100%"
+            label={label}
+            key={label}
+            cursor="default !important"
+          >
             <VStack w="100%" spacing={3}>
               {getInputsForStep(label)}
             </VStack>
