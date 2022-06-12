@@ -14,8 +14,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-
 import moment from 'moment';
+import 'moment/locale/pt-br';
+
 import { Input } from './Form/input';
 import { Pagination } from './Pagination';
 import api from '../client/api';
@@ -39,6 +40,8 @@ type CommentProps = {
 interface CommentBoxProps {
   caseId: string;
 }
+
+moment.locale('pt-br');
 
 export function CommentBox({ caseId }: CommentBoxProps) {
   const { user } = useAuth();
