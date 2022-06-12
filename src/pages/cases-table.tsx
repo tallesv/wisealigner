@@ -14,6 +14,9 @@ import {
   IconButton,
   Spinner,
   useDisclosure,
+  Input,
+  InputGroup,
+  InputRightAddon,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -24,6 +27,7 @@ import {
   RiShareBoxLine,
   RiArrowUpLine,
   RiArrowDownLine,
+  RiSearchLine,
 } from 'react-icons/ri';
 import api from '../client/api';
 import { Pagination } from '../components/Pagination';
@@ -35,6 +39,7 @@ function CaseTable() {
   const [page, setPage] = useState(1);
   const [isLoadindCase, setIsLoadingCases] = useState(false);
   const [cases, setCases] = useState<NewCaseType[]>([]);
+  const [casesFiltered, setCasesFiltered] = useState<NewCaseType[]>([]);
   const [caseToDelete, setCaseToDelete] = useState<NewCaseType | undefined>();
   const [casesDateOrder, setCaseDateOrder] = useState('ascending');
 
@@ -53,6 +58,7 @@ function CaseTable() {
       caseItem => caseItem.id !== caseToDelete?.id,
     );
     setCases(updateCases);
+    setCasesFiltered(updateCases);
     setCaseToDelete(undefined);
   }
 
@@ -63,20 +69,30 @@ function CaseTable() {
     );
     if (casesDateOrder === 'ascending') {
       setCaseDateOrder('descending');
-      const casesSorted = cases.sort(
+      const casesSorted = casesFiltered.sort(
         (a: NewCaseType, b: NewCaseType) =>
           new Date(a.date).getTime() - new Date(b.date).getTime(),
       );
-      setCases(casesSorted);
+      setCasesFiltered(casesSorted);
     } else {
       setCaseDateOrder('ascending');
-      const casesSorted = cases.sort(
+      const casesSorted = casesFiltered.sort(
         (a: NewCaseType, b: NewCaseType) =>
           new Date(b.date).getTime() - new Date(a.date).getTime(),
       );
-      setCases(casesSorted);
+      setCasesFiltered(casesSorted);
     }
     setIsLoadingCases(false);
+  }
+
+  function handleSearchCaseByName(name: string) {
+    const filterCases = cases.filter(caseItem =>
+      caseItem.dados_do_paciente.nome_completo
+        .toLocaleLowerCase()
+        .includes(name.toLocaleLowerCase()),
+    );
+
+    setCasesFiltered(filterCases);
   }
 
   useEffect(() => {
@@ -84,20 +100,22 @@ function CaseTable() {
       setIsLoadingCases(true);
       const response = await api.get('/requests');
       if (user.type === 'Admin') {
+        setCases(response.data);
         const casesSorted = response.data.sort(
           (a: NewCaseType, b: NewCaseType) =>
             new Date(b.date).getTime() - new Date(a.date).getTime(),
         );
-        setCases(casesSorted);
+        setCasesFiltered(casesSorted);
       } else {
         const filterCases = response.data.filter(
           (caseItem: NewCaseType) => caseItem.userId === user.id,
         );
+        setCases(filterCases);
         const casesSorted = filterCases.sort(
           (a: NewCaseType, b: NewCaseType) =>
             new Date(b.date).getTime() - new Date(a.date).getTime(),
         );
-        setCases(casesSorted);
+        setCasesFiltered(casesSorted);
       }
       setIsLoadingCases(false);
     }
@@ -115,11 +133,23 @@ function CaseTable() {
         onDelete={() => afterDeletedCase()}
       />
 
-      <Flex mx="auto">
+      <Flex mx="auto" alignItems="center" justifyContent="space-between">
         <Heading size="lg">
           Casos
           {isLoadindCase && <Spinner ml={5} />}
         </Heading>
+
+        <InputGroup maxW={300} hidden={isLoadindCase}>
+          <Input
+            borderRadius="xl"
+            size="sm"
+            focusBorderColor="teal.600"
+            placeholder="Filtre casos pelo nome do paciente"
+            onChange={event => handleSearchCaseByName(event.target.value)}
+          />
+
+          <InputRightAddon height="auto" children={<RiSearchLine />} />
+        </InputGroup>
       </Flex>
       <Table variant="simple" mt={5}>
         <Thead>
@@ -155,7 +185,7 @@ function CaseTable() {
           </Tr>
         </Thead>
         <Tbody>
-          {cases.slice((page - 1) * 10, page * 10).map(caseItem => (
+          {casesFiltered.slice((page - 1) * 10, page * 10).map(caseItem => (
             <Tr key={caseItem.id}>
               <Td>
                 <Flex align="center">
@@ -183,7 +213,7 @@ function CaseTable() {
                     aria-label="Edit case"
                     bgColor="white"
                     icon={<RiEditLine />}
-                    ml={3}
+                    mx={1}
                     onClick={() => push(`/case/edit/${caseItem.id}`)}
                   />
                 </Tooltip>
@@ -202,7 +232,7 @@ function CaseTable() {
       </Table>
 
       <Pagination
-        totalCountOfRegisters={cases.length}
+        totalCountOfRegisters={casesFiltered.length}
         currentPage={page}
         onPageChange={setPage}
       />
