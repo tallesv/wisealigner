@@ -18,7 +18,13 @@ import {
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { RiDeleteBin2Line, RiEditLine, RiShareBoxLine } from 'react-icons/ri';
+import {
+  RiDeleteBin2Line,
+  RiEditLine,
+  RiShareBoxLine,
+  RiArrowUpLine,
+  RiArrowDownLine,
+} from 'react-icons/ri';
 import api from '../client/api';
 import { Pagination } from '../components/Pagination';
 import { DeleteDialog } from '../components/UsersTable/DeleteDialog';
@@ -30,6 +36,7 @@ function CaseTable() {
   const [isLoadindCase, setIsLoadingCases] = useState(false);
   const [cases, setCases] = useState<NewCaseType[]>([]);
   const [caseToDelete, setCaseToDelete] = useState<NewCaseType | undefined>();
+  const [casesDateOrder, setCaseDateOrder] = useState('ascending');
 
   const { user } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -49,17 +56,48 @@ function CaseTable() {
     setCaseToDelete(undefined);
   }
 
+  function handleChangeCasesDateOrder() {
+    setIsLoadingCases(true);
+    setCaseDateOrder(
+      casesDateOrder === 'ascending' ? 'descending' : 'ascending',
+    );
+    if (casesDateOrder === 'ascending') {
+      setCaseDateOrder('descending');
+      const casesSorted = cases.sort(
+        (a: NewCaseType, b: NewCaseType) =>
+          new Date(a.date).getTime() - new Date(b.date).getTime(),
+      );
+      setCases(casesSorted);
+    } else {
+      setCaseDateOrder('ascending');
+      const casesSorted = cases.sort(
+        (a: NewCaseType, b: NewCaseType) =>
+          new Date(b.date).getTime() - new Date(a.date).getTime(),
+      );
+      setCases(casesSorted);
+    }
+    setIsLoadingCases(false);
+  }
+
   useEffect(() => {
     async function loadCases() {
       setIsLoadingCases(true);
       const response = await api.get('/requests');
       if (user.type === 'Admin') {
-        setCases(response.data);
+        const casesSorted = response.data.sort(
+          (a: NewCaseType, b: NewCaseType) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime(),
+        );
+        setCases(casesSorted);
       } else {
         const filterCases = response.data.filter(
           (caseItem: NewCaseType) => caseItem.userId === user.id,
         );
-        setCases(filterCases);
+        const casesSorted = filterCases.sort(
+          (a: NewCaseType, b: NewCaseType) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime(),
+        );
+        setCases(casesSorted);
       }
       setIsLoadingCases(false);
     }
@@ -88,7 +126,31 @@ function CaseTable() {
           <Tr bgColor="gray.200">
             <Th>Nome</Th>
             <Th>Gênero</Th>
-            <Th>Data</Th>
+            <Th display="flex" alignItems="center">
+              Data
+              <Tooltip
+                label={
+                  casesDateOrder === 'ascending'
+                    ? 'Ordem crescente'
+                    : 'Ordem decresente'
+                }
+                aria-label="case order"
+              >
+                <IconButton
+                  aria-label="Order case"
+                  size="xs"
+                  ml={4}
+                  icon={
+                    casesDateOrder === 'ascending' ? (
+                      <RiArrowUpLine />
+                    ) : (
+                      <RiArrowDownLine />
+                    )
+                  }
+                  onClick={() => handleChangeCasesDateOrder()}
+                />
+              </Tooltip>
+            </Th>
             <Th>Opções</Th>
           </Tr>
         </Thead>
