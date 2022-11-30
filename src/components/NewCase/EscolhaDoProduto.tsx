@@ -1,7 +1,11 @@
-import { useBreakpointValue, VStack } from '@chakra-ui/react';
+import {
+  Checkbox,
+  useBreakpointValue,
+  VStack,
+  Text,
+  Button,
+} from '@chakra-ui/react';
 import { useState } from 'react';
-
-import { Button } from '../Button';
 
 interface EscolhaDoProdutoProps {
   handleSubmitData: (value: { productPropose: string }) => Promise<void>;
@@ -46,8 +50,12 @@ const plans = [
   },
 ];
 
+const contract =
+  'https://firebasestorage.googleapis.com/v0/b/wisealigners-d1c0c.appspot.com/o/Contrato%20de%20Presta%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20e%20Compra%20Wise%20Aligners%C2%AE.pdf?alt=media&token=ef4f002b-e77d-4d3c-8e2d-e28959b359fd';
+
 export function EscolhaDoProduto({ handleSubmitData }: EscolhaDoProdutoProps) {
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   const checkBoxSize = useBreakpointValue({
     lg: 'md',
@@ -62,6 +70,19 @@ export function EscolhaDoProduto({ handleSubmitData }: EscolhaDoProdutoProps) {
 
   return (
     <VStack align="flex-start" spacing={6} w="100%">
+      <Checkbox onChange={event => setIsChecked(event.target.checked)}>
+        Li e aceito os termos do{' '}
+        <Text
+          color="blue.500"
+          as="a"
+          textDecoration="underline"
+          href={contract}
+          target="_blank"
+          rel="noreferrer"
+        >
+          contrato de adesão
+        </Text>
+      </Checkbox>
       {plans.map(plan => (
         <a
           key={plan.id}
@@ -75,6 +96,9 @@ export function EscolhaDoProduto({ handleSubmitData }: EscolhaDoProdutoProps) {
             isLoading={buttonLoading}
             whiteSpace="normal"
             py={1}
+            variant="outline"
+            borderRadius={3}
+            disabled={!isChecked}
             onClick={() => handleSelectProduct(plan.name)}
           >
             {plan.name}
