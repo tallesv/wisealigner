@@ -18,6 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     '/sign-up',
     '/reset-password',
     '/request-password-reset',
+    '/404',
   ];
 
   const themeExtented = extendTheme({
