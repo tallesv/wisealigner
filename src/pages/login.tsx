@@ -12,6 +12,7 @@ import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import Link from 'next/link';
 import { useAuth } from '../hooks/useAuth';
 import { Input } from '../components/Form/input';
 import { Button } from '../components/Button';
@@ -96,15 +97,6 @@ export default function Login() {
               <Box>
                 <Flex justifyContent="space-between">
                   <Text fontWeight={700}>Senha</Text>
-                  {/* <Text
-                    fontWeight={700}
-                    color="purple.550"
-                    _hover={{
-                      color: 'blue.450',
-                    }}
-                  >
-                    <Link href="/sign-up">Esqueceu a senha?</Link>
-                  </Text> */}
                 </Flex>
                 <Input
                   type="password"
@@ -114,7 +106,16 @@ export default function Login() {
                   {...register('password')}
                 />
               </Box>
-
+              <Text
+                textAlign="right"
+                fontWeight={700}
+                color="purple.550"
+                _hover={{
+                  color: 'blue.450',
+                }}
+              >
+                <Link href="/request-password-reset">Esqueceu a senha?</Link>
+              </Text>
               <Button type="submit" isLoading={buttonLoading}>
                 Entrar
               </Button>

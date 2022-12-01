@@ -13,7 +13,12 @@ import { SidebarDrawerProvider } from '../context/SidebarDrawerContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
-  const pagesWithoutLayout = ['/login', '/sign-up', '/reset-password'];
+  const pagesWithoutLayout = [
+    '/login',
+    '/sign-up',
+    '/reset-password',
+    '/request-password-reset',
+  ];
 
   const themeExtented = extendTheme({
     ...theme,
