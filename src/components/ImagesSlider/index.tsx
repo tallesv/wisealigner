@@ -23,6 +23,12 @@ export function ImagesSlider({ images }: ImagesSliderProps) {
     setThumbsSwiper(thumb);
   }
 
+  function getFile(file: string) {
+    return file.includes('.stl')
+      ? 'https://spassodourado.com.br/wp-content/uploads/2015/01/default-placeholder.png'
+      : file;
+  }
+
   return (
     <Box>
       <SwiperComponent
@@ -43,7 +49,7 @@ export function ImagesSlider({ images }: ImagesSliderProps) {
               download
               rel="noreferrer"
             >
-              <Image maxHeight={500} maxWidth={600} src={imageItem} />
+              <Image maxHeight={500} maxWidth={600} src={getFile(imageItem)} />
             </a>
           </SwiperSlide>
         ))}
@@ -59,7 +65,7 @@ export function ImagesSlider({ images }: ImagesSliderProps) {
       >
         {images.map(imageItem => (
           <SwiperSlide key={imageItem}>
-            <Image src={imageItem} cursor="pointer" />
+            <Image src={getFile(imageItem)} cursor="pointer" />
           </SwiperSlide>
         ))}
       </SwiperComponent>
