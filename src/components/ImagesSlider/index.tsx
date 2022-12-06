@@ -17,6 +17,7 @@ interface ImagesSliderProps {
 
 export function ImagesSlider({ images }: ImagesSliderProps) {
   const [thumbsSwiper, setThumbsSwiper] = useState<Swiper>();
+  const [imageActiveInSlideUrl, setImageActiveInSlideUrl] = useState(images[0]);
 
   function setActualThumb(thumb: Swiper) {
     setThumbsSwiper(thumb);
@@ -30,10 +31,20 @@ export function ImagesSlider({ images }: ImagesSliderProps) {
         thumbs={{ swiper: thumbsSwiper }}
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper2"
+        onRealIndexChange={swiper =>
+          setImageActiveInSlideUrl(images[swiper.realIndex])
+        }
       >
         {images.map(imageItem => (
           <SwiperSlide key={imageItem}>
-            <Image maxHeight={500} maxWidth={600} src={imageItem} />
+            <a
+              href={imageActiveInSlideUrl}
+              target="_blank"
+              download
+              rel="noreferrer"
+            >
+              <Image maxHeight={500} maxWidth={600} src={imageItem} />
+            </a>
           </SwiperSlide>
         ))}
       </SwiperComponent>
@@ -48,7 +59,7 @@ export function ImagesSlider({ images }: ImagesSliderProps) {
       >
         {images.map(imageItem => (
           <SwiperSlide key={imageItem}>
-            <Image src={imageItem} />
+            <Image src={imageItem} cursor="pointer" />
           </SwiperSlide>
         ))}
       </SwiperComponent>
